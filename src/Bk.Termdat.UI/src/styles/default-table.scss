@@ -1,0 +1,77 @@
+﻿@use '@angular/material' as mat;
+@use '@oblique/oblique/styles/scss/core/palette' as *;
+@use 'src/styles/variables.scss' as *;
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+
+.layout {
+    padding: $ob-spacing-default;
+
+    .default-table {
+        @include mat.elevation(1);
+        margin: $ob-spacing-default $ob-spacing-sm;
+    }
+
+    .header {
+        padding: 0 $ob-spacing-sm;
+
+        &.two-column-grid {
+            grid-template-columns: 1fr;
+            @include ob-media-breakpoint-up(md) {
+                grid-template-columns: auto 1fr;
+            }
+            width: 100%;
+        }
+
+        .buttons {
+            display: flex;
+            gap: $ob-spacing-sm;
+            padding: $ob-spacing-sm 0;
+            margin-bottom: $ob-spacing-default;
+            flex-direction: row-reverse;
+            align-items: flex-end;
+
+            @include ob-media-breakpoint-down(md) {
+                flex-direction: column;
+                align-items: center;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .controls {
+        @include mat.elevation(2);
+        border-radius: $ob-border-radius-base;
+
+        padding: $ob-spacing-default;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: $ob-spacing-sm;
+        @include ob-media-breakpoint-up(md) {
+            position: sticky;
+            top: $ob-spacing-default;
+            background-color: $ob-white;
+            z-index: $ob-z-index-controls;
+        }
+
+        .two-column-grid {
+            @include ob-media-breakpoint-down(md) {
+                grid-template-columns: 1fr;
+            }
+            width: 100%;
+        }
+    }
+
+    @include ob-media-breakpoint-up(md) {
+        .mat-mdc-cell {
+            height: 56px;
+        }
+
+        .mat-column-select {
+            padding-left: $ob-spacing-default;
+        }
+    }
+}

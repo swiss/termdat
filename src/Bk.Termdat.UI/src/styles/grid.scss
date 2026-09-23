@@ -1,0 +1,47 @@
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+@use 'src/styles/variables.scss' as *;
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.layout-up-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @include ob-media-breakpoint-up(md) {
+        grid-template-columns: repeat(12, 1fr);
+    }
+}
+
+@for $i from 1 through 12 {
+    .grid {
+        .span-#{$i} {
+            grid-column: span $i;
+        }
+    }
+
+    .layout-up-grid {
+        @include ob-media-breakpoint-up(md) {
+            .span-#{$i} {
+                grid-column: span $i;
+            }
+        }
+    }
+}
+
+.row {
+    grid-column: 1 / -1;
+}
+
+.layout-down-row {
+    @include ob-media-breakpoint-down(md) {
+        grid-column: 1 / -1;
+    }
+}

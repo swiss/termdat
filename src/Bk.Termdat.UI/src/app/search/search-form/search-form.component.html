@@ -1,0 +1,158 @@
+<div class="layout" [ngClass]="{'no-results': !results?.length}">
+    <!-- Search header -->
+    <header class="search-header">
+        @if (form) {
+            <form id="search-form" [formGroup]="form" (ngSubmit)="$event.preventDefault(); search()">
+                <div class="search-form">
+                    <!-- Search Input -->
+                    <div class="search">
+                        <mat-form-field id="search-input">
+                            <mat-label>{{ 'search.criteria.search' | translate }}</mat-label>
+                            <input
+                                formControlName="phrase"
+                                type="text"
+                                name="phrase"
+                                matInput
+                                #phraseControl
+                                placeholder="{{ 'search.criteria.searchText' | translate }}"
+                                (click)="onPhraseClick()"
+                                [matAutocomplete]="recommend"
+                                [matAutocompleteDisabled]="suppressRecommendationPanel()"
+                            />
+                            <button type="button" role="button" [obInputClear]="phraseControl" (onClear)="clear('phrase')">
+                                <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                                <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                            </button>
+                            <mat-autocomplete #recommend="matAutocomplete" (optionSelected)="search()">
+                                @for (option of filteredRecommendations | async; track $index) {
+                                    <mat-option [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                }
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <div class="filter">
+                        <mat-form-field>
+                            <mat-label>{{ 'search.criteria.sourceLanguage' | translate }}</mat-label>
+                            <mat-select multiple formControlName="sourceLanguage">
+                                <td-select-all [selectControl]="sourceLanguageControl" [values]="languageOptionValues">{{
+                                    'common.selectAllOrNone' | translate
+                                }}</td-select-all>
+                                @for (sourceLanguage of languageOptions; track sourceLanguage.id) {
+                                    <mat-option [value]="sourceLanguage.id">{{ sourceLanguage.name }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>{{ 'search.criteria.targetLanguage' | translate }}</mat-label>
+                            <mat-select multiple formControlName="targetLanguage">
+                                <td-select-all [selectControl]="targetLanguageControl" [values]="languageOptionValues">{{
+                                    'common.selectAllOrNone' | translate
+                                }}</td-select-all>
+                                @for (targetLanguage of languageOptions; track targetLanguage.id) {
+                                    <mat-option [value]="targetLanguage.id">{{ targetLanguage.name }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <div class="buttons">
+                            <!-- Search Button -->
+                            <button
+                                type="button"
+                                mat-button
+                                obButton="primary"
+                                (click)="search()"
+                                [attr.aria-label]="'common.search' | translate"
+                                id="search-button"
+                            >
+                                {{ 'common.search' | translate }}
+                            </button>
+                            <!-- Extended Search Button -->
+                            <button
+                                id="extended-search-button"
+                                type="button"
+                                mat-button
+                                obButton="secondary"
+                                (click)="toggleExtendedSearch()"
+                                [ngClass]="{active: extendedSearchForm?.dirty}"
+                                [attr.aria-label]="'search.criteria.extendSearch' | translate"
+                                matBadge="✓"
+                                matBadgeColor="primary"
+                                [matBadgeHidden]="!extendedSearchForm?.dirty"
+                            >
+                                {{ 'search.criteria.extendSearch' | translate }}
+                            </button>
+                            @if (extendedSearchForm?.dirty) {
+                                <span class="ob-screen-reader-only">{{ 'search.criteria.extendedSearchIsActiveWarning' | translate }}</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    </header>
+
+    <!-- Results -->
+    <ob-column-layout class="ob-full-height" left="OPENED" right="NONE">
+        <div column-left-content>
+            <div class="result-header" [ngClass]="{'has-watchlist-menu': (isAuthenticated$ | async)}">
+                <mat-paginator
+                    [length]="resultLength || 0"
+                    [pageSize]="pagination.pageSize"
+                    [pageIndex]="pagination.pageIndex"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="page($event)"
+                    [disabled]="!enablePagination"
+                />
+
+                @if (isAuthenticated$ | async) {
+                    <button
+                        id="watchlist-menu-button"
+                        [mat-menu-trigger-for]="watchlistMenu"
+                        mat-icon-button
+                        obButton="tertiary"
+                        type="button"
+                        [matTooltip]="'entry.watchlist.title' | translate"
+                    >
+                        <span class="ob-screen-reader-only">{{ 'entry.watchlist.title' | translate }}</span>
+                        <mat-icon svgIcon="stack" />
+                    </button>
+                    <mat-menu #watchlistMenu="matMenu">
+                        <button type="button" mat-menu-item (click)="addAllEntriesToWatchlist()">
+                            <mat-icon svgIcon="plus" /> {{ 'entry.watchlist.addAll' | translate }}
+                        </button>
+                        <button type="button" mat-menu-item (click)="removeAllEntriesFromWatchlist()">
+                            <mat-icon svgIcon="minus" /> {{ 'entry.watchlist.removeAll' | translate }}
+                        </button>
+                    </mat-menu>
+                }
+            </div>
+
+            <section class="result-list">
+                @for (result of results; track trackByEntryId(i, result); let i = $index) {
+                    <a [routerLink]="['/search/entry', result.id]" [queryParams]="activatedRoute.snapshot.queryParams" (click)="selectSearchEntry(result)">
+                        <td-search-result-card [result]="result" [number]="pagination.pageIndex * pagination.pageSize + i + 1" id="result-{{ result.id }}" />
+                    </a>
+                }
+            </section>
+        </div>
+        <div column-main-content class="content">
+            <!-- Extended search -->
+            <td-search-form-extended
+                class="extended-search"
+                (searched)="search()"
+                [form]="extendedSearchForm"
+                [ngClass]="{hidden: !form.controls.extendSearch.value}"
+            />
+
+            @if (!hasSearched() && !currentEntry && !isEntryRoute()) {
+                <section class="news-list">
+                    @for (news of newsItems(); track news.id) {
+                        <td-news-item-block [newsItem]="news" />
+                    }
+                </section>
+            }
+            <router-outlet />
+        </div>
+    </ob-column-layout>
+</div>

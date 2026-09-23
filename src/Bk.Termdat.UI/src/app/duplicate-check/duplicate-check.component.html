@@ -1,0 +1,46 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'duplicateCheck.title' | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" [disabled]="!form.valid" mat-button (click)="exportAsText()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'duplicateCheck.exportText' | translate }}
+            </button>
+            <button type="submit" [disabled]="!form.valid" mat-button (click)="exportAsXlsx()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'duplicateCheck.exportXlsx' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="reset" (click)="reset()">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'duplicateCheck.reset' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <mat-form-field>
+            <mat-label>{{ 'search.criteria.language' | translate }}</mat-label>
+            <mat-select formControlName="language">
+                @for (language of languageOptions(); track language.id) {
+                    <mat-option [value]="language.id">{{ language.name }}</mat-option>
+                }
+            </mat-select>
+            @if (form.controls.language.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.language.errors, 'search.criteria.language' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <td-autocomplete [isDisabled]="form.get('collection')?.disabled ?? false" formControlName="collection" [options]="collections()">
+            <mat-label>{{ 'field.collection' | translate }}</mat-label>
+        </td-autocomplete>
+        <td-autocomplete [isDisabled]="form.get('glossary')?.disabled ?? false" formControlName="glossary" [options]="glossaries()">
+            <mat-label>{{ 'field.glossaries' | translate }}</mat-label>
+        </td-autocomplete>
+        @if (form.errors) {
+            <mat-error>
+                {{ errorService.getControlError(form.errors, '', 'duplicateCheck.error') }}
+            </mat-error>
+        }
+    </form>
+</div>

@@ -1,0 +1,97 @@
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.layout {
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            .mat-column-name {
+                width: 30%;
+            }
+
+            .mat-column-isUiLanguage,
+            .mat-column-createdBy,
+            .mat-column-modifiedBy,
+            .mat-column-createdCombined,
+            .mat-column-modifiedCombined,
+            .mat-column-action {
+                width: 10%;
+            }
+
+            .mat-column-created,
+            .mat-column-modified {
+                width: 5%;
+            }
+
+            .mat-column-modifiedCombined,
+            .mat-column-createdCombined {
+                display: none;
+            }
+
+            .person {
+                display: none;
+            }
+
+            @include ob-media-breakpoint-down('md') {
+                .mat-mdc-row .mat-mdc-cell {
+                    width: auto;
+                    display: inherit;
+                }
+            }
+
+            @include ob-media-breakpoint-down('xl') {
+                .mat-column-isoCode,
+                .mat-column-id {
+                    width: 7.5%;
+                }
+
+                .mat-column-name {
+                    width: 35%;
+                }
+            }
+
+            @include ob-media-breakpoint-down('lg') {
+                .mat-column-created,
+                .mat-column-modified {
+                    display: none;
+                }
+
+                .mat-column-name {
+                    width: 45%;
+                }
+
+                .mat-column-action {
+                    width: 10%;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .mat-column-action {
+                    white-space: normal;
+                    word-break: normal;
+                }
+
+                .mat-column-createdBy,
+                .mat-column-modifiedBy {
+                    display: none;
+                }
+
+                .mat-column-created,
+                .mat-column-modified {
+                    width: 7.5%;
+                }
+
+                .person,
+                .date {
+                    display: block;
+                }
+
+                .mat-column-modifiedCombined,
+                .mat-column-createdCombined {
+                    display: inherit;
+                }
+            }
+        }
+    }
+}

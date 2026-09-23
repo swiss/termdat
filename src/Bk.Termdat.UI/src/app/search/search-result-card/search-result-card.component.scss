@@ -1,0 +1,96 @@
+@use 'src/styles/variables.scss' as *;
+
+.result {
+    box-sizing: border-box;
+    border-radius: $fieldset-border-radius;
+    border: 3px solid transparent;
+    font-size: $ob-font-size-sm;
+    filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.1)) drop-shadow(-1px -1px 0 rgba(0, 0, 0, 0.05));
+    padding: $ob-spacing-sm;
+
+    background-color: $ob-gray-extra-light;
+    &.active {
+        border-color: $ob-gray-light;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+        margin-bottom: 0;
+
+        li {
+            padding-left: 0.5em;
+            text-indent: -0.5em;
+        }
+
+        .end-of-language {
+            margin-bottom: $ob-spacing-xs;
+            padding-bottom: $ob-spacing-xs;
+            border-bottom: 1px $ob-gray solid;
+        }
+
+        .avoid {
+            text-decoration: line-through;
+        }
+
+        .avoid,
+        .obsolete,
+        .rare {
+            color: $ob-gray;
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.validated {
+        background-color: $ob-success-light;
+        &.active {
+            border-color: $ob-success-dark;
+        }
+    }
+
+    &.pending {
+        background-color: $yellow-extra-light;
+        &.active {
+            border-color: $yellow;
+        }
+    }
+
+    &.deleted {
+        background-color: $ob-error-light;
+        &.active {
+            border-color: $ob-error;
+        }
+    }
+}
+
+.info-box {
+    float: right;
+    display: inline-flex;
+    align-items: center;
+    gap: $ob-spacing-xs;
+    padding-left: $ob-spacing-sm;
+
+    .index {
+        background-color: #60a2d6; // To make it the exact same color as the watchlist checkbox
+        padding: 0 6px;
+        border-radius: $ob-border-radius-base;
+        color: $ob-white;
+        font-size: $ob-font-size-smaller;
+    }
+
+    .watchlist-checkbox {
+        top: -10px;
+        right: 8px;
+        height: 20px;
+        width: 20px;
+    }
+}
+
+.collection {
+    margin-top: $ob-spacing-sm;
+    font-size: $ob-font-size-smaller;
+    color: #555; // Gray-500 is too bright and gray-600 too dark
+}

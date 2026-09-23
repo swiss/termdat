@@ -1,0 +1,117 @@
+@use 'src/styles/variables.scss' as *;
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+
+:host {
+    background-color: white;
+    z-index: $ob-z-index-controls + 2;
+    transition: all $ob-duration-fast ease-in-out;
+    height: fit-content;
+    max-height: 100%;
+    overflow-y: auto;
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+}
+
+.extended-search-form {
+    padding: $ob-spacing-default;
+
+    display: flex;
+    gap: 0 $ob-spacing-default;
+    flex-wrap: wrap;
+
+    > * {
+        flex: 1;
+    }
+
+    .default {
+        padding-bottom: $ob-spacing-sm;
+    }
+
+    .default,
+    .admin {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 400px;
+    }
+
+    @include ob-media-breakpoint-down(md) {
+        flex-direction: column;
+
+        .buttons {
+            display: flex;
+            gap: $ob-spacing-default;
+        }
+    }
+
+    .fields {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 300px;
+
+        section {
+            &.checkbox {
+                padding-left: $ob-spacing-sm;
+            }
+        }
+
+        .mat-mdc-button {
+            margin-top: $ob-spacing-default;
+            width: 100%;
+        }
+    }
+
+    .chiplist-width {
+        width: 100%;
+    }
+}
+
+.search-toggle {
+    display: flex;
+    gap: $ob-spacing-default;
+    align-items: baseline;
+
+    > .search-control {
+        flex: 1;
+    }
+
+    .priority-toggler,
+    .exclude-toggler {
+        height: 100%;
+        top: -$ob-spacing-xs;
+        position: relative;
+    }
+
+    @include ob-media-breakpoint-up('xl') {
+        grid-template-columns: auto min-content;
+    }
+
+    mat-form-field {
+        padding: 0;
+    }
+}
+
+.search-checkbox {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    gap: 0 $ob-spacing-default;
+
+    mat-label {
+        width: 30%;
+        color: rgba(0, 0, 0, 0.6);
+    }
+}
+
+:host::ng-deep {
+    @media (max-width: 1500px) {
+        .search-toggle {
+            .mat-mdc-slide-toggle .mdc-form-field .mdc-label {
+                display: none;
+            }
+        }
+    }
+}

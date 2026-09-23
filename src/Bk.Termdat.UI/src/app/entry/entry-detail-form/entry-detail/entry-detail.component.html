@@ -1,0 +1,21 @@
+@if (this.detailsCount > 0) {
+    @for (detail of details | keyvalue: unsorted; track detail.key) {
+        <fieldset>
+            <legend>{{ detail.key }}</legend>
+            @for (translatedEntry of detail.value; track translatedEntry.id) {
+                <div
+                    class="section"
+                    [ngClass]="{
+                        obsolete: translatedEntry.isObsolete,
+                        rare: translatedEntry.isRare,
+                        avoid: translatedEntry.shouldAvoid,
+                    }"
+                >
+                    <td-language-detail [languageDetail]="translatedEntry" [displayMode]="currentDisplay ?? DisplayMode.Complete" />
+                </div>
+            }
+        </fieldset>
+    }
+} @else {
+    <h5>{{ 'search.noEquivalent' | translate }}</h5>
+}

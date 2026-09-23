@@ -1,0 +1,28 @@
+@use 'src/styles/variables.scss' as *;
+
+.mat-expansion-panel {
+    margin: $ob-spacing-default;
+
+    .mat-expansion-panel-header {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            margin-bottom: 0;
+        }
+    }
+}
+
+:host::ng-deep .grid {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button {
+    margin-left: $ob-spacing-sm;
+}
+
+.mat-column-action {
+    width: 10%;
+}

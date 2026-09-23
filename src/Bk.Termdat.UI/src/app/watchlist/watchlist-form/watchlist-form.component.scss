@@ -1,0 +1,65 @@
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.deleted {
+    background-color: $ob-error-light !important;
+}
+
+.locked {
+    background-color: $ob-warning-light !important;
+}
+
+.default-table {
+    > table {
+        table-layout: fixed;
+        width: 100%;
+    }
+}
+
+.layout {
+    .icon-action-button {
+        min-width: 2.5rem;
+        padding: 0;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        .ob-icon {
+            margin: 0;
+        }
+    }
+
+    .chip {
+        border-radius: $ob-border-radius-base;
+        padding: $ob-spacing-xs $ob-spacing-lg;
+        font-weight: bold;
+        margin-top: $ob-spacing-xs;
+        display: inline-block;
+        font-size: 0.8rem;
+
+        @include ob-media-breakpoint-down(md) {
+            position: absolute;
+            top: 2px;
+        }
+
+        &.status {
+            color: white;
+            background-color: $ob-black;
+        }
+
+        &.validated {
+            color: white;
+            background-color: $ob-success-dark;
+        }
+
+        &.pending {
+            background-color: $yellow-light;
+        }
+
+        &.deleted {
+            color: white;
+            background-color: $ob-error;
+        }
+    }
+}

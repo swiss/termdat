@@ -1,0 +1,91 @@
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.layout {
+    .controls {
+        margin-bottom: $ob-spacing-default;
+        align-items: stretch;
+    }
+
+    .controls-row {
+        display: flex;
+        align-items: baseline;
+        gap: $ob-spacing-sm;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .controls-row > mat-form-field {
+        flex: 1 1 20rem;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            .mat-column-isEnabled {
+                width: 10em;
+            }
+
+            .mat-column-id {
+                width: 6%;
+            }
+
+            .mat-column-title {
+                width: 15%;
+            }
+
+            .mat-column-isEnabled {
+                width: 7%;
+            }
+
+            .mat-column-created, .mat-column-modified {
+                width: 7%;
+            }
+
+            .mat-column-action {
+                width: 12%;
+            }
+
+            .mat-column-validTo {
+                width: 6%;
+            }
+
+            .mat-column-sortIndex {
+                width: 5.5%;
+            }
+
+            @include ob-media-breakpoint-down('lg') {
+                .mat-column-action {
+                    width: 10%;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .mat-column-action {
+                    white-space: normal;
+                    word-break: normal;
+                }
+
+                .mat-column-createdBy {
+                    display: none;
+                }
+
+                .date {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $ob-spacing-sm;
+        button[disabled] mat-icon {
+            color: $ob-gray-light;
+        }
+    }
+}

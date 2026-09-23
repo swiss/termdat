@@ -1,0 +1,20 @@
+@use 'src/styles/default-table.scss';
+@use 'src/styles/variables.scss' as *;
+
+.layout {
+    .default-table {
+        > table {
+            table-layout: fixed;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $ob-spacing-sm;
+    }
+}
+
+.mat-column-action {
+    flex: 0 0 20% !important;
+    width: 10% !important;
+}

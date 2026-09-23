@@ -1,0 +1,101 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+.picture-link {
+    cursor: pointer;
+}
+
+.comment-field-content {
+    white-space: pre-wrap;
+}
+
+:host {
+    @include td-fieldset-with-legend;
+
+    font-size: $ob-font-size-xs;
+
+    .has-copy-icon {
+        display: grid;
+        grid-template-columns: 1fr auto;
+
+        > div {
+            min-width: 0;
+        }
+
+        .overflow-hidden {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .title {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .domain {
+        text-indent: 20px;
+    }
+
+    .collectionInactive {
+        color: white;
+        background-color: $ob-error;
+        padding: $ob-spacing-xs;
+    }
+
+    .chip {
+        border-radius: $ob-border-radius-base;
+        padding: $ob-spacing-xs $ob-spacing-lg;
+        font-weight: bold;
+        margin-top: $ob-spacing-xs;
+        margin-right: $ob-spacing-xs;
+        display: inline-block;
+
+        &.status {
+            color: white;
+            background-color: $ob-black;
+        }
+        &.validated {
+            color: white;
+            background-color: $ob-success-dark;
+        }
+
+        &.pending {
+            background-color: $yellow-light;
+        }
+
+        &.deleted {
+            color: white;
+            background-color: $ob-error;
+        }
+
+        &.activeApi {
+            color: $ob-black;
+            background-color: $blue-light;
+        }
+
+        &.lindas {
+            color: $ob-black;
+            background-color: $orange-light;
+        }
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+        li {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .obsolete {
+        color: $ob-gray;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 24rem;
+    }
+}

@@ -1,0 +1,184 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.administration.languages' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="primary" routerLink="/administration/language/create">
+                <mat-icon svgIcon="plus" class="ob-icon" />
+                {{ 'administration.language.create' | translate }}
+            </button>
+        </div>
+    </div>
+    <div class="controls">
+        <div class="two-column-grid">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'administration.language.filter' | translate }}</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'administration.language.filter' | translate }}" #input />
+
+                <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                    <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                </button>
+            </mat-form-field>
+
+            <mat-paginator [pageSize]="defaultPageSize" [pageSizeOptions]="pageSizeOptions" />
+        </div>
+    </div>
+
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.administration.languages' | translate
+                }}
+            </caption>
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.id' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.id' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.id' | translate" class="no-break">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- Value Column -->
+            <ng-container matColumnDef="isoCode">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.language.field.isoCode' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.language.field.isoCode' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.language.field.isoCode' | translate" class="no-break">
+                    {{ row.isoCode }}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.name' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.name' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.field.name' | translate">
+                    {{ row.name }}
+                </td>
+            </ng-container>
+
+            <!-- Selected / IsUiLanguage -->
+            <ng-container matColumnDef="isUiLanguage">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.language.field.tooltip.isUiLanguage' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.language.field.isUiLanguage' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.language.field.isUiLanguage' | translate">
+                    @if (row.isUiLanguage) {
+                        <mat-icon svgIcon="checkmark" class="ob-icon" />
+                    }
+                    <span class="ob-screen-reader-only">{{ (row.isUiLanguage ? 'administration.yes' : 'administration.no') | translate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="sortIndex">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.language.field.sortIndex' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.language.field.sortIndex' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.language.field.sortIndex' | translate">
+                    {{ row.sortIndex }}
+                </td>
+            </ng-container>
+
+            <!-- Created Column -->
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.created' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.created' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.created' | translate">
+                    <span class="date">{{ row.created | date: 'shortDate' }}</span>
+                    <span class="person ellipsis">{{ row.createdBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- CreatedBy Column -->
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.createdBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.createdBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.createdBy' | translate">
+                    <span class="ellipsis">{{ row.createdBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Modified Column -->
+            <ng-container matColumnDef="modified">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.modified' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modified' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modified' | translate">
+                    <span class="date">{{ row.modified | date: 'shortDate' }}</span>
+                    <span class="person ellipsis">{{ row.modifiedBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- ModifiedBy Column -->
+            <ng-container matColumnDef="modifiedBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.modifiedBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modifiedBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modifiedBy' | translate">
+                    <span class="ellipsis">{{ row.modifiedBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <button obButton="tertiary" mat-icon-button [matTooltip]="'common.update' | translate" [matTooltipPosition]="'below'" (click)="update(row)">
+                        <mat-icon svgIcon="pencil" class="ob-icon header-icon" />
+                        <span class="ob-screen-reader-only">{{ 'common.update' | translate }}</span>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="15">
+                    @if (input.value) {
+                        <span>{{ 'administration.noFilteredItems' | translate: {filter: input.value} }}</span>
+                    }
+                    @if (!input.value) {
+                        <span>{{ 'administration.noItems' | translate }}</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

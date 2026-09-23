@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EntryLenochClassificationsNotFound" xml:space="preserve">
+    <value>At least one of the Lenoch sub-domains with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryRelatedCollectionsNotFound" xml:space="preserve">
+    <value>At least one of the related collections with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryConceptSystemInvalid" xml:space="preserve">
+    <value>Concept system with ID='{0}' does not belong to collection with ID='{1}'.</value>
+  </data>
+  <data name="ConceptSystemNotFound" xml:space="preserve">
+    <value>Concept system with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryOfficeNotFound" xml:space="preserve">
+    <value>Terminology office with ID='{0}' was not found.</value>
+  </data>
+  <data name="CollectionNotFound" xml:space="preserve">
+    <value>Collection with ID='{0}' was not found.</value>
+  </data>
+  <data name="GlossaryNotFound" xml:space="preserve">
+    <value>Glossary with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryLanguageDetailsSequenceInvalid" xml:space="preserve">
+    <value>Expected sequence='{0}' but instead got '{1}' for language ID='{2}'.</value>
+  </data>
+  <data name="LanguageDetailMinimalFields" xml:space="preserve">
+    <value>At least one of the fields Term, Name, Abbreviation or Phraseology must be completed.</value>
+  </data>
+  <data name="LanguageDetailTerminusRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Term is required when term source is set.</value>
+  </data>
+  <data name="LanguageDetailNameRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Name is required when name source is set.</value>
+  </data>
+  <data name="LanguageDetailAbbreviationRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Abbreviation is required when abbreviation source is set.</value>
+  </data>
+  <data name="LanguageDetailPhraseologyRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Phraseology is required when phraseology source is set.</value>
+  </data>
+  <data name="LanguageDetailDefinitionRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Definition is required when definition source is set.</value>
+  </data>
+  <data name="LanguageDetailNoteRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Note is required when note source is set.</value>
+  </data>
+  <data name="LanguageDetailContextRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Context is required when context source is set.</value>
+  </data>
+  <data name="LanguageDetailMetadataRequiredWhenSourceIsSet" xml:space="preserve">
+    <value>Metadata is required when metadata source is set.</value>
+  </data>
+  <data name="LanguageNotFound" xml:space="preserve">
+    <value>Language with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryComment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="EntryAdminInfo" xml:space="preserve">
+    <value>Administrative notes</value>
+  </data>
+  <data name="EntryLenochClassification" xml:space="preserve">
+    <value>Lenoch classification</value>
+  </data>
+  <data name="EntryCollection" xml:space="preserve">
+    <value>Terminology collection</value>
+  </data>
+  <data name="EntryOffice" xml:space="preserve">
+    <value>Terminology office</value>
+  </data>
+  <data name="EntryLanguageTerminus" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="EntryLanguageTerminusSource" xml:space="preserve">
+    <value>Term source</value>
+  </data>
+  <data name="EntryLanguageName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EntryLanguageNameSource" xml:space="preserve">
+    <value>Name source</value>
+  </data>
+  <data name="EntryLanguageAbbreviation" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="EntryLanguageAbbreviationSource" xml:space="preserve">
+    <value>Abbreviation source</value>
+  </data>
+  <data name="EntryLanguagePhraseology" xml:space="preserve">
+    <value>Phraseology</value>
+  </data>
+  <data name="EntryLanguagePhraseologySource" xml:space="preserve">
+    <value>Phraseology source</value>
+  </data>
+  <data name="EntryLanguageDefinition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="EntryLanguageDefinitionSource" xml:space="preserve">
+    <value>Definition source</value>
+  </data>
+  <data name="EntryLanguageNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="EntryLanguageNoteSource" xml:space="preserve">
+    <value>Note source</value>
+  </data>
+  <data name="EntryLanguageContext" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="EntryLanguageContextSource" xml:space="preserve">
+    <value>Context source</value>
+  </data>
+  <data name="EntryLanguageCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="EntryLanguageMetadata" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="EntryLanguageMetadataSource" xml:space="preserve">
+    <value>Metadata source</value>
+  </data>
+  <data name="EntryLanguageReference" xml:space="preserve">
+    <value>Reference</value>
+  </data>
+  <data name="EntryNotFound" xml:space="preserve">
+    <value>There is no entry with ID='{0}'.</value>
+  </data>
+  <data name="PictureFileSize" xml:space="preserve">
+    <value>The image exceeds the maximum file size of {0}.</value>
+  </data>
+  <data name="PictureFileType" xml:space="preserve">
+    <value>The file format of the image is not an image format or is not supported.</value>
+  </data>
+  <data name="PictureMinimalFields" xml:space="preserve">
+    <value>There must be at least one image description.</value>
+  </data>
+  <data name="PictureDescriptionDe" xml:space="preserve">
+    <value>Image description German</value>
+  </data>
+  <data name="PictureDescriptionEn" xml:space="preserve">
+    <value>Image description English</value>
+  </data>
+  <data name="PictureDescriptionFr" xml:space="preserve">
+    <value>Image description French</value>
+  </data>
+  <data name="PictureDescriptionIt" xml:space="preserve">
+    <value>Image description Italian</value>
+  </data>
+  <data name="PictureDescriptionRm" xml:space="preserve">
+    <value>Image description Romansh</value>
+  </data>
+  <data name="PictureSourceDe" xml:space="preserve">
+    <value>Image source German</value>
+  </data>
+  <data name="PictureSourceEn" xml:space="preserve">
+    <value>Image source English</value>
+  </data>
+  <data name="PictureSourceFr" xml:space="preserve">
+    <value>Image source French</value>
+  </data>
+  <data name="PictureSourceIt" xml:space="preserve">
+    <value>Image source Italian</value>
+  </data>
+  <data name="PictureSourceRm" xml:space="preserve">
+    <value>Image source Romansh</value>
+  </data>
+  <data name="PictureFileMissing" xml:space="preserve">
+    <value>An image description and/or image source cannot be entered without an image.</value>
+  </data>
+  <data name="EntryLanguageNotFound" xml:space="preserve">
+    <value>Language with ID='{0}' was not found.</value>
+  </data>
+  <data name="SourceTemplateFederalLawSr" xml:space="preserve">
+    <value>Title, art. para. let. No (SR XYZ, transl., status YYYY-MM)</value>
+  </data>
+  <data name="SourceTemplateFederalLawBbl" xml:space="preserve">
+    <value>Title (BBl YYYY page)</value>
+  </data>
+  <data name="SourceTemplateFederalLawAs" xml:space="preserve">
+    <value>Title, art. para. let. No (AS YYYY page)</value>
+  </data>
+  <data name="SourceTemplateFederalCourt" xml:space="preserve">
+    <value>Federal Supreme Court decision, No (YYYY)</value>
+  </data>
+  <data name="SourceTemplateBundesratMessage" xml:space="preserve">
+    <value>FCDisp Title, No (BBl YYYY page)</value>
+  </data>
+  <data name="SourceTemplateInternet" xml:space="preserve">
+    <value>Title ([Internet, {{ date }}](LINK))</value>
+  </data>
+  <data name="ActiveApiSetWithoutId" xml:space="preserve">
+    <value>If a terminology collection is set in the API, it must be given a classification.</value>
+  </data>
+  <data name="CollectionAlreadyHasConceptSystem" xml:space="preserve">
+    <value>Collection with ID='{0}' has already been assigned a concept system.</value>
+  </data>
+  <data name="ClassificationNotFound" xml:space="preserve">
+    <value>There is no classification with ID='{0}'.</value>
+  </data>
+  <data name="EntryGlossariesNotFound" xml:space="preserve">
+    <value>At least one of the glossaries with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryOfficeDeleteFailedHasEntries" xml:space="preserve">
+    <value>You must first delete the entries assigned to this terminology office.</value>
+  </data>
+  <data name="UniqueConstraintViolation" xml:space="preserve">
+    <value>One field is not unique.</value>
+  </data>
+  <data name="UniqueConstraintViolationCode" xml:space="preserve">
+    <value>The 'Code' field must be unique.</value>
+  </data>
+  <data name="OfficeNotFound" xml:space="preserve">
+    <value>There is no terminology office with ID='{0}'.</value>
+  </data>
+  <data name="EntryReferencesNotFound" xml:space="preserve">
+    <value>At least one of the referenced entries with ID='{0}' was not found.</value>
+  </data>
+  <data name="ReliabilityFirstDraft" xml:space="preserve">
+    <value>First draft</value>
+  </data>
+  <data name="ReliabilityTentative" xml:space="preserve">
+    <value>Provisional</value>
+  </data>
+  <data name="ReliabilityTranslated" xml:space="preserve">
+    <value>Linguistic/formal check completed</value>
+  </data>
+  <data name="ReliabilityVerified" xml:space="preserve">
+    <value>Checked by specialist</value>
+  </data>
+  <data name="ReliabilityApproved" xml:space="preserve">
+    <value>Standard terminology</value>
+  </data>
+  <data name="StatusInProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="StatusValidated" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="ReferenceTypeNone" xml:space="preserve">
+    <value>&lt;empty&gt;</value>
+  </data>
+  <data name="ReferenceTypeGeneral" xml:space="preserve">
+    <value>Superordinate concept</value>
+  </data>
+  <data name="ReferenceTypeSpecific" xml:space="preserve">
+    <value>Subordinate concept</value>
+  </data>
+  <data name="ReferenceTypeAntonym" xml:space="preserve">
+    <value>Antonym</value>
+  </data>
+  <data name="ReferenceTypeWhole" xml:space="preserve">
+    <value>Whole</value>
+  </data>
+  <data name="ReferenceTypePart" xml:space="preserve">
+    <value>Part</value>
+  </data>
+  <data name="SystemLanguagesIsoCodeCanNotBeChanged" xml:space="preserve">
+    <value>The ISO code for system languages must not be changed.</value>
+  </data>
+  <data name="ReferencesMustBeUnique" xml:space="preserve">
+    <value>References must not be entered more than once.</value>
+  </data>
+  <data name="SubjectNotFound" xml:space="preserve">
+    <value>There is no domain with ID='{0}'.</value>
+  </data>
+  <data name="DomainNotFound" xml:space="preserve">
+    <value>There is no sub-domain with ID='{0}'.</value>
+  </data>
+  <data name="SubjectDeleteFailedHasEntries" xml:space="preserve">
+    <value>SubjectDeleteFailedHasEntries Before you can delete this domain, you must first remove any entries assigned to it.</value>
+  </data>
+  <data name="DomainDeleteFailedHasEntries" xml:space="preserve">
+    <value>Before you can delete this sub-domain, you must first remove any entries assigned to it.</value>
+  </data>
+  <data name="ConceptSystemUpdateCollectionNotAllowed" xml:space="preserve">
+    <value>The collection cannot be changed because it still contains entries. The entries have the ID=[{0}].</value>
+  </data>
+  <data name="ConceptSystemDeleteNotAllowed" xml:space="preserve">
+    <value>The concept system cannot be deleted because it still contains entries. The entries have the ID=[{0}].</value>
+  </data>
+  <data name="ConceptSystemCollectionAlreadyUsed" xml:space="preserve">
+    <value>Collection with ID='{0}' is already assigned to another concept system.</value>
+  </data>
+  <data name="EntrySubject" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="EntryDomainsNotFound" xml:space="preserve">
+    <value>At least one of the sub-domains with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntrySubjectsNotFound" xml:space="preserve">
+    <value>At least one of the domains with ID='{0}' was not found.</value>
+  </data>
+  <data name="EntryDomainsInvalid" xml:space="preserve">
+    <value>The sub-domains with ID='{0}' were selected without a corresponding domain.</value>
+  </data>
+  <data name="EntryDomain" xml:space="preserve">
+    <value>Sub-domain</value>
+  </data>
+  <data name="EntrySubjectsDuplicates" xml:space="preserve">
+    <value>The domain may be selected only once.</value>
+  </data>
+  <data name="WatchlistExportTitlePrefix" xml:space="preserve">
+    <value>Clipboard list of</value>
+  </data>
+  <data name="Entry" xml:space="preserve">
+    <value>entry</value>
+  </data>
+  <data name="Entries" xml:space="preserve">
+    <value>entries</value>
+  </data>
+  <data name="Glossaries" xml:space="preserve">
+    <value>Glossaries</value>
+  </data>
+  <data name="EntryRelatedCollections" xml:space="preserve">
+    <value>Related collections</value>
+  </data>
+  <data name="EntryConceptSystemPosition" xml:space="preserve">
+    <value>Position in the concept system</value>
+  </data>
+  <data name="EntryCreated" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="EntryModified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="ReferenceTypeGeneralCode" xml:space="preserve">
+    <value>GEN</value>
+  </data>
+  <data name="ReferenceTypeSpecificCode" xml:space="preserve">
+    <value>SPE</value>
+  </data>
+  <data name="ReferenceTypeAntonymCode" xml:space="preserve">
+    <value>ANT</value>
+  </data>
+  <data name="ReferenceTypeWholeCode" xml:space="preserve">
+    <value>TOUT</value>
+  </data>
+  <data name="ReferenceTypePartCode" xml:space="preserve">
+    <value>PART</value>
+  </data>
+  <data name="ReferenceTypeNodeCode" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WatchlistExportMailMessageSuccess" xml:space="preserve">
+    <value>The PDF file can be downloaded from this link: {0}</value>
+  </data>
+  <data name="WatchlistExportMailMessageError" xml:space="preserve">
+    <value>An error occurred when creating the export file. Please contact {0}.</value>
+  </data>
+  <data name="EntryDeletedCanNotBeEdited" xml:space="preserve">
+    <value>Entry ID='{0}' is deleted and cannot be edited</value>
+  </data>
+  <data name="EntryRestoreNotAllowedForUser" xml:space="preserve">
+    <value>The user does not have access rights to restore the entry with ID='{0}'</value>
+  </data>
+  <data name="RoleAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="RoleSuperUser" xml:space="preserve">
+    <value>Super-User</value>
+  </data>
+  <data name="RoleWriter" xml:space="preserve">
+    <value>Writer</value>
+  </data>
+  <data name="RoleNone" xml:space="preserve">
+    <value>&lt;no role&gt;</value>
+  </data>
+  <data name="UserAccountNotFound" xml:space="preserve">
+    <value>There is no user account with ID='{0}'.</value>
+  </data>
+  <data name="UserAccountUpdateWriterOrSuperReaderOnlyError" xml:space="preserve">
+    <value>Only user accounts with the role 'Writer' or 'Super-Reader' can be modified.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>You are not authorised to perform this action.</value>
+  </data>
+  <data name="AdminInfoNotFound" xml:space="preserve">
+    <value>There is no administrative note with ID='{0}'.</value>
+  </data>
+  <data name="EntryLocked" xml:space="preserve">
+    <value>The entry with ID='{0}' is locked.</value>
+  </data>
+  <data name="StatisticNotFound" xml:space="preserve">
+    <value>There is no statistic with ID='{0}'.</value>
+  </data>
+  <data name="TemplateExistsForUser" xml:space="preserve">
+    <value>A template with the name {0} already exists for this user.</value>
+  </data>
+  <data name="EntryTemplateNotFound" xml:space="preserve">
+    <value>There is no template with ID='{0}'.</value>
+  </data>
+  <data name="MaximumEntryIdsExceededError" xml:space="preserve">
+    <value>Maximum number of entry IDs exceeded: {0}.</value>
+  </data>
+  <data name="FileImportMailSuccess" xml:space="preserve">
+    <value>&lt;html&gt;&lt;body style='padding:20px; font-family:Arial, Helvetica;font-size:14px;'&gt;
+File imported&lt;br&gt;&lt;br&gt;
+Administrative note: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+Number of new entries: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+Number of updated entries: &lt;b&gt;{2}&lt;/b&gt;
+&lt;/body&gt;&lt;/html&gt;</value>
+  </data>
+  <data name="FileImportMailError" xml:space="preserve">
+    <value>&lt;html&gt;&lt;body style='padding:20px; font-family:Arial, Helvetica;font-size:14px;'&gt;
+Error importing file&lt;br&gt;&lt;br&gt;
+Administrative note: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+Error description: &lt;b&gt;{1}&lt;/b&gt;
+&lt;/body&gt;&lt;/html&gt;</value>
+  </data>
+  <data name="ExternalLinkInvalid" xml:space="preserve">
+    <value>The URL of the external reference '{0}' is invalid</value>
+  </data>
+  <data name="RoleSuperReader" xml:space="preserve">
+    <value>Super-Reader</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.EntryId" xml:space="preserve">
+    <value>Entry ID</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Sequence" xml:space="preserve">
+    <value>Sequence</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.EntryLink" xml:space="preserve">
+    <value>Entry Link</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Office" xml:space="preserve">
+    <value>Terminology Office</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Collection" xml:space="preserve">
+    <value>Terminology Collection</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Status" xml:space="preserve">
+    <value>Processing Status</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Reliability" xml:space="preserve">
+    <value>Reliability Code</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.SubjectsAndDomains" xml:space="preserve">
+    <value>Subject Fields / Domains</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.RelatedCollections" xml:space="preserve">
+    <value>Related Collections</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Glossaries" xml:space="preserve">
+    <value>Glossaries</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.AdminInfos" xml:space="preserve">
+    <value>Administrative Notes</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.OutgoingReferences" xml:space="preserve">
+    <value>Outgoing References</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.ExternalLinks" xml:space="preserve">
+    <value>External References</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.ConceptSystemPosition" xml:space="preserve">
+    <value>Position in Concept System</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Modified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.NameSource" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Terminus" xml:space="preserve">
+    <value>Term</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.TerminusSource" xml:space="preserve">
+    <value>Term Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Phraseology" xml:space="preserve">
+    <value>Phraseology</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.PhraseologySource" xml:space="preserve">
+    <value>Phraseology Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Abbreviation" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.AbbreviationSource" xml:space="preserve">
+    <value>Abbreviation Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Definition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.DefinitionSource" xml:space="preserve">
+    <value>Definition Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.NoteSource" xml:space="preserve">
+    <value>Note Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Context" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.ContextSource" xml:space="preserve">
+    <value>Context Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Metadata" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.MetadataSource" xml:space="preserve">
+    <value>Metadata Source</value>
+  </data>
+  <data name="Watchlist.Export.XLSX.Header.Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="CollectionDeleteFailedHasEntries" xml:space="preserve">
+    <value>Before you can delete this collection, you must first remove any entries assigned to it.</value>
+  </data>
+  <data name="CollectionDeleteFailedNotSoftDeleted" xml:space="preserve">
+    <value>Before you can permanently delete this collection, you must first mark it as deleted.</value>
+  </data>
+  <data name="DuplicateCheck.Export.XLSX.Header.EntryId" xml:space="preserve">
+    <value>EN_EintragsId</value>
+  </data>
+  <data name="DuplicateCheck.Export.XLSX.Header.DuplicateEntryId" xml:space="preserve">
+    <value>EN_DublettenId</value>
+  </data>
+  <data name="DuplicateCheck.Export.XLSX.Header.MatchText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="DuplicateCheck.Export.XLSX.FileName" xml:space="preserve">
+    <value>EN_IDs_Dublettenkontrolle</value>
+  </data>
+  <data name="NewsNotFound" xml:space="preserve">
+    <value>EN_Keine News mit der ID='{0}' vorhanden.</value>
+  </data>
+</root>

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="16.1.1" />
+        <PackageReference Include="Bk.DocumentService.Client" Version="1.8.0" />
+        <PackageReference Include="Bk.Monitoring" Version="2.5.0" />
+        <PackageReference Include="Bk.Sparql" Version="6.2.1" />
+        <PackageReference Include="Bk.Utils" Version="1.9.0" />
+        <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.11" />
+        <PackageReference Include="SkiaSharp" Version="4.148.0" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.148.0" />
+        <PackageReference Include="ClosedXML" Version="0.105.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Bk.Termdat.Common\Bk.Termdat.Common.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.CrossCutting\Bk.Termdat.CrossCutting.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Resource\XmlSchemas\TBX_core.xsd" />
+        <EmbeddedResource Include="Resource\XmlSchemas\TBX_core.xsd" />
+        <None Remove="Resource\XmlSchemas\Xml.xsd" />
+        <EmbeddedResource Include="Resource\XmlSchemas\Xml.xsd" />
+        <None Update="Templates\Watchlist.docx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

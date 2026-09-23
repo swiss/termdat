@@ -1,0 +1,52 @@
+<div
+    class="result"
+    [ngClass]="{
+        deleted: result.deleted,
+        validated: isValidated && isMainOffice,
+        pending: !isValidated && isMainOffice,
+    }"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="routerLinkActiveOptions"
+>
+    <div class="info-box">
+        <span class="index">{{ number }}</span>
+        @if ((isAuthenticated$ | async) && canBeAddedToWatchList) {
+            <mat-checkbox
+                class="watchlist-checkbox"
+                [checked]="isWatchlistItem"
+                [color]="'accent'"
+                (change)="toggleWatchlistItem()"
+                (click)="$event.stopPropagation()"
+                [matTooltip]="(isWatchlistItem ? 'entry.watchlist.removeEntry' : 'entry.watchlist.addEntry') | translate"
+                matTooltipPosition="right"
+            />
+        }
+    </div>
+
+    @if (result.terms.length) {
+        <ul>
+            @for (term of result.terms; track $index) {
+                <li
+                    [ngClass]="{
+                        obsolete: term.isObsolete,
+                        rare: term.isRare,
+                        avoid: term.shouldAvoid,
+                        'end-of-language': $index + 1 === result.terms.length || term.languageId !== result.terms[$index + 1].languageId,
+                    }"
+                >
+                    {{ termLabels[$index] }}
+                    @if (term.phraseology) {
+                        @if (termLabels[$index]) {
+                            {{ separator }}
+                        }
+                        <span class="phraseology">{{ term.phraseology }}</span>
+                    }
+                </li>
+            }
+        </ul>
+    } @else {
+        <li>{{ 'search.noEquivalent' | translate }}</li>
+    }
+
+    <div class="collection" [title]="'field.collection' | translate">{{ result.collection.code + separator + result.collection.name }}</div>
+</div>

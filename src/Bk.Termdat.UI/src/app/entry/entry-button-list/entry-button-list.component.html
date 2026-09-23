@@ -1,0 +1,57 @@
+@if (canCreateAndDeleteAndUpdate) {
+    @if (currentEntry && currentEntry.locked && isAdmin) {
+        <button mat-button obButton="primary" type="button" (click)="unlock(currentEntry!.id)" tdFocusRemover>
+            {{ 'entry.unlock' | translate }}
+        </button>
+    }
+    @if (canCreate) {
+        <button
+            mat-button
+            obButton="primary"
+            type="button"
+            tdFocusRemover
+            routerLink="/search/entry/create"
+            [queryParams]="activatedRoute.snapshot.queryParams"
+        >
+            {{ 'search.criteria.newEntry' | translate }}
+        </button>
+    }
+    @if (currentEntry && currentEntry.canEdit) {
+        <button
+            mat-button
+            obButton="primary"
+            tdFocusRemover
+            [routerLink]="['/search/entry', currentEntry.id, 'copy']"
+            [queryParams]="activatedRoute.snapshot.queryParams"
+        >
+            {{ 'entry.copy' | translate }}
+        </button>
+    }
+    @if (currentEntry && !currentEntry.locked && currentEntry.canEdit) {
+        <button
+            mat-button
+            obButton="primary"
+            tdFocusRemover
+            [routerLink]="['/search/entry', currentEntry.id, 'update']"
+            [queryParams]="activatedRoute.snapshot.queryParams"
+            [disabled]="currentEntry.deleted"
+        >
+            {{ 'common.update' | translate }}
+        </button>
+    }
+    @if (currentEntry && !currentEntry.locked && currentEntry.canDelete && !currentEntry.deleted) {
+        <button mat-button obButton="primary" type="button" (click)="softDeleteEntry(currentEntry!.id)" tdFocusRemover>
+            {{ 'common.delete' | translate }}
+        </button>
+    }
+    @if (currentEntry && !currentEntry.locked && currentEntry.canRestore && currentEntry.deleted) {
+        <button mat-button obButton="primary" type="button" (click)="restoreEntry(currentEntry!.id)" tdFocusRemover>
+            {{ 'common.restore' | translate }}
+        </button>
+    }
+    @if (currentEntry && !currentEntry.locked && currentEntry.canDelete && currentEntry.deleted) {
+        <button mat-button obButton="primary" type="button" (click)="hardDeleteEntry(currentEntry!.id)" tdFocusRemover>
+            {{ 'entry.hardDelete.title' | translate }}
+        </button>
+    }
+}

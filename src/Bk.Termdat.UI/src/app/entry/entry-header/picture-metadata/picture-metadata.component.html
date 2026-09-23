@@ -1,0 +1,56 @@
+@if (picture) {
+    <dl>
+        @switch (translateService.getCurrentLang()) {
+            @case ('de') {
+                @if (picture.descriptionDe) {
+                    <dt>{{ 'field.picture.description' | translate }}</dt>
+                    <dd>{{ picture.descriptionDe }}</dd>
+                }
+                @if (picture.sourceDe) {
+                    <dt>{{ 'field.picture.source' | translate }}</dt>
+                    <dd>{{ picture.sourceDe }}</dd>
+                }
+            }
+            @case ('fr') {
+                @if (picture.descriptionFr) {
+                    <dt>{{ 'field.picture.description' | translate }}</dt>
+                    <dd>{{ picture.descriptionFr }}</dd>
+                }
+                @if (picture.sourceFr) {
+                    <dt>{{ 'field.picture.source' | translate }}</dt>
+                    <dd>{{ picture.sourceFr }}</dd>
+                }
+            }
+            @case ('it') {
+                @if (picture.descriptionIt) {
+                    <dt>{{ 'field.picture.description' | translate }}</dt>
+                    <dd>{{ picture.descriptionIt }}</dd>
+                }
+                @if (picture.sourceIt) {
+                    <dt>{{ 'field.picture.source' | translate }}</dt>
+                    <dd>{{ picture.sourceIt }}</dd>
+                }
+            }
+            @case ('rm') {
+                @if (picture.descriptionRm) {
+                    <dt>{{ 'field.picture.description' | translate }}</dt>
+                    <dd>{{ picture.descriptionRm }}</dd>
+                }
+                @if (picture.sourceRm) {
+                    <dt>{{ 'field.picture.source' | translate }}</dt>
+                    <dd>{{ picture.sourceRm }}</dd>
+                }
+            }
+            @case ('en') {
+                @if (picture.descriptionEn) {
+                    <dt>{{ 'field.picture.description' | translate }}</dt>
+                    <dd>{{ picture.descriptionEn }}</dd>
+                }
+                @if (picture.sourceEn) {
+                    <dt>{{ 'field.picture.source' | translate }}</dt>
+                    <dd>{{ picture.sourceEn }}</dd>
+                }
+            }
+        }
+    </dl>
+}

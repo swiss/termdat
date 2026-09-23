@@ -1,0 +1,61 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'watchlist.editSource' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <mat-form-field>
+            <mat-label>{{ 'search.criteria.language' | translate }}</mat-label>
+            <mat-select multiple formControlName="language">
+                <td-select-all [selectControl]="languageControl" [values]="languageOptionValues">{{ 'common.selectAllOrNone' | translate }}</td-select-all>
+                @for (language of languageOptions; track language.id) {
+                    <mat-option [value]="language.id">{{ language.name }}</mat-option>
+                }
+            </mat-select>
+            @if (form.controls.language.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.language.errors, 'search.criteria.language' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <div class="two-column-grid" formGroupName="sources">
+            <mat-checkbox formControlName="definitionSource">{{ 'field.definition' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="noteSource">{{ 'field.note' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="contextSource">{{ 'field.context' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="abbreviationSource">{{ 'field.abbreviation' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="terminusSource">{{ 'field.terminus' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="nameSource">{{ 'field.name' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="metadataSource">{{ 'field.metadata' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="phraseologySource">{{ 'field.phraseology' | translate }}</mat-checkbox>
+            @if (form.controls.sources.invalid && form.controls.source.touched) {
+                <mat-error class="checkbox-error">
+                    {{ errorService.getControlError(form.controls.sources.errors, '', 'watchlist.multiEditSource.error') }}
+                </mat-error>
+            }
+        </div>
+
+        <mat-form-field class="search-control">
+            <input formControlName="source" matInput type="text" placeholder="{{ 'search.extended.source' | translate }}" />
+            @if (form.controls.source.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.source.errors, 'search.extended.source' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <div class="button-area">
+            <button mat-button obButton="secondary" type="button" (click)="add()">
+                {{ 'watchList.multiEditSource.add' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="button" (click)="set()">
+                {{ 'watchlist.multiEditSource.set' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

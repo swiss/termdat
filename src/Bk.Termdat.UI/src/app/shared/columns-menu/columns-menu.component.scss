@@ -1,0 +1,7 @@
+@use 'src/styles/variables.scss' as *;
+
+.td-columns-menu-panel .columns-menu-title {
+    display: block;
+    margin: 0;
+    padding-left: $ob-spacing-default;
+}

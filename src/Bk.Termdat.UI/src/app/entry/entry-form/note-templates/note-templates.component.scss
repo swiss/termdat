@@ -1,0 +1,44 @@
+@use 'src/styles/variables.scss' as *;
+
+::ng-deep {
+    button.mat-mdc-menu-item {
+        line-height: $ob-spacing-xl;
+        height: fit-content;
+    }
+    .mat-mdc-menu-panel {
+        &.sub-menu {
+            width: fit-content;
+            max-width: 40em;
+        }
+    }
+    .mat-mdc-menu-content {
+        h6 {
+            font-size: $ob-font-size-normal;
+            padding: 0 $ob-spacing-default;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.template {
+    text-decoration: none;
+    color: $ob-primary;
+    cursor: pointer;
+
+    &:hover,
+    &:active {
+        color: $ob-dark;
+    }
+}
+
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+    margin-bottom: 0;
+
+    > li > ul {
+        padding-inline-start: $ob-spacing-lg;
+    }
+}

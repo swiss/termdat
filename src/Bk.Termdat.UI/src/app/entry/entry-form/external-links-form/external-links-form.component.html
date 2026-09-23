@@ -1,0 +1,16 @@
+<details>
+    <summary [ngClass]="{invalid: (formArray.touched && formArray.invalid) || (createForm.touched && createForm.invalid)}">
+        <h6>{{ 'field.externalLinks' | translate }}</h6>
+    </summary>
+    <div class="external-links-form">
+        @for (form of $any(formArray).controls; track $index) {
+            <td-external-link-entry
+                [externalLink]="_externalLinks[$index]"
+                [form]="form"
+                [mode]="EXTERNAL_LINK_MODE.Edit"
+                (externalLinkRemoved)="onRemoved($index)"
+            />
+        }
+        <td-external-link-entry [mode]="EXTERNAL_LINK_MODE.Create" (externalLinkCreated)="onCreated($event)" [form]="createForm" />
+    </div>
+</details>

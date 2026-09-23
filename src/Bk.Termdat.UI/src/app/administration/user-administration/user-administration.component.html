@@ -1,0 +1,195 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.administration.userAdministration' | translate }}</h1>
+    </div>
+    <div class="controls">
+        <div class="two-column-grid">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'administration.userAdministration.filter' | translate }}</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'administration.userAdministration.filter' | translate }}" #input />
+
+                <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                    <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                </button>
+            </mat-form-field>
+
+            <mat-paginator [pageSize]="defaultPageSize" [pageSizeOptions]="pageSizeOptions" />
+        </div>
+    </div>
+
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.administration.userAdministration' | translate
+                }}
+            </caption>
+
+            <!-- Last Name Column -->
+            <ng-container matColumnDef="lastName">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.lastName' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.lastName' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.lastName' | translate" class="no-break">
+                    <span class="ellipsis">{{ row.lastName }}</span>
+                </td>
+            </ng-container>
+
+            <!-- First Name Column -->
+            <ng-container matColumnDef="firstName">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.firstName' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.firstName' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.firstName' | translate" class="no-break">
+                    <span class="ellipsis">{{ row.firstName }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.email' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.email' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.email' | translate" class="no-break">
+                    <span class="ellipsis">{{ row.email }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Role Column -->
+            <ng-container matColumnDef="role">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.role' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.role' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.role' | translate" class="no-break">
+                    {{ row.role }}
+                </td>
+            </ng-container>
+
+            <!-- Last Action Column -->
+            <ng-container matColumnDef="lastAction">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.lastAction' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.lastAction' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.lastAction' | translate">
+                    <span class="date">{{ row.lastAction | date: 'shortDate' }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Collections Column -->
+            <ng-container matColumnDef="collections">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.field.collections' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.field.collections' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.collections' | translate">
+                    @if (!row.hasFullAccess) {
+                        <mat-chip-listbox>
+                            @for (collection of row.collections; track $index) {
+                                <mat-chip-option [matTooltip]="collection.name">{{ collection.code }}</mat-chip-option>
+                            }
+                        </mat-chip-listbox>
+                    }
+                    @if (row.hasFullAccess) {
+                        <mat-chip-listbox disabled>
+                            <mat-chip-option>{{ 'administration.userAdministration.all' | translate }}</mat-chip-option>
+                        </mat-chip-listbox>
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Glossaries Column -->
+            <ng-container matColumnDef="glossaries">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.field.glossaries' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.field.glossaries' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.glossaries' | translate">
+                    @if (!row.hasFullAccess) {
+                        <mat-chip-listbox>
+                            @for (glossar of row.glossaries; track $index) {
+                                <mat-chip-option [matTooltip]="glossar.name">{{ glossar.code }} </mat-chip-option>
+                            }
+                        </mat-chip-listbox>
+                    }
+                    @if (row.hasFullAccess) {
+                        <mat-chip-listbox disabled>
+                            <mat-chip-option>{{ 'administration.userAdministration.all' | translate }}</mat-chip-option>
+                        </mat-chip-listbox>
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <div class="actions">
+                        @if (row.isWriter || row.isSuperReader) {
+                            <button
+                                obButton="tertiary"
+                                mat-icon-button
+                                [matTooltip]="'common.update' | translate"
+                                [matTooltipPosition]="'below'"
+                                (click)="updateUserAccount(row)"
+                            >
+                                <mat-icon svgIcon="pencil" class="ob-icon header-icon" />
+                                <span class="ob-screen-reader-only">{{ 'common.update' | translate }}</span>
+                            </button>
+                        }
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="9">
+                    @if (input.value) {
+                        <span>{{ 'administration.noFilteredItems' | translate: {filter: input.value} }}</span>
+                    }
+                    @if (!input.value) {
+                        <span>{{ 'administration.noItems' | translate }}</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

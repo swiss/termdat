@@ -1,0 +1,182 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ titleTranslateKey | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/administration/news">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="grid">
+            <!-- ID wird automatisch nach dem Speichern vergeben -->
+            <mat-form-field class="span-7">
+                <mat-label>{{ (form.controls.id.value ? 'field.id' : 'common.willBeSetOnSave') | translate }}</mat-label>
+                <input matInput type="text" name="id" formControlName="id" />
+            </mat-form-field>
+            <!-- Aktiv (Checkbox) (Standard: aktiviert) -->
+            <mat-form-field floatLabel="always" class="span-4 hide-outline align-right">
+                <mat-slide-toggle name="isEnabled" formControlName="isEnabled">{{ 'administration.news.toggle.isEnabled' | translate }}</mat-slide-toggle>
+                <!-- HACK: mat-form-field must contain a MatFormFieldControl -->
+                <input matInput hidden />
+            </mat-form-field>
+        </div>
+        <mat-form-field>
+            <!-- Gültig von - bis -->
+            <mat-label>{{ 'administration.news.field.timeSpan' | translate }}</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate formControlName="validFrom" placeholder="{{ 'administration.news.timeSpan.start' | translate }}" />
+                <input matEndDate formControlName="validTo" placeholder="{{ 'administration.news.timeSpan.end' | translate }}" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker" />
+            <mat-date-range-picker #picker />
+            @for (error of form!.controls.validFrom.errors || form!.controls.validFrom.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <div class="form-languages">
+            <h2>{{ 'administration.field.title' | translate }}</h2>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.titleDe' | translate }}</mat-label>
+                <textarea formControlName="titleDe" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.titleDe.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.titleFr' | translate }}</mat-label>
+                <textarea formControlName="titleFr" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.titleFr.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.titleIt' | translate }}</mat-label>
+                <textarea formControlName="titleIt" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.titleIt.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.titleRm' | translate }}</mat-label>
+                <textarea formControlName="titleRm" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.titleRm.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.titleEn' | translate }}</mat-label>
+                <textarea formControlName="titleEn" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.titleEn.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <div class="form-languages">
+            <h2>{{ 'administration.field.text' | translate }}</h2>
+            <div class="text-field">
+                <label>
+                    {{ 'administration.field.name.textDe' | translate }}
+                </label>
+                <td-rich-text-editor controlName="textDe" />
+
+                @for (error of form.controls.textDe.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </div>
+            <div class="text-field">
+                <label>
+                    {{ 'administration.field.name.textFr' | translate }}
+                </label>
+                <td-rich-text-editor controlName="textFr" />
+
+                @for (error of form.controls.textFr.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </div>
+
+            <div class="text-field">
+                <label>
+                    {{ 'administration.field.name.textIt' | translate }}
+                </label>
+                <td-rich-text-editor controlName="textIt" />
+
+                @for (error of form.controls.textIt.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </div>
+
+            <div class="text-field">
+                <label>
+                    {{ 'administration.field.name.textRm' | translate }}
+                </label>
+                <td-rich-text-editor controlName="textRm" />
+
+                @for (error of form.controls.textRm.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </div>
+
+            <div class="text-field">
+                <label>
+                    {{ 'administration.field.name.textEn' | translate }}
+                </label>
+                <td-rich-text-editor controlName="textEn" />
+
+                @for (error of form.controls.textEn.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </div>
+        </div>
+
+        <!-- Readonly audit information (only shown when editing) -->
+        @if (form.controls.created.value) {
+            <div class="grid audit-grid">
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.created' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="created" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.createdBy' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="createdBy" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.modified' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="modified" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.modifiedBy' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="modifiedBy" />
+                </mat-form-field>
+            </div>
+        }
+    </form>
+</div>

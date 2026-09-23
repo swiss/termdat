@@ -1,0 +1,117 @@
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+@use '@oblique/oblique/styles/scss/core/variables' as *;
+
+.details {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+        'header'
+        'notification'
+        'meta'
+        'details';
+
+    @include ob-media-breakpoint-up(md) {
+        grid-template-columns: auto 25vw;
+        grid-template-areas:
+            'header  header'
+            'notification notification'
+            'details meta'
+            'details .';
+    }
+
+    .notification {
+        grid-area: notification;
+        margin: $ob-spacing-sm $ob-spacing-sm 0;
+    }
+
+    .details-header {
+        grid-area: header;
+        position: sticky;
+        top: 0;
+        background: white;
+        border-bottom: var(--layout-border);
+        padding: $ob-spacing-sm $ob-spacing-default $ob-spacing-sm $ob-spacing-sm;
+        align-items: center;
+        z-index: $ob-z-index-controls + 1;
+        display: flex;
+        gap: $ob-spacing-md 0;
+        flex-wrap: wrap;
+
+        .details-left {
+            display: flex;
+
+            .hide-meta-data {
+                min-width: fit-content;
+                //padding-top: 0.7em;
+            }
+
+            .displayOptions {
+                padding-left: 2em;
+                @include ob-media-breakpoint-down(md) {
+                    padding-left: 1em;
+                }
+            }
+
+            mat-checkbox {
+                padding-top: 6px;
+            }
+
+            mat-form-field {
+                width: 200px;
+            }
+        }
+
+        .details-right {
+            flex: 1 1 auto;
+            text-align: right;
+            justify-items: flex-end;
+        }
+
+        @include ob-media-breakpoint-down(md) {
+            td-entry-button-list {
+                display: flex;
+            }
+        }
+    }
+
+    .result-details {
+        grid-area: details;
+        padding: $ob-spacing-default;
+
+        &.hide-head-data {
+            @include ob-media-breakpoint-up(md) {
+                grid-column: span 2;
+            }
+        }
+    }
+
+    .head-data {
+        grid-area: meta;
+        padding: $ob-spacing-default $ob-spacing-default $ob-spacing-lg 0;
+
+        @include ob-media-breakpoint-down(md) {
+            padding-left: $ob-spacing-default;
+        }
+    }
+}
+
+.no-result {
+    display: flex;
+    justify-content: space-between;
+    margin: $ob-spacing-default;
+}
+
+.notification {
+    .ob-alert {
+        height: 3.6em;
+        font-weight: bold;
+
+        &.ob-angular {
+            margin-bottom: 0;
+        }
+
+        @include ob-media-breakpoint-down(md) {
+            height: auto;
+        }
+    }
+}

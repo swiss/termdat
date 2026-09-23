@@ -1,0 +1,28 @@
+<div class="two-column-grid">
+    <div class="user-container">
+        <h1>{{ 'application.profile' | translate }}</h1>
+        <section>
+            <a [attr.href]="myAccountHref" target="_blank" rel="nofollow noopener noreferrer">
+                {{ 'profile.myAccount' | translate }}
+            </a>
+        </section>
+        <section>
+            <dl>
+                <dt>{{ 'profile.name' | translate }}</dt>
+                <dd>{{ userInfo?.name }}</dd>
+                <dt>{{ 'profile.email' | translate }}</dt>
+                <dd>{{ userInfo?.email }}</dd>
+                <dt>{{ 'profile.role' | translate }}</dt>
+                @for (role of userInfo?.roles; track role) {
+                    <dd>{{ role }}</dd>
+                }
+            </dl>
+        </section>
+    </div>
+    @if (isAdmin || isSuperUser || isWriter) {
+        <div>
+            <td-source-template-list (reload)="reloadSourceTemplates()" [sourceTemplates]="userInfo!.sourceTemplates" />
+            <td-entry-template-list />
+        </div>
+    }
+</div>

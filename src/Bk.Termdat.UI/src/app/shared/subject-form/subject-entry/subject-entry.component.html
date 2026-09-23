@@ -1,0 +1,34 @@
+@if (formGroup) {
+    <div class="grid" [formGroup]="formGroup">
+        <mat-form-field class="span-6">
+            <mat-label>{{ 'field.subject' | translate }}</mat-label>
+            <mat-select formControlName="subject" (selectionChange)="selectionChanged($event)" disableOptionCentering>
+                @for (subject of subjects; track subject.id) {
+                    <mat-option [value]="subject.id">{{ subject.name }}</mat-option>
+                }
+            </mat-select>
+            @if (formGroup.controls.subject.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(formGroup.controls.subject.errors, 'field.subject' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <div class="span-5">
+            <td-chiplist-autocomplete formControlName="domains" [chips]="domainChips" class="domain-field">
+                <mat-label>{{ 'field.domains' | translate }}</mat-label>
+            </td-chiplist-autocomplete>
+        </div>
+        <div class="span-1 right-aligned">
+            <button
+                mat-icon-button
+                obButton="secondary"
+                type="button"
+                (click)="remove()"
+                matTooltip="{{ 'entry.subjects.remove' | translate }}"
+                class="subject-button"
+            >
+                <mat-icon svgIcon="minus" class="ob-icon" />
+            </button>
+        </div>
+    </div>
+}

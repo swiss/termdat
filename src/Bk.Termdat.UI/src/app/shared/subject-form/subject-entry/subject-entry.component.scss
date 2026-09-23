@@ -1,0 +1,11 @@
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    .grid {
+        grid-gap: 0 $ob-spacing-default;
+    }
+
+    .subject-button {
+        margin: 0.4em 0;
+    }
+}

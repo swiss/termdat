@@ -1,0 +1,9 @@
+<div class="unauthorized-container">
+    <h2>{{ 'unauthorized.title' | translate }}</h2>
+    <h3>{{ 'unauthorized.subtitle' | translate }}</h3>
+    @if (showRequestAccessLink) {
+        <p>
+            <a [href]="requestAccessLink">{{ 'unauthorized.requestAccessLink' | translate }}</a>
+        </p>
+    }
+</div>

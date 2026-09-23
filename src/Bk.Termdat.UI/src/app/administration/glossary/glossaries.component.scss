@@ -1,0 +1,116 @@
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.layout {
+    .controls {
+        margin-bottom: $ob-spacing-default;
+        align-items: stretch;
+    }
+
+    .controls-row {
+        display: flex;
+        align-items: baseline;
+        gap: $ob-spacing-sm;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .controls-row > mat-form-field {
+        flex: 1 1 20rem;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .table-controls {
+        display: flex;
+        align-items: center;
+        gap: $ob-spacing-sm;
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            tr.deleted {
+                background-color: $ob-error-light;
+            }
+
+            .mat-column-code {
+                width: 10em;
+            }
+
+            .mat-column-name {
+                width: 25%;
+            }
+
+            .mat-column-createdBy,
+            .mat-column-action,
+            .mat-column-documentation {
+                width: 7.5%;
+            }
+
+            .mat-column-entryCount {
+                width: 7.5%;
+            }
+
+            .person {
+                display: none;
+            }
+
+            @include ob-media-breakpoint-down('md') {
+                .mat-mdc-row .mat-mdc-cell {
+                    width: auto;
+                    display: inherit;
+                }
+            }
+
+            @include ob-media-breakpoint-down('xl') {
+                .mat-column-code {
+                    width: 7.5%;
+                }
+
+                .mat-column-name {
+                    width: 35%;
+                }
+            }
+
+            @include ob-media-breakpoint-down('lg') {
+                .mat-column-entryCount {
+                    display: none;
+                }
+
+                .mat-column-name {
+                    width: 45%;
+                }
+
+                .mat-column-action {
+                    width: 10%;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .mat-column-action {
+                    white-space: normal;
+                    word-break: normal;
+                }
+
+                .mat-column-createdBy {
+                    display: none;
+                }
+
+                .person,
+                .date {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $ob-spacing-sm;
+    }
+}

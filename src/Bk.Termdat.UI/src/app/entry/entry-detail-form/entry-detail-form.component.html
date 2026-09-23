@@ -1,0 +1,52 @@
+@if (currentEntry) {
+    <section class="details">
+        <header class="details-header">
+            <form [formGroup]="form">
+                <div class="details-left">
+                    <mat-checkbox id="hide-meta-checkbox" [checked]="hideHeadData" (change)="hideHeadData = $event.checked" class="hide-meta-data">
+                        {{ 'search.result.hideHeadData' | translate }}
+                    </mat-checkbox>
+                    <mat-form-field subscriptSizing="dynamic" class="displayOptions">
+                        <mat-label>{{ 'entry.displayMode' | translate }}</mat-label>
+                        <mat-select formControlName="displayOptions" (selectionChange)="changeDisplayMode($event)">
+                            <mat-option [value]="DisplayMode.Minimal">{{ 'entry.displayMode.minimal' | translate }}</mat-option>
+                            <mat-option [value]="DisplayMode.Complete">{{ 'entry.displayMode.complete' | translate }}</mat-option>
+                            @if (canCreateAndDeleteAndUpdate) {
+                                <mat-option [value]="DisplayMode.Context">{{ 'entry.displayMode.context' | translate }}</mat-option>
+                            }
+                            @if (canCreateAndDeleteAndUpdate) {
+                                <mat-option [value]="DisplayMode.Definition">{{ 'entry.displayMode.definition' | translate }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div class="details-right">
+                <td-entry-button-list [currentEntry]="currentEntry" />
+            </div>
+        </header>
+        @if (currentEntry.locked) {
+            <div class="notification">
+                <ob-alert type="info">
+                    {{ 'entry.locked' | translate: {email: currentEntry!.lockedBy, minutes: getLockedMinutes(currentEntry!.locked!)} }}
+                </ob-alert>
+            </div>
+        }
+        @if (!hideHeadData) {
+            <td-entry-header class="head-data" [entryDetail]="currentEntry" />
+        }
+        <td-entry-detail
+            #details
+            class="result-details"
+            [ngClass]="{'hide-head-data': hideHeadData}"
+            [entry]="currentEntry"
+            [currentDisplay]="currentDisplay"
+        />
+    </section>
+}
+@if (!currentEntry) {
+    <section class="no-result">
+        <p>{{ 'search.emptyResults' | translate }}</p>
+        <td-entry-button-list [currentEntry]="currentEntry" />
+    </section>
+}

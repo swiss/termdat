@@ -1,0 +1,19 @@
+<ob-alert type="error" id="file-import-error" role="alert">
+    {{ 'file.import.error.file' | translate }}
+</ob-alert>
+
+<div class="default-table">
+    <table mat-table [dataSource]="dataSource" class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+        <ng-container matColumnDef="errorDetail">
+            <th mat-header-cell *matHeaderCellDef scope="col">
+                {{ 'file.import.error.detail' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let row" [attr.data-title]="'error.detail' | translate" class="no-break">
+                {{ row }}
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+</div>

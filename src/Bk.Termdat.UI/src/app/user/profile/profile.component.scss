@@ -1,0 +1,32 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+.user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.two-column-grid {
+    gap: $ob-spacing-default;
+}
+
+dl {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+
+    dt {
+        margin-top: 1em;
+        word-break: break-word;
+        hyphens: auto;
+    }
+
+    dd {
+        margin-top: 1em;
+        grid-column: 2 / 3;
+        text-align: left;
+    }
+}

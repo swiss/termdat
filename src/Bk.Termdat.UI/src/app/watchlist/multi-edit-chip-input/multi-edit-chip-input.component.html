@@ -1,0 +1,40 @@
+<div class="layout">
+    <form [formGroup]="form">
+        <div class="header">
+            <h4>{{ titleTranslateKey | translate }}</h4>
+        </div>
+        <div class="one-column-chiplist">
+            <td-chiplist-autocomplete-input formControlName="multiSelect" [chips]="chips">
+                <mat-label>{{ typeTranslateKey | translate }}</mat-label>
+                @if (form.controls.multiSelect.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.multiSelect.errors, typeTranslateKey | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-chiplist-autocomplete-input>
+        </div>
+        <div class="button-area">
+            <button
+                mat-button
+                obButton="secondary"
+                type="button"
+                (click)="add()"
+                [disabled]="form.controls.multiSelect.value === null || form.controls.multiSelect.value.length === 0"
+            >
+                {{ 'watchlist.multiEditChip.add' | translate }}
+            </button>
+            <button
+                mat-button
+                obButton="secondary"
+                type="button"
+                (click)="set()"
+                [disabled]="form.controls.multiSelect.value === null || form.controls.multiSelect.value.length === 0"
+            >
+                {{ 'watchlist.multiEditChip.set' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="button" (click)="remove()">
+                {{ 'watchlist.multiEditChip.remove' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

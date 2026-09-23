@@ -1,0 +1,3 @@
+@if (conceptSystem$ | async; as conceptSystem) {
+    <td-concept-system-form [conceptSystem]="conceptSystem" titleTranslateKey="navigation.administration.conceptSystems.update" (saved)="save($event)" />
+}

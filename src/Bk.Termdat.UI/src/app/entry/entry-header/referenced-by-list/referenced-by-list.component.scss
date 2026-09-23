@@ -1,0 +1,18 @@
+@use 'src/styles/variables.scss' as *;
+
+details {
+    margin-bottom: $ob-spacing-default;
+
+    ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    abbr {
+        cursor: help;
+    }
+
+    summary {
+        font-weight: bold;
+    }
+}

@@ -1,0 +1,55 @@
+<div [formGroup]="form" class="grid">
+    <mat-form-field class="span-3">
+        <mat-label>{{ 'field.referenceType' | translate }}</mat-label>
+        <mat-select formControlName="type">
+            @for (option of referenceTypes; track option.id) {
+                <mat-option [value]="option.id">{{ option.name }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field class="span-3">
+        <mat-label>{{ 'field.entryId' | translate }}</mat-label>
+        <input type="number" min="1" matInput formControlName="entryId" />
+        @if (form.controls.entryId.invalid) {
+            <mat-error>
+                {{ errorService.getControlError(form.controls.entryId.errors, 'field.entryId' | translate, 'entry.error') }}
+            </mat-error>
+        }
+    </mat-form-field>
+    <div class="span-6 link">
+        @if (text) {
+            <a [routerLink]="['/search', 'entry', form.controls.entryId.value]" [queryParams]="activatedRoute.snapshot.queryParams" target="_blank">
+                {{ text }}
+            </a>
+        }
+        @if (loading && !text) {
+            <mat-icon svgIcon="refresh" class="ob-icon loading" />
+        }
+        @switch (mode) {
+            @case (REFERENCE_ENTRY_MODE.Edit) {
+                <button
+                    mat-icon-button
+                    obButton="secondary"
+                    type="button"
+                    (click)="remove()"
+                    matTooltip="{{ 'entry.reference.remove' | translate }}"
+                    class="reference-button"
+                >
+                    <mat-icon svgIcon="minus" class="ob-icon" />
+                </button>
+            }
+            @case (REFERENCE_ENTRY_MODE.Create) {
+                <button
+                    mat-icon-button
+                    obButton="secondary"
+                    type="button"
+                    (click)="create()"
+                    matTooltip="{{ 'entry.reference.create' | translate }}"
+                    class="reference-button"
+                >
+                    <mat-icon svgIcon="plus" class="ob-icon" />
+                </button>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,191 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.statistic' | translate }}</h1>
+        @if (dateFilterChanged) {
+            <div class="buttons">
+                <button type="button" mat-button obButton="primary" (click)="bulkDelete()">
+                    {{ 'statistic.selectionDelete' | translate }}
+                </button>
+            </div>
+        }
+    </div>
+    <div class="controls">
+        <div class="two-column-grid">
+            <form [formGroup]="formGroup" id="statistic-filter" obUnsavedChanges>
+                <div class="search-fields">
+                    <mat-form-field appearance="outline" class="filter-field">
+                        <mat-label>{{ 'statistic.filter' | translate }}</mat-label>
+                        <input matInput placeholder="{{ 'statistic.filter' | translate }}" #input formControlName="filterText" />
+                        <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                            <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                        </button>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>{{ 'statistic.dateRange.start' | translate }}</mat-label>
+                        <input [matDatepicker]="fromDate" [min]="fromDateMin" [max]="fromDateMax" formControlName="fromDate" matInput />
+                        <mat-datepicker-toggle [for]="fromDate" matSuffix />
+                        <mat-datepicker #fromDate />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>{{ 'statistic.dateRange.end' | translate }}</mat-label>
+                        <input [matDatepicker]="toDate" [min]="toDateMin" [max]="toDateMax" formControlName="toDate" matInput />
+                        <mat-datepicker-toggle [for]="toDate" matSuffix />
+                        <mat-datepicker #toDate />
+                    </mat-form-field>
+                </div>
+            </form>
+            <mat-paginator
+                [length]="searchResult?.totalCount"
+                [pageSize]="defaultPageSize"
+                [pageIndex]="pagination?.pageIndex"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                (page)="page($event)"
+            />
+        </div>
+    </div>
+
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sort($event)" class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.statistics' | translate
+                }}
+            </caption>
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.id' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.id' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.id' | translate" class="no-break">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- Search Text Column -->
+            <ng-container matColumnDef="searchText">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'statistic.searchText' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'statistic.searchText' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'statistic.searchText' | translate" class="no-break">
+                    {{ row.searchText }}
+                </td>
+            </ng-container>
+
+            <!-- Language Column -->
+            <ng-container matColumnDef="languages">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'statistic.languages' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'statistic.languages' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'statistic.languages' | translate">
+                    {{ row.languages }}
+                </td>
+            </ng-container>
+
+            <!-- Search Fields Column -->
+            <ng-container matColumnDef="searchFields">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'statistic.searchFields' | translate }} {{ 'statistic.searchFields.legend' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'statistic.searchFields' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'statistic.searchFields' | translate" class="no-break">
+                    {{ row.searchFields }}
+                </td>
+            </ng-container>
+
+            <!-- NumberOfSearches Column -->
+            <ng-container matColumnDef="numberOfSearches">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'statistic.numberOfSearches' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'statistic.numberOfSearches' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'statistic.numberOfSearches' | translate" class="no-break">
+                    {{ row.numberOfSearches }}
+                </td>
+            </ng-container>
+
+            <!-- DateLastSearch Column -->
+            <ng-container matColumnDef="dateLastSearch">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'statistic.dateLastSearch' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'statistic.dateLastSearch' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'statistic.dateLastSearch' | translate">
+                    <span class="date">{{ row.dateLastSearch | date: 'medium' }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <div class="actions">
+                        @if (!row.deleted) {
+                            <button
+                                obButton="tertiary"
+                                mat-icon-button
+                                [matTooltip]="'common.delete' | translate"
+                                [matTooltipPosition]="'below'"
+                                [disabled]="row.entryCount"
+                                (click)="delete(row)"
+                            >
+                                <mat-icon svgIcon="delete" class="ob-icon header-icon" />
+                                <span class="ob-screen-reader-only">{{ 'common.delete' | translate }}</span>
+                            </button>
+                        }
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.deleted]="row.deleted"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="15">
+                    @if (input.value) {
+                        <span>{{ 'administration.noFilteredItems' | translate: {filter: input.value} }}</span>
+                    }
+                    @if (!input.value) {
+                        <span>{{ 'administration.noItems' | translate }}</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

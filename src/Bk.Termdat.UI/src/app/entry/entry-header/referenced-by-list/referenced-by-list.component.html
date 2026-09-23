@@ -1,0 +1,10 @@
+<details>
+    <summary>{{ 'field.referencedBy' | translate }}</summary>
+    <ul>
+        @for (reference of displayReferences; track reference.entryId) {
+            <li>
+                <a [routerLink]="['/search', 'entry', reference.entryId]" target="_blank">{{ reference.text }}</a>
+            </li>
+        }
+    </ul>
+</details>

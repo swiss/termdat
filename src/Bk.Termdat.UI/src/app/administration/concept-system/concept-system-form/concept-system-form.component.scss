@@ -1,0 +1,29 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+@include td-form-with-descriptions;
+
+:host {
+    .layout .header {
+        position: sticky;
+        top: 0;
+        background-color: $ob-white;
+        z-index: $ob-z-index-controls;
+        padding-top: $ob-spacing-sm;
+    }
+
+    .form-concept-positions {
+        padding: $ob-spacing-sm;
+
+        .position-entry {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: $ob-spacing-sm;
+
+            button {
+                margin: 6px 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+@use 'src/styles/variables.scss' as *;
+
+h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0 !important;
+    top: -$ob-spacing-sm;
+}
+
+img {
+    max-width: 100%;
+    max-height: max(100vh, 96rem);
+    display: block;
+    margin: auto;
+}

@@ -1,0 +1,14 @@
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+:host {
+    &.ng-invalid.ng-touched {
+        .ob-input-clear {
+            padding-right: $ob-spacing-lg;
+        }
+    }
+
+    ::ng-deep {
+        @include td-select-multiline;
+    }
+}

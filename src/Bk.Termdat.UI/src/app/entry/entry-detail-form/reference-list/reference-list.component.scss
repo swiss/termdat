@@ -1,0 +1,18 @@
+@use 'src/styles/variables.scss' as *;
+
+abbr {
+    cursor: help;
+}
+
+.describer {
+    margin-right: $ob-spacing-xs;
+}
+
+.separator {
+    padding-right: $ob-spacing-xs;
+    line-break: anywhere;
+}
+
+.reference {
+    line-break: strict;
+}

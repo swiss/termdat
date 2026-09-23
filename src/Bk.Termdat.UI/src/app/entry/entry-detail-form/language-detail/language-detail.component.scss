@@ -1,0 +1,18 @@
+@use 'src/styles/variables.scss' as *;
+
+section {
+    padding: $ob-spacing-sm 0;
+}
+
+.avoid .value {
+    text-decoration: line-through;
+}
+
+.obsolete,
+.rare {
+    &:not(.avoid) {
+        .value {
+            color: $ob-gray;
+        }
+    }
+}

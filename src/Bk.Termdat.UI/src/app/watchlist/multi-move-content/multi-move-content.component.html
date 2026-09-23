@@ -1,0 +1,73 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'watchlist.moveContent' | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" [disabled]="!form.valid" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'watchlist.moveContent' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <mat-form-field>
+            <mat-label>{{ 'search.criteria.language' | translate }}</mat-label>
+            <mat-select multiple formControlName="language">
+                <td-select-all [selectControl]="languageControl" [values]="languageOptionValues">{{ 'common.selectAllOrNone' | translate }}</td-select-all>
+                @for (language of languageOptions; track language.id) {
+                    <mat-option [value]="language.id">{{ language.name }}</mat-option>
+                }
+            </mat-select>
+            @if (form.controls.language.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.language.errors, 'search.criteria.language' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>{{ 'watchlist.moveContent.sourceField' | translate }}</mat-label>
+            <mat-select formControlName="sourceField">
+                <mat-option value="terminus">{{ 'field.terminus' | translate }}</mat-option>
+                <mat-option value="name">{{ 'field.name' | translate }}</mat-option>
+                <mat-option value="abbreviation">{{ 'field.abbreviation' | translate }}</mat-option>
+                <mat-option value="phraseology">{{ 'field.phraseology' | translate }}</mat-option>
+                <mat-option value="definition">{{ 'field.definition' | translate }}</mat-option>
+                <mat-option value="note">{{ 'field.note' | translate }}</mat-option>
+                <mat-option value="context">{{ 'field.context' | translate }}</mat-option>
+                <mat-option value="metadata">{{ 'field.metadata' | translate }}</mat-option>
+            </mat-select>
+            @if (form.controls.sourceField.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.sourceField.errors, 'watchlist.moveContent.sourceField' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>{{ 'watchlist.moveContent.destinationField' | translate }}</mat-label>
+            <mat-select formControlName="destinationField">
+                <mat-option value="terminus">{{ 'field.terminus' | translate }}</mat-option>
+                <mat-option value="name">{{ 'field.name' | translate }}</mat-option>
+                <mat-option value="abbreviation">{{ 'field.abbreviation' | translate }}</mat-option>
+                <mat-option value="phraseology">{{ 'field.phraseology' | translate }}</mat-option>
+                <mat-option value="definition">{{ 'field.definition' | translate }}</mat-option>
+                <mat-option value="note">{{ 'field.note' | translate }}</mat-option>
+                <mat-option value="context">{{ 'field.context' | translate }}</mat-option>
+                <mat-option value="metadata">{{ 'field.metadata' | translate }}</mat-option>
+            </mat-select>
+            @if (form.controls.destinationField.invalid) {
+                <mat-error>
+                    {{
+                        errorService.getControlError(form.controls.destinationField.errors, 'watchlist.moveContent.destinationField' | translate, 'entry.error')
+                    }}
+                </mat-error>
+            }
+        </mat-form-field>
+        <div>
+            <mat-checkbox formControlName="forAllSynonyms">{{ 'watchlist.moveContent.forAllSynonyms' | translate }}</mat-checkbox>
+        </div>
+    </form>
+</div>

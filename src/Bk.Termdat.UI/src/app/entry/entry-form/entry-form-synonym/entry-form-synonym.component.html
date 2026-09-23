@@ -1,0 +1,287 @@
+@if (_form) {
+    <details open class="entry-language" [formGroup]="_form">
+        <summary class="entry-language-heading" [ngClass]="{invalid: _form.touched && _form.invalid}">
+            <h6>
+                <span>{{ title }}</span>
+                @if (fieldVisibility) {
+                    <td-field-visibility-data-form
+                        [fieldVisibility]="fieldVisibility"
+                        [enableDefinition]="{enabled: isFirst}"
+                        (visibilityChanged)="onVisibilityChanged($event)"
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="$event.stopPropagation()"
+                    />
+                }
+            </h6>
+            @if (!(isFirst && isLast)) {
+                <button
+                    mat-icon-button
+                    obButton="tertiary"
+                    type="button"
+                    (click)="changeSort(sortDirection.Up)"
+                    [disabled]="isFirst"
+                    matTooltip="{{ 'entry.sortUp' | translate }}"
+                    [matTooltipDisabled]="isFirst"
+                >
+                    <mat-icon svgIcon="arrow_up" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'entry.sortUp' | translate }}</span>
+                </button>
+                <button
+                    mat-icon-button
+                    obButton="tertiary"
+                    type="button"
+                    (click)="changeSort(sortDirection.Down)"
+                    [disabled]="isLast"
+                    matTooltip="{{ 'entry.sortDown' | translate }}"
+                    [matTooltipDisabled]="isLast"
+                >
+                    <mat-icon svgIcon="arrow_down" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'entry.sortDown' | translate }}</span>
+                </button>
+            }
+            <button mat-button obButton="tertiary" type="button" (click)="delete()" class="delete-button">
+                <mat-icon svgIcon="minus" class="ob-icon" />&nbsp;{{ 'entry.removeTerminus' | translate }}
+            </button>
+        </summary>
+        <div class="entry-language-content">
+            @if (_form.touched && _form.invalid) {
+                @for (error of getInvisibleControlsErrors(); track error) {
+                    <mat-error class="invisible-errors">
+                        {{ error }}
+                    </mat-error>
+                }
+            }
+            <!-- Name -->
+            @if (fieldVisibility.name) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.name' | translate }}**</mat-label>
+                    <textarea matInput formControlName="name" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.name.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.name.errors, 'field.name' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.nameSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="nameSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.nameSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.nameSource.errors, 'field.name' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates class="template-component" [language]="language" (templateSelected)="sourceTemplateSelected($event, 'nameSource')" />
+                </div>
+            }
+            <!-- Terminus -->
+            @if (fieldVisibility.terminus) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.terminus' | translate }}**</mat-label>
+                    <textarea matInput formControlName="terminus" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.terminus.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.terminus.errors, 'field.terminus' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.terminusSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="terminusSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.terminusSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.terminusSource.errors, 'field.terminus' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'terminusSource')"
+                    />
+                </div>
+            }
+            <!-- Phraseology -->
+            @if (fieldVisibility.phraseology) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.phraseology' | translate }}**</mat-label>
+                    <textarea matInput formControlName="phraseology" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.phraseology.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.phraseology.errors, 'field.phraseology' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.phraseologySource' | translate }}</mat-label>
+                        <textarea matInput formControlName="phraseologySource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.phraseologySource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.phraseologySource.errors, 'field.phraseology' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'phraseologySource')"
+                    />
+                </div>
+            }
+            <!-- Abbreviation -->
+            @if (fieldVisibility.abbreviation) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.abbreviation' | translate }}**</mat-label>
+                    <textarea matInput formControlName="abbreviation" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.abbreviation.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.abbreviation.errors, 'field.abbreviation' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.abbreviationSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="abbreviationSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.abbreviationSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.abbreviationSource.errors, 'field.abbreviation' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'abbreviationSource')"
+                    />
+                </div>
+            }
+            <!-- Definition -->
+            @if (isFirst && fieldVisibility.definition) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.definition' | translate }}</mat-label>
+                    <textarea matInput formControlName="definition" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.definition.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.definition.errors, 'field.definition' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.definitionSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="definitionSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.definitionSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.definitionSource.errors, 'field.definition' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'definitionSource')"
+                    />
+                </div>
+            }
+            <!-- Note -->
+            @if (fieldVisibility.note) {
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.note' | translate }}</mat-label>
+                        <textarea matInput formControlName="note" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.note.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.note.errors, 'field.note' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-note-templates class="template-component" [language]="language" (templateSelected)="sourceTemplateSelected($event, 'note')" />
+                </div>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.noteSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="noteSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.noteSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.noteSource.errors, 'field.note' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates class="template-component" [language]="language" (templateSelected)="sourceTemplateSelected($event, 'noteSource')" />
+                </div>
+            }
+            <!-- Context -->
+            @if (fieldVisibility.context) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.context' | translate }}</mat-label>
+                    <textarea matInput formControlName="context" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.context.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.context.errors, 'field.context' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.contextSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="contextSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.contextSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.contextSource.errors, 'field.context' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'contextSource')"
+                    />
+                </div>
+            }
+            <!-- Metadata -->
+            @if (fieldVisibility.metadata) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.metadata' | translate }}</mat-label>
+                    <textarea matInput formControlName="metadata" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.metadata.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.metadata.errors, 'field.metadata' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <div class="template-container">
+                    <mat-form-field>
+                        <mat-label>{{ 'field.metadataSource' | translate }}</mat-label>
+                        <textarea matInput formControlName="metadataSource" cdkTextareaAutosize></textarea>
+                        @if (_form.controls.metadataSource.invalid) {
+                            <mat-error>
+                                {{ errorService.getControlError(_form.controls.metadataSource.errors, 'field.metadata' | translate, 'entry.error') }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                    <td-source-templates
+                        class="template-component"
+                        [language]="language"
+                        (templateSelected)="sourceTemplateSelected($event, 'metadataSource')"
+                    />
+                </div>
+            }
+            <!-- Country -->
+            @if (fieldVisibility.country) {
+                <mat-form-field>
+                    <mat-label>{{ 'field.country' | translate }}</mat-label>
+                    <textarea matInput formControlName="country" cdkTextareaAutosize></textarea>
+                    @if (_form.controls.country.invalid) {
+                        <mat-error>
+                            {{ errorService.getControlError(_form.controls.country.errors, 'field.country' | translate, 'entry.error') }}
+                        </mat-error>
+                    }
+                </mat-form-field>
+            }
+        </div>
+    </details>
+}

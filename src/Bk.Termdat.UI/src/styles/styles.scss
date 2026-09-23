@@ -1,0 +1,145 @@
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+main {
+    overflow-y: auto;
+}
+
+.cdk-overlay-container .mat-mdc-select-panel {
+    max-height: 50vh;
+    max-width: 60vw;
+}
+
+.buttons-bar {
+    text-align: right;
+    border-bottom: 1px solid $ob-gray;
+    padding: $ob-spacing-sm $ob-spacing-default;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: $ob-z-index-controls + 1;
+
+    button {
+        margin-left: 0.5em;
+    }
+}
+
+.ob-control-item .hidden {
+    visibility: hidden;
+}
+
+@include ob-media-breakpoint-up(md) {
+    // Prevents the window from getting jiggy in touch mode
+    html {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+}
+
+.ob-table {
+    .no-break,
+    .ellipsis {
+        white-space: nowrap;
+        word-break: keep-all;
+    }
+
+    .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+
+    &.sort-table {
+        .mat-sort-header-content {
+            word-break: keep-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+    }
+}
+
+// Fix multiple scroll bars with fixed containers
+.ob-master-layout.ob-master-layout-fixed .ob-master-layout-content .ob-master-layout-content-viewport > main.ob-main-layout {
+    overflow-y: inherit;
+}
+
+.phraseology {
+    color: $blue-dark;
+}
+
+// prevents scrollbar in textarea
+textarea.mat-mdc-input-element.cdk-textarea-autosize {
+    box-sizing: content-box;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .ob-column-layout {
+        .ob-column-left,
+        .ob-column-right {
+            flex-basis: $ob-column-width !important;
+            max-width: $ob-column-width !important;
+        }
+        .ob-column-left.ob-collapsed {
+            margin-left: -$ob-column-width !important;
+        }
+        .ob-column-right.ob-collapsed {
+            margin-right: -$ob-column-width !important;
+        }
+    }
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-actions {
+    row-gap: $ob-spacing-sm;
+}
+
+/* Hide (mobile) header on printing to prevent it from covering information. */
+@media print {
+    .ob-master-layout-header {
+        display: none !important;
+        height: 0 !important;
+    }
+}
+
+.mat-mdc-chip-grid {
+    flex: 1;
+}
+
+.mat-mdc-form-field-infix:after {
+    margin-top: 3px !important;
+}
+
+// Remove the navigation close button on non-mobile screen-sizes
+.ob-master-layout-navigation-item .ob-sub-menu {
+    @media (min-width: 906px) {
+        padding: $ob-spacing-md !important;
+
+        .ob-sub-menu-back-close-container {
+            display: none !important;
+        }
+    }
+}
+
+// This fixes the misalignment of the error indicator for text-fields
+// Bug was introduced with Oblique@11
+// https://devops-server.admin.ch/DefaultCollection/BK_DevOps/_workitems/edit/114693
+.ob-form-field-textarea .mat-mdc-form-field-infix:after {
+    margin-top: unset !important;
+}
+
+// Since Oblique@11 table header strangely break words
+th {
+    word-break: auto-phrase;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.ob-service-navigation-custom-control {
+    display: flex;
+}

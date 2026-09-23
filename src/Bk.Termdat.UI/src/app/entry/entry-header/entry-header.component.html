@@ -1,0 +1,174 @@
+@if (entry) {
+    <fieldset>
+        <legend>{{ 'entry.headData' | translate }}</legend>
+        <div class="has-copy-icon">
+            <div>
+                <p class="title">{{ 'field.entryId' | translate }}</p>
+                <p>
+                    {{ entry.id }}
+                </p>
+            </div>
+            <button mat-icon-button [matTooltip]="'common.copy' | translate" matTooltipPosition="left" obButton="tertiary" (click)="copyAsEntryUri()">
+                <mat-icon svgIcon="link" class="ob-icon" />
+            </button>
+        </div>
+        @if (entry.conceptUri) {
+            <div class="has-copy-icon">
+                <div>
+                    <p class="title">{{ 'field.conceptUri' | translate }}</p>
+                    <p class="overflow-hidden">
+                        {{ entry.conceptUri }}
+                    </p>
+                </div>
+                <button
+                    mat-icon-button
+                    [matTooltip]="'common.copyToClipboard' | translate"
+                    matTooltipPosition="left"
+                    obButton="tertiary"
+                    (click)="copyToClipboard(entry.conceptUri!)"
+                >
+                    <mat-icon svgIcon="clipboard" class="ob-icon" />
+                </button>
+            </div>
+        }
+        @if (entry.identification !== null && entry.identification !== undefined) {
+            <p class="title">{{ 'field.identification' | translate }}</p>
+            <p>{{ entry.identification }}</p>
+        }
+        @if (entry.office) {
+            <p class="title">{{ 'field.office' | translate }}</p>
+            <p>{{ entry.office.code }} - {{ entry.office.name }}</p>
+        }
+        @if (entry.collection) {
+            <p class="title">{{ 'field.collection' | translate }}</p>
+            <p [ngClass]="{obsolete: entry.collection.isObsolete}">
+                {{ entry.collection.code }} - {{ entry.collection.name }}&nbsp;&nbsp;
+                @if (!entry.collection.active) {
+                    <span class="collectionInactive">{{ 'field.inactive' | translate }}</span>
+                }
+                @if (entry.collection.exportLindas) {
+                    <span class="chip lindas">LINDAS</span>
+                }
+                @if (entry.collection.activeApi && canSeeActiveApi) {
+                    <span class="chip activeApi">{{ 'administration.collection.field.activeApi' | translate }}</span>
+                }
+            </p>
+        }
+        @if (entry.glossaries && entry.glossaries.length > 0) {
+            <dl>
+                <dt>{{ 'field.glossaries' | translate }}</dt>
+                @for (glossary of entry.glossaries; track glossary.id) {
+                    <dd>{{ glossary.code }} - {{ glossary.name }}</dd>
+                }
+            </dl>
+        }
+        @if (entry.conceptSystemPosition) {
+            <p class="title">{{ 'field.conceptSystemPosition' | translate }}</p>
+            <p>{{ entry.conceptSystemPosition.value }}</p>
+        }
+        <p class="title">{{ 'field.status' | translate }}</p>
+        <p>
+            <span class="chip" [ngClass]="{status: !isMainOffice, validated: isValidated && isMainOffice, pending: !isValidated && isMainOffice}">
+                {{ 'field.status.' + statusName | translate }}
+            </span>
+        </p>
+        <p class="title">{{ 'field.reliability' | translate }}</p>
+        <p>{{ entry.reliability + 1 }} - {{ 'field.reliability.' + reliabilityName | translate }}</p>
+        @if (entry.subjects && entry.subjects.length > 0) {
+            <dl>
+                <dt>{{ 'field.subjectDomains' | translate }}</dt>
+                @for (subject of entry.subjects; track subject.id) {
+                    <dd>{{ subject.name }}</dd>
+                    @for (domain of entry.domains; track domain.id) {
+                        @if (domain.subjectId === subject.id) {
+                            <dd class="domain">{{ domain.name }}</dd>
+                        }
+                    }
+                }
+            </dl>
+        }
+        @if (entry.relatedCollections && entry.relatedCollections.length > 0) {
+            <dl>
+                <dt>{{ 'field.relatedCollections' | translate }}</dt>
+                @for (collection of entry.relatedCollections; track collection.id) {
+                    <dd [ngClass]="{obsolete: collection.isObsolete}">{{ collection.code }} - {{ collection.name }}</dd>
+                }
+            </dl>
+        }
+        @if (entry.picture) {
+            <p class="title">{{ 'field.picture' | translate }}</p>
+            <p class="picture-link" tabindex="0" (click)="openPicture()" (keydown.enter)="openPicture()">
+                <img src="/api/pictures/{{ entry.id }}" [alt]="translatedPictureAltText" />
+            </p>
+            <p><td-picture-metadata [picture]="entry.picture" /></p>
+        }
+        @if (entry.comment) {
+            <p class="title">{{ 'field.comment' | translate }}</p>
+            <p class="comment-field-content">{{ entry.comment }}</p>
+        }
+        @if (entry.adminInfos && entry.adminInfos.length > 0) {
+            <dl>
+                <dt class="title">{{ 'field.adminInfos' | translate }}</dt>
+                @for (adminInfo of entry.adminInfos; track adminInfo.id) {
+                    <dd>
+                        {{ adminInfo.code }}
+                    </dd>
+                }
+            </dl>
+        }
+        @if (entry.referencedBy && entry.referencedBy.length > 0) {
+            <td-referenced-by-list [references]="entry.referencedBy" />
+        }
+        @if (entry.externalLinkSummary && entry.externalLinkSummary.length > 0) {
+            <dl>
+                <dt class="title">{{ 'field.externalLinks' | translate }}</dt>
+                @for (externalLink of entry.externalLinkSummary; track externalLink.url) {
+                    <dd>
+                        @if (externalLink.type === ExternalLinkType.Wikidata) {
+                            Wikidata: <a href="{{ externalLink.url }}">{{ externalLink.url }}</a>
+                        }
+                        @if (externalLink.type === ExternalLinkType.Fedlex) {
+                            Fedlex: <a href="{{ externalLink.url }}">{{ externalLink.url }}</a>
+                        }
+                        @if (externalLink.type === ExternalLinkType.Lindas) {
+                            LINDAS: <a href="{{ externalLink.url }}">{{ externalLink.url }}</a>
+                        }
+                    </dd>
+                }
+            </dl>
+        }
+        @if (entry.created || entry.modified) {
+            <dl>
+                <dt>{{ 'entry.headData.changes' | translate }}</dt>
+                @if (entry.created) {
+                    <dd>
+                        {{ 'field.created' | translate }}: {{ entry.created | date: 'medium' }}
+                        @if (entry.createdBy) {
+                            <span>&nbsp;({{ entry.createdBy }})</span>
+                        }
+                    </dd>
+                }
+                @if (entry.modified) {
+                    <dd>
+                        {{ 'field.modified' | translate }}: {{ entry.modified | date: 'medium' }}
+                        @if (entry.modifiedBy) {
+                            <span>&nbsp;({{ entry.modifiedBy }})</span>
+                        }
+                    </dd>
+                }
+            </dl>
+        }
+        @if (entry.deleted) {
+            <p>
+                <span class="chip deleted">{{ 'field.deleted' | translate }}</span>
+            </p>
+        }
+        @if (emailLink) {
+            <div class="feedback">
+                <a [href]="emailLink">
+                    {{ 'feedback.text' | translate }}
+                </a>
+            </div>
+        }
+    </fieldset>
+}

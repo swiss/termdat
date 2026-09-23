@@ -1,0 +1,24 @@
+<div class="dialog-title-wrapper">
+    <h2 mat-dialog-title>
+        {{ data.title | translate }}
+    </h2>
+    <button [mat-dialog-close] mat-icon-button [attr.aria-label]="'common.close' | translate">
+        <mat-icon svgIcon="xmark" class="ob-icon" />
+    </button>
+</div>
+<div mat-dialog-content>
+    <p [innerHTML]="data.text | translate: data.textValue"></p>
+    @if (data.alert) {
+        <ob-alert [type]="data.alert.type ?? 'info'">
+            {{ data.alert.text | translate }}
+        </ob-alert>
+    }
+</div>
+<div mat-dialog-actions class="dialog-buttons-right">
+    <button [mat-dialog-close] color="primary" mat-stroked-button>
+        {{ 'common.cancel' | translate }}
+    </button>
+    <button (click)="confirmDialog()" color="primary" mat-flat-button>
+        {{ data.confirm | translate }}
+    </button>
+</div>

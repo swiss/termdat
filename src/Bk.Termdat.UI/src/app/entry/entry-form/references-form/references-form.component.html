@@ -1,0 +1,16 @@
+<details>
+    <summary [ngClass]="{invalid: (formArray.touched && formArray.invalid) || (createForm.touched && createForm.invalid)}">
+        <h6>{{ 'field.references' | translate }}</h6>
+    </summary>
+    <div class="references-form">
+        @for (form of $any(formArray).controls; track $index) {
+            <td-reference-entry
+                [entryReference]="_references[$index]"
+                [form]="form"
+                [mode]="REFERENCE_ENTRY_MODE.Edit"
+                (referenceRemoved)="onRemoved($index)"
+            />
+        }
+        <td-reference-entry [mode]="REFERENCE_ENTRY_MODE.Create" (referenceCreated)="onCreated($event)" [form]="createForm" />
+    </div>
+</details>

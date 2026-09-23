@@ -1,0 +1,75 @@
+# Cube Link - Dataset
+@prefix schema: <http://schema.org/> .
+
+<https://register.ld.admin.ch/.well-known/dataset/termdat> a <https://cube.link/Cube> ;
+	<http://purl.org/dc/terms/identifier> "termdat" ;
+	schema:version 1 ;
+	schema:workExample <https://ld.admin.ch/application/visualize> ;
+	schema:creativeWorkStatus <https://ld.admin.ch/vocabulary/CreativeWorkStatus/Draft> ;
+
+	<http://www.w3.org/ns/dcat#contactPoint> [
+		<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2006/vcard/ns#Organization> ;
+		<http://www.w3.org/2006/vcard/ns#fn> "Sektion Terminologie" ;
+		<http://www.w3.org/2006/vcard/ns#hasEmail> "info@bk.admin.ch" ;
+	] ;
+
+	<http://www.w3.org/ns/dcat#theme> <https://register.ld.admin.ch/opendataswiss/category/administration> ;
+	<http://purl.org/dc/terms/creator> <https://register.ld.admin.ch/opendataswiss/org/bundeskanzlei>;
+	<https://cube.link/observationSet> <https://register.ld.admin.ch/.well-known/dataset/termdat/1/observation> ;
+	<https://cube.link/observationConstraint> <https://register.ld.admin.ch/.well-known/dataset/termdat/1/shape> ;
+.
+# Cube Link - Constraint
+<https://register.ld.admin.ch/.well-known/dataset/termdat/1/shape> a <http://www.w3.org/ns/shacl#NodeShape>, <https://cube.link/Constraint> ;
+
+	<http://www.w3.org/ns/shacl#property> [
+		<http://schema.org/name> "Terme"@fr, "Term"@en, "Term"@de, "Termine"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/name> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 1 ;
+	],
+	[
+		<http://schema.org/name> "Définition"@fr, "Definition"@en, "Definition"@de, "Definizione"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/description> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 2 ;
+	],[
+		<http://schema.org/name> "Code de fiabilité"@fr, "Reliability code"@en, "Zuverlässigkeitscode"@de, "Codice di affidabilità"@it ;
+		<http://www.w3.org/ns/shacl#path> <https://schema.ld.admin.ch/reliabilityCode> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 3 ;
+	],[
+		<http://schema.org/name> "Source"@fr, "Source"@en, "Quelle"@de, "Fonte"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/citation> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 4 ;
+	],[
+		<http://schema.org/name> "Domaines"@fr, "Domains"@en, "Fachgebiete"@de, "Domini"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/citation> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 5 ;
+	],[
+		<http://schema.org/name> "Fiche"@fr, "Entry"@en, "Eintrag"@de, "Scheda"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/URL> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#IRI> ;
+		<http://www.w3.org/ns/shacl#order> 6 ;
+	],[
+		<http://schema.org/name> "Catégorisation"@fr, "Categorization"@en, "Einordnung"@de, "Categorizzazione"@it ;
+		<http://www.w3.org/ns/shacl#path> <http://schema.org/inDefinedTermSet> ;
+		<http://qudt.org/schema/qudt/scaleType> <http://qudt.org/schema/qudt/NominalScale> ;
+		<http://www.w3.org/ns/shacl#datatype> <http://www.w3.org/2001/XMLSchema#string> ;
+		<http://www.w3.org/ns/shacl#nodeKind> <http://www.w3.org/ns/shacl#Literal> ;
+		<http://www.w3.org/ns/shacl#order> 7 ;
+	];
+	<http://www.w3.org/ns/shacl#closed> true .

@@ -1,0 +1,31 @@
+@use 'src/styles/variables.scss' as *;
+
+.grid,
+.two-column-grid {
+    gap: $ob-spacing-default;
+}
+
+.file-import {
+    margin-top: $ob-spacing-default;
+    margin-left: $ob-spacing-default;
+    margin-right: $ob-spacing-default;
+    margin-bottom: $ob-spacing-default;
+}
+
+.file-import-fields {
+    margin-top: $ob-spacing-default !important;
+    margin-bottom: $ob-spacing-default;
+}
+
+.import-actions {
+    margin-top: $ob-spacing-default;
+    text-align: right;
+}
+
+.last-button {
+    margin-left: $ob-spacing-sm;
+}
+
+.import-error {
+    margin-top: $ob-spacing-default;
+}

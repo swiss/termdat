@@ -1,0 +1,8 @@
+@use '@oblique/oblique/styles/scss/core/variables' as *;
+
+h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $ob-spacing-sm;
+}

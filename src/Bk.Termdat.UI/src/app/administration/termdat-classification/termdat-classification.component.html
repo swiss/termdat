@@ -1,0 +1,224 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.administration.termdatClassifications' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="primary" routerLink="/administration/termdatClassification/create">
+                <mat-icon svgIcon="plus" class="ob-icon" />
+                {{ 'administration.termdatClassification.create' | translate }}
+            </button>
+        </div>
+    </div>
+    <div class="controls">
+        <div class="two-column-grid">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'administration.termdatClassification.filter' | translate }}</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'administration.termdatClassification.filter' | translate }}" #input />
+
+                <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                    <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                </button>
+            </mat-form-field>
+
+            <mat-paginator [pageSize]="defaultPageSize" [pageSizeOptions]="pageSizeOptions" />
+        </div>
+    </div>
+
+    <div class="default-table">
+        <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            matSortActive="subjectName"
+            matSortDirection="asc"
+            class="ob-table ob-table-sm ob-table-collapse-md sort-table ob-table-plain"
+        >
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.administration.termdatClassifications' | translate
+                }}
+            </caption>
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.subjectId' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.subjectId' | translate }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let row; let i = index"
+                    [attr.data-title]="'administration.field.subjectId' | translate"
+                    [attr.rowspan]="rowSpans['id'][i]"
+                    [style.display]="rowSpans['id'][i] ? '' : 'none'"
+                    [class.odd]="i % 2"
+                    class="no-break"
+                >
+                    {{ row.id }}
+                </td>
+            </ng-container>
+
+            <!-- Subject Name Column -->
+            <ng-container matColumnDef="subjectName">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.subject' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.subject' | translate }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let row; let i = index"
+                    [attr.data-title]="'administration.field.subject' | translate"
+                    [attr.rowspan]="rowSpans['id'][i]"
+                    [style.display]="rowSpans['id'][i] ? '' : 'none'"
+                >
+                    {{ row.subjectName }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="domainId">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.field.domainId' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.field.domainId' | translate }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let row; let i = index"
+                    [attr.data-title]="'administration.field.domainId' | translate"
+                    [attr.rowspan]="rowSpans['domainId'][i]"
+                    [style.display]="rowSpans['domainId'][i] ? '' : 'none'"
+                    [class.odd]="i % 2"
+                    class="no-break"
+                >
+                    {{ row.domainId }}
+                </td>
+            </ng-container>
+
+            <!-- Domain Name Column -->
+            <ng-container matColumnDef="domainName">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.field.domain' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.field.domain' | translate }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let row; let i = index"
+                    [attr.data-title]="'administration.field.domain' | translate"
+                    [attr.rowspan]="rowSpans['domainId'][i]"
+                    [style.display]="rowSpans['domainId'][i] ? '' : 'none'"
+                >
+                    {{ row.domainName }}
+                </td>
+            </ng-container>
+
+            <!-- EntryCount Column -->
+            <ng-container matColumnDef="entryCount">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.field.entryCount' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.field.entryCount' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.field.entryCount' | translate" class="no-break">
+                    {{ row.entryCount }}
+                </td>
+            </ng-container>
+
+            <!-- Created Column -->
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'field.created' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.created' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.created' | translate">
+                    <span class="date">{{ row.created | date: 'shortDate' }}</span>
+                    <span class="person ellipsis">{{ row.createdBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- CreatedBy Column -->
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'field.createdBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.createdBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.createdBy' | translate">
+                    <span class="ellipsis">{{ row.createdBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Modified Column -->
+            <ng-container matColumnDef="modified">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'field.modified' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modified' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modified' | translate">
+                    <span class="date">{{ row.modified | date: 'shortDate' }}</span>
+                    <span class="person ellipsis">{{ row.modifiedBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- ModifiedBy Column -->
+            <ng-container matColumnDef="modifiedBy">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'field.modifiedBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modifiedBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modifiedBy' | translate">
+                    <span class="ellipsis">{{ row.modifiedBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <div class="actions">
+                        <button
+                            obButton="tertiary"
+                            mat-icon-button
+                            [matTooltip]="row.domainId && row.domainId > 0 ? ('domain.update.tooltip' | translate) : ('subject.update.tooltip' | translate)"
+                            [matTooltipPosition]="'below'"
+                            (click)="updateTermdatClassification(row)"
+                        >
+                            <mat-icon svgIcon="pencil" class="ob-icon header-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.update' | translate }}</span>
+                        </button>
+                        @if (!row.deleted) {
+                            <button
+                                obButton="tertiary"
+                                mat-icon-button
+                                [matTooltip]="row.domainId && row.domainId > 0 ? ('domain.delete.tooltip' | translate) : ('subject.delete.tooltip' | translate)"
+                                [matTooltipPosition]="'below'"
+                                [disabled]="row.entryCount > 0"
+                                (click)="deleteTermdatClassification(row)"
+                            >
+                                <mat-icon svgIcon="delete" class="ob-icon header-icon" />
+                                <span class="ob-screen-reader-only">{{ 'common.delete' | translate }}</span>
+                            </button>
+                        }
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.deleted]="row.deleted"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="9">
+                    @if (input.value) {
+                        <span>{{ 'administration.noFilteredItems' | translate: {filter: input.value} }}</span>
+                    }
+                    @if (!input.value) {
+                        <span>{{ 'administration.noItems' | translate }}</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

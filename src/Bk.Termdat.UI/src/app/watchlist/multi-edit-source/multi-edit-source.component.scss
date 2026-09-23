@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+@include td-form-with-descriptions;
+
+.layout {
+    form {
+        max-width: 62em;
+    }
+}
+.button-area {
+    display: flex;
+    gap: $ob-spacing-default;
+}
+.checkbox-error
+{
+    font-size: 12px;
+}
+

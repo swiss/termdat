@@ -1,0 +1,13 @@
+@use 'src/styles/default-table.scss';
+
+form {
+    max-width: 36em;
+
+    * {
+        cursor: default !important;
+    }
+
+    input {
+        cursor: text !important;
+    }
+}

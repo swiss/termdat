@@ -1,0 +1,24 @@
+$ob-grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1900px,
+);
+
+$yellow: #fff64f;
+$yellow-light: #fffa9f;
+$yellow-extra-light: #fcfad0;
+
+$blue-dark: darkblue;
+
+$blue-light: #cce6ff;
+$orange-light: #ffdcb3;
+
+$fieldset-border-radius: 12px;
+
+$ob-column-width: 25%;
+
+@forward '@oblique/oblique/styles/scss/core/_variables.scss';
+@forward '@oblique/oblique/styles/scss/core/_palette.scss';

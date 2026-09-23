@@ -1,0 +1,16 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'watchlist.multiEditHeaderData' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+    <td-multi-edit-admininfos [ids]="ids" />
+
+    <td-multi-edit-chip-glossaries [ids]="ids" />
+
+    <td-multi-edit-chip-collections [ids]="ids" />
+</div>

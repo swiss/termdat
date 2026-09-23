@@ -1,0 +1,196 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.administration.news' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="primary" routerLink="/administration/news/create">
+                <mat-icon svgIcon="plus" class="ob-icon" />
+                {{ 'administration.news.create' | translate }}
+            </button>
+        </div>
+    </div>
+    <div class="controls">
+        <div class="controls-row">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'administration.news.filter' | translate }}</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'administration.news.filter' | translate }}" #input />
+
+                <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                    <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                </button>
+            </mat-form-field>
+
+            <mat-paginator [pageSize]="defaultPageSize" [pageSizeOptions]="pageSizeOptions" />
+        </div>
+    </div>
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.administration.news' | translate
+                }}
+            </caption>
+
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.id' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.id' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.id' | translate" class="no-break">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- IsEnabled  Column -->
+            <ng-container matColumnDef="isEnabled">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.news.field.isEnabled' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.news.field.isEnabled' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.news.field.isEnabled' | translate">
+                    @if (row.isEnabled) {
+                        <mat-icon svgIcon="checkmark" class="ob-icon" />
+                    }
+                    <span class="ob-screen-reader-only">{{ (row.isEnabled ? 'administration.yes' : 'administration.no') | translate }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.title' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.title' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.field.title' | translate">
+                    {{ row.title }}
+                </td>
+            </ng-container>
+
+            <!-- Created Column -->
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.created' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.created' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.created' | translate">
+                    <span class="date">{{ row.created | date: 'shortDate' }}</span>
+                </td>
+            </ng-container>
+
+            <!-- CreatedBy Column -->
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.createdBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.createdBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.createdBy' | translate">
+                    <span class="ellipsis">{{ row.createdBy }}</span>
+                </td>
+            </ng-container>
+
+            <!-- Modified Column -->
+            <ng-container matColumnDef="modified">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.modified' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modified' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modified' | translate">
+                    <span class="date">{{ row.modified | date: 'shortDate' }}</span>
+                </td>
+            </ng-container>
+
+            <!-- ModifiedBy Column -->
+            <ng-container matColumnDef="modifiedBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{ 'field.modifiedBy' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'field.modifiedBy' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.modifiedBy' | translate">
+                    <span class="ellipsis">{{ row.modifiedBy }}</span>
+                </td>
+            </ng-container>
+            <!-- Gültig bis -->
+            <ng-container matColumnDef="validTo">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.field.validTo' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.field.validTo' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.field.validTo' | translate">
+                    <span class="date">{{ row.validTo | date: 'shortDate' }}</span>
+                </td>
+            </ng-container>
+            <!-- Sortierung -->
+            <ng-container matColumnDef="sortIndex">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'administration.news.field.sortIndex' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'administration.news.field.sortIndex' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.news.field.sortIndex' | translate">
+                    {{ row.sortIndex }}
+                </td>
+            </ng-container>
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'administration.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'administration.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <div class="actions">
+                        <button mat-icon-button (click)="moveUp(row)" [disabled]="!row.canMoveUp || isCustomSorted() || isFiltered()">
+                            <mat-icon svgIcon="arrow_up" />
+                        </button>
+
+                        <button mat-icon-button (click)="moveDown(row)" [disabled]="!row.canMoveDown || isCustomSorted() || isFiltered()">
+                            <mat-icon svgIcon="arrow_down" />
+                        </button>
+                        <button
+                            obButton="tertiary"
+                            mat-icon-button
+                            [matTooltip]="'common.update' | translate"
+                            [matTooltipPosition]="'below'"
+                            (click)="update(row)"
+                        >
+                            <mat-icon svgIcon="pencil" class="ob-icon header-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.update' | translate }}</span>
+                        </button>
+                        <button obButton="tertiary" mat-icon-button [matTooltip]="'entry.copy' | translate" [matTooltipPosition]="'below'" (click)="copy(row)">
+                            <mat-icon svgIcon="copy" class="ob-icon header-icon" />
+                            <span class="ob-screen-reader-only">{{ 'entry.copy' | translate }}</span>
+                        </button>
+                        <button
+                            obButton="tertiary"
+                            mat-icon-button
+                            [matTooltip]="'common.delete' | translate"
+                            (click)="delete(row)"
+                            [matTooltipPosition]="'below'"
+                        >
+                            <mat-icon svgIcon="delete" class="ob-icon header-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.delete' | translate }}</span>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
+</div>

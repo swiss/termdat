@@ -1,0 +1,150 @@
+@use '@angular/material' as mat;
+@use 'src/styles/variables.scss' as *;
+@use '@oblique/oblique/styles/scss/core/mixins/_typography.scss' as *;
+@import '@oblique/oblique/styles/scss/core/mixins/_layout.scss';
+
+@mixin td-form-with-descriptions {
+    .layout {
+        padding: $ob-spacing-default;
+
+        form {
+            @include mat.elevation(2);
+            border-radius: $ob-border-radius-base;
+            padding: $ob-spacing-default;
+            max-width: 992px;
+            margin: $ob-spacing-default auto;
+
+            .source {
+                display: flex;
+
+                .source-template {
+                    margin-top: 2px;
+                    margin-left: $ob-spacing-sm;
+                }
+            }
+
+            .form-languages {
+                h2 {
+                    @include ob-h5;
+                }
+                padding: $ob-spacing-sm;
+            }
+        }
+
+        .header {
+            padding: 0 $ob-spacing-sm;
+
+            &.two-column-grid {
+                grid-template-columns: 1fr;
+                @include ob-media-breakpoint-up(md) {
+                    grid-template-columns: auto 1fr;
+                }
+                width: 100%;
+            }
+
+            h1 {
+                @include ob-h2;
+            }
+
+            .buttons {
+                display: flex;
+                gap: $ob-spacing-sm;
+                padding: $ob-spacing-sm 0;
+                margin-bottom: 10px;
+                flex-direction: row-reverse;
+                align-items: flex-end;
+
+                @include ob-media-breakpoint-down(md) {
+                    flex-direction: column;
+                    align-items: center;
+
+                    button {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin td-fieldset-with-legend {
+    fieldset {
+        padding: 0 $ob-spacing-default $ob-spacing-default $ob-spacing-default;
+        margin: 0;
+        border: 1px solid black;
+        border-radius: $fieldset-border-radius;
+
+        legend {
+            width: unset;
+            border: none;
+            padding: 0 $ob-spacing-default;
+        }
+    }
+}
+
+@mixin td-details-with-heading {
+    details {
+        margin-bottom: $ob-spacing-sm;
+
+        summary {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: $ob-spacing-sm;
+            border-bottom: 1px dotted $ob-gray;
+
+            &.invalid > h6 {
+                color: $ob-error;
+            }
+
+            > h6 {
+                flex: 1 1 auto;
+                line-height: inherit;
+                padding-left: $ob-spacing-sm;
+            }
+
+            &::before {
+                -webkit-font-smoothing: antialiased;
+                display: inline-block;
+                font-style: normal;
+                font-feature-settings: normal;
+                font-variant: normal;
+                text-rendering: auto;
+                line-height: 1;
+                content: '\25b6';
+                width: 14px;
+                text-align: center;
+            }
+
+            button {
+                flex: 0 0 auto;
+                margin-bottom: $ob-spacing-xs;
+            }
+        }
+
+        &[open] {
+            summary::before {
+                content: '\25BC';
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@mixin td-select-multiline {
+    .mat-mdc-option.multi-line {
+        height: auto;
+        white-space: normal;
+        line-height: initial;
+        padding: $ob-spacing-sm $ob-spacing-default;
+        min-height: 48px;
+
+        .mdc-list-item__primary-text {
+            word-break: break-word;
+            text-overflow: initial;
+            overflow: auto;
+        }
+    }
+}

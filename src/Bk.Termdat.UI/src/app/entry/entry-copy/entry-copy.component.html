@@ -1,0 +1,28 @@
+<div class="buttons-bar">
+    <button type="button" mat-button obButton="primary" (click)="save()" [disabled]="form.pristine">
+        {{ 'common.save' | translate }}
+    </button>
+    @if (originalId > 0) {
+        <button
+            mat-button
+            obButton="primary"
+            type="button"
+            tdFocusRemover
+            [routerLink]="['/search/entry', originalId]"
+            [queryParams]="activatedRoute.snapshot.queryParams"
+        >
+            {{ 'common.close' | translate }}
+        </button>
+    }
+</div>
+
+<div class="notification">
+    <ob-alert type="warning">{{ 'entry.copy.hint' | translate }}</ob-alert>
+</div>
+
+<div class="entry-copy">
+    <h3>{{ 'entry.copy' | translate }}</h3>
+    @if (entry) {
+        <td-entry-form [form]="form" [formEntry]="entry" />
+    }
+</div>

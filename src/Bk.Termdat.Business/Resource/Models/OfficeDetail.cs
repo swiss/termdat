@@ -1,0 +1,12 @@
+using System;
+
+namespace Bk.Termdat.Business.Resource.Models;
+
+public class OfficeDetail : OfficeSummary
+{
+    public DateTime Created { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTime Modified { get; set; }
+    public string ModifiedBy { get; set; }
+    public int EntryCount { get; set; }
+}

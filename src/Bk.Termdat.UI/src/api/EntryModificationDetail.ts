@@ -1,0 +1,43 @@
+﻿import {ConceptSystemPositionSummary} from 'api/ConceptSystemPositionSummary';
+import {EntryModificationLanguageDetail} from 'api/EntryModificationLanguageDetail';
+import {EntryReferenceDetail} from 'api/EntryReferenceDetail';
+import {ExternalLinkDetail} from 'api/ExternalLinkDetail';
+import {AdminInfoSummary} from './AdminInfoSummary';
+import {CollectionSummary} from './CollectionSummary';
+import {DomainSummary} from './DomainSummary';
+import {GlossarySummary} from './GlossarySummary';
+import {LenochClassificationSummary} from './LenochClassificationSummary';
+import {OfficeSummary} from './OfficeSummary';
+import {PictureDetail} from './PictureDetail';
+import {Reliability} from './Reliability';
+import {Status} from './Status';
+import {SubjectSummary} from './SubjectSummary';
+
+export interface EntryModificationDetail {
+    id?: number;
+    status: Status;
+    reliability: Reliability;
+    identification?: number;
+    comment?: string;
+    office: OfficeSummary;
+    collection: CollectionSummary;
+    picture?: PictureDetail;
+    conceptSystemPosition?: ConceptSystemPositionSummary;
+    languageDetails?: EntryModificationLanguageDetail[];
+    lenochClassifications: LenochClassificationSummary[];
+    subjects?: SubjectSummary[];
+    domains?: DomainSummary[];
+    relatedCollections?: CollectionSummary[];
+    glossaries?: GlossarySummary[];
+    adminInfos?: AdminInfoSummary[];
+    references?: EntryReferenceDetail[];
+    externalLinks?: ExternalLinkDetail[];
+    deleted?: boolean;
+    concurrencyToken?: number;
+    canEdit?: boolean;
+    canEditCollection?: boolean;
+    canDelete?: boolean;
+    canRestore?: boolean;
+    locked?: Date;
+    lockedBy?: string;
+}

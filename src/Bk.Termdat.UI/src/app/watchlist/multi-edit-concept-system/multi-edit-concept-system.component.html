@@ -1,0 +1,28 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'watchlist.multiEditConceptSystem' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form">
+        <div class="header"></div>
+        <div class="one-column">
+            <td-autocomplete class="span-4" formControlName="conceptSystemPosition" [options]="conceptSystemPositions">
+                <mat-label>{{ 'field.conceptSystemPosition' | translate }}</mat-label>
+            </td-autocomplete>
+        </div>
+        <div class="button-area">
+            <button mat-button obButton="secondary" type="button" (click)="set()">
+                {{ 'watchlist.multiEditConceptSystem.set' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="button" (click)="remove()">
+                {{ 'watchlist.multiEditConceptSystem.remove' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

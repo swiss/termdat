@@ -1,0 +1,56 @@
+@use 'src/styles/variables.scss' as *;
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+
+a.profile-button {
+    padding: 0 $ob-spacing-sm;
+}
+
+span.profile-label {
+    @include ob-media-breakpoint-down(md) {
+        display: none;
+    }
+}
+
+a {
+    color: #069;
+}
+
+:host {
+    .footer-item {
+        margin-left: $ob-spacing-default;
+        @include ob-media-breakpoint-down(sm) {
+            margin-left: 0;
+        }
+    }
+
+    ::ng-deep {
+        .ob-master-layout-header .ob-service-navigation-languages .mat-mdc-form-field-icon-suffix {
+            margin: 4px 0 0;
+        }
+
+        .ob-master-layout-footer {
+            display: block;
+            padding: 0;
+
+            > footer {
+                grid-template-columns: 1fr;
+            }
+
+            .ob-footer-links {
+                display: none;
+            }
+
+            .ob-footer-info {
+                flex: 1;
+
+                .ob-footer-item.ob-footer-item-info {
+                    display: flex;
+
+                    @include ob-media-breakpoint-down(sm) {
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
+    }
+}

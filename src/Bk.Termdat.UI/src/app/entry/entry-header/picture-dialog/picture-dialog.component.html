@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>
+    {{ 'field.picture' | translate }}
+    <button [mat-dialog-close] mat-icon-button [attr.aria-label]="'common.close' | translate">
+        <mat-icon svgIcon="xmark" class="ob-icon" />
+    </button>
+</h1>
+<section mat-dialog-content>
+    <p><img src="/api/pictures/{{ data.entryId }}" [alt]="translatedPictureAltText" /></p>
+</section>

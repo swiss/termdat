@@ -1,0 +1,77 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ titleTranslateKey | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/administration/conceptSystem">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="grid">
+            <mat-form-field class="span-7">
+                <mat-label>{{ (form.controls.id.value ? 'field.id' : 'common.willBeSetOnSave') | translate }}</mat-label>
+                <input matInput type="text" name="id" formControlName="id" />
+            </mat-form-field>
+        </div>
+
+        <mat-form-field>
+            <mat-label>{{ 'administration.conceptSystem.field.title' | translate }}</mat-label>
+            <input matInput type="text" name="title" formControlName="title" required />
+            @for (error of form.controls.title.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key.toString() | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Terminologiesammlung -->
+        @if (collectionOptions) {
+            <td-autocomplete formControlName="collectionId" [options]="collectionOptions" class="search-control">
+                <mat-label>{{ 'field.collection' | translate }}</mat-label>
+                @for (error of form.controls.collectionId.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key.toString() | translate: error.value }}
+                    </mat-error>
+                }
+            </td-autocomplete>
+        }
+
+        <div class="form-concept-positions">
+            <h5>{{ 'field.conceptSystemPositions' | translate }}</h5>
+
+            <ng-container formArrayName="positions">
+                @for (positionForm of $any(positions.controls); track $index) {
+                    <div class="position-entry" [formGroup]="positionForm">
+                        <mat-form-field>
+                            <input
+                                matInput
+                                type="text"
+                                name="value"
+                                formControlName="value"
+                                [placeholder]="'conceptSystem.form.positionPlaceholder' | translate"
+                            />
+                            @for (error of positionForm.controls.value?.errors | keyvalue; track error.key) {
+                                <mat-error>
+                                    {{ 'i18n.validation.' + error.key.toString() | translate: error.value }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                        <button mat-icon-button obButton="secondary" type="button" [matTooltip]="'common.add' | translate" (click)="addPosition($index)">
+                            <mat-icon svgIcon="plus" />
+                        </button>
+                        <button mat-icon-button obButton="secondary" [matTooltip]="'common.delete' | translate" (click)="removePosition($index)">
+                            <mat-icon svgIcon="delete" />
+                        </button>
+                    </div>
+                }
+            </ng-container>
+        </div>
+    </form>
+</div>

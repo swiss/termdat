@@ -1,0 +1,15 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+@include td-form-with-descriptions;
+
+.button-area {
+    display: flex;
+    gap: $ob-spacing-default;
+}
+
+.one-column-chiplist {
+    display: grid;
+    grid-template-columns: 1fr;
+    vertical-align: top;
+}

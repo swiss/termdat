@@ -1,0 +1,28 @@
+@for (reference of displayReferences; track reference.entryId) {
+    @switch (reference.type) {
+        @case (REFERENCE_TYPE.Antonym) {
+            <abbr class="type" matTooltip="{{ 'entry.reference.tooltip.Antonym' | translate }}">{{ 'field.reference.Antonym' | translate }}</abbr
+            ><span class="describer">:</span>
+        }
+        @case (REFERENCE_TYPE.General) {
+            <abbr class="type" matTooltip="{{ 'entry.reference.tooltip.General' | translate }}">{{ 'field.reference.General' | translate }}</abbr
+            ><span class="describer">:</span>
+        }
+        @case (REFERENCE_TYPE.Specific) {
+            <abbr class="type" matTooltip="{{ 'entry.reference.tooltip.Specific' | translate }}">{{ 'field.reference.Specific' | translate }}</abbr
+            ><span class="describer">:</span>
+        }
+        @case (REFERENCE_TYPE.Whole) {
+            <abbr class="type" matTooltip="{{ 'entry.reference.tooltip.Whole' | translate }}">{{ 'field.reference.Whole' | translate }}</abbr
+            ><span class="describer">:</span>
+        }
+        @case (REFERENCE_TYPE.Part) {
+            <abbr class="type" matTooltip="{{ 'entry.reference.tooltip.Part' | translate }}">{{ 'field.reference.Part' | translate }}</abbr
+            ><span class="describer">:</span>
+        }
+    }
+    <a class="reference" [routerLink]="['/search', 'entry', reference.entryId]" target="_blank">{{ reference.text }}</a>
+    @if (reference.separator) {
+        <span class="separator">{{ reference.separator }}</span>
+    }
+}

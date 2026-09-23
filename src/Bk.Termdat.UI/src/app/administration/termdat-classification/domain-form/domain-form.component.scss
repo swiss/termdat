@@ -1,0 +1,10 @@
+@use 'src/styles/mixins.scss' as *;
+
+@include td-form-with-descriptions;
+
+:host {
+    .delete-domain-button {
+        min-width: 80px;
+        margin: 0.4em 0;
+    }
+}

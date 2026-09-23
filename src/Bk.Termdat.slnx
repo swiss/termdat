@@ -1,0 +1,57 @@
+<Solution>
+  <Folder Name="/00.Solution Items/">
+    <File Path="../.dockerignore" />
+    <File Path="../.editorconfig" />
+    <File Path="../.gitignore" />
+    <File Path="../.trivyignore" />
+    <File Path="../CHANGELOG.md" />
+    <File Path="../Dockerfile.gateway" />
+    <File Path="../Dockerfile.lindas.export.api" />
+    <File Path="../Dockerfile.private.api" />
+    <File Path="../Dockerfile.public.api" />
+    <File Path="../Dockerfile.search.api" />
+    <File Path="../etc/termdat-docker/docker-compose.yml" />
+    <File Path="../global.json" />
+    <File Path="NuGet.Config" />
+  </Folder>
+  <Folder Name="/10.Gateway/">
+    <Project Path="Bk.Termdat.Gateway.Tests/Bk.Termdat.Gateway.Tests.csproj" />
+    <Project Path="Bk.Termdat.Gateway/Bk.Termdat.Gateway.csproj" />
+  </Folder>
+  <Folder Name="/20.Api/">
+    <Project Path="Bk.Termdat.Common.Api.Tests/Bk.Termdat.Common.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.Common.Api/Bk.Termdat.Common.Api.csproj" />
+    <Project Path="Bk.Termdat.LindasExport.Api.Tests/Bk.Termdat.LindasExport.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.LindasExport.Api/Bk.Termdat.LindasExport.Api.csproj" />
+    <Project Path="Bk.Termdat.Private.Api.Tests/Bk.Termdat.Private.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.Private.Api/Bk.Termdat.Private.Api.csproj" />
+    <Project Path="Bk.Termdat.Public.Api.Tests/Bk.Termdat.Public.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.Public.Api/Bk.Termdat.Public.Api.csproj" />
+    <Project Path="Bk.Termdat.Search.Api.Tests/Bk.Termdat.Search.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.Search.Api/Bk.Termdat.Search.Api.csproj" />
+  </Folder>
+  <Folder Name="/30.Business/">
+    <Project Path="Bk.Termdat.Business.Tests/Bk.Termdat.Business.Tests.csproj" />
+    <Project Path="Bk.Termdat.Business/Bk.Termdat.Business.csproj" />
+  </Folder>
+  <Folder Name="/31.Business.Public.Api/">
+    <Project Path="Bk.Termdat.Business.Public.Api.Tests/Bk.Termdat.Business.Public.Api.Tests.csproj" />
+    <Project Path="Bk.Termdat.Business.Public.Api/Bk.Termdat.Business.Public.Api.csproj" />
+  </Folder>
+  <Folder Name="/40.Infrastructure/">
+    <Project Path="Bk.Termdat.Infrastructure.DataSource.Tests/Bk.Termdat.Infrastructure.DataSource.Tests.csproj" />
+    <Project Path="Bk.Termdat.Infrastructure.DataSource/Bk.Termdat.Infrastructure.DataSource.csproj" />
+    <Project Path="Bk.Termdat.Infrastructure.Search.Tests/Bk.Termdat.Infrastructure.Search.Tests.csproj" />
+    <Project Path="Bk.Termdat.Infrastructure.Search/Bk.Termdat.Infrastructure.Search.csproj" />
+    <Project Path="Bk.Termdat.Infrastructure.Service.Tests/Bk.Termdat.Infrastructure.Service.Tests.csproj" />
+    <Project Path="Bk.Termdat.Infrastructure.Service/Bk.Termdat.Infrastructure.Service.csproj" />
+  </Folder>
+  <Folder Name="/50.CrossCutting/">
+    <Project Path="Bk.Termdat.CrossCutting.Tests/Bk.Termdat.CrossCutting.Tests.csproj" />
+    <Project Path="Bk.Termdat.CrossCutting/Bk.Termdat.CrossCutting.csproj" />
+  </Folder>
+  <Folder Name="/60.Common/">
+    <Project Path="Bk.Termdat.Common.Tests/Bk.Termdat.Common.Tests.csproj" />
+    <Project Path="Bk.Termdat.Common/Bk.Termdat.Common.csproj" />
+  </Folder>
+</Solution>

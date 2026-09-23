@@ -1,0 +1,71 @@
+@use '../../../../styles/variables' as *;
+
+.upload-dropzone {
+    padding: $ob-spacing-xl;
+    text-align: center;
+    border: dashed 2px $ob-gray-light;
+    position: relative;
+    margin: 0 auto;
+    background: $ob-gray-extra-light;
+    display: flex;
+    flex-direction: column;
+
+    &.file-over {
+        border-style: solid;
+        opacity: 0.6;
+    }
+
+    input {
+        display: none;
+    }
+
+    .upload-dropzone-textcontainer {
+        padding: $ob-spacing-xl 0 $ob-spacing-default + $ob-spacing-xs;
+        position: relative;
+    }
+
+    .upload-dropzone-icon,
+    .upload-dropzone-text,
+    .upload-dropzone-format {
+        color: $ob-gray-dark;
+    }
+
+    .upload-dropzone-text {
+        font-size: $ob-font-size-lg;
+    }
+
+    .upload-dropzone-icon {
+        font-size: $ob-font-size-xl;
+    }
+
+    .upload-dropzone-format {
+        padding-top: 1rem;
+    }
+
+    label {
+        color: $ob-blue-600;
+        text-decoration: underline;
+        font-size: $ob-font-size-lg;
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+            text-decoration: underline;
+            color: $ob-primary;
+        }
+    }
+
+    .upload-progress {
+        opacity: 0;
+
+        &.loading {
+            opacity: 1;
+        }
+    }
+
+    .dropzone-icon {
+        padding-top: $ob-spacing-xs;
+        margin-right: $ob-spacing-xs;
+        font-size: $ob-font-size-xl;
+    }
+}

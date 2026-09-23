@@ -1,0 +1,6 @@
+@use 'src/styles/variables.scss' as *;
+
+.changes-buttons-container {
+    justify-content: flex-end;
+    padding-top: $ob-spacing-default;
+}

@@ -1,0 +1,64 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'entry.multipleSearchAndReplace' | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" [disabled]="!form.valid" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.multipleSearchAndReplace' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <mat-form-field>
+            <mat-label>{{ 'search.criteria.language' | translate }}</mat-label>
+            <mat-select multiple formControlName="language">
+                <td-select-all [selectControl]="languageControl" [values]="languageOptionValues">{{ 'common.selectAllOrNone' | translate }}</td-select-all>
+                @for (language of languageOptions; track language.id) {
+                    <mat-option [value]="language.id">{{ language.name }}</mat-option>
+                }
+            </mat-select>
+            @if (form.controls.language.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.language.errors, 'search.criteria.language' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-radio-group formControlName="searchField">
+            <div class="two-column-grid">
+                <mat-radio-button name="definition" value="definition">{{ 'field.definition' | translate }}</mat-radio-button>
+                <mat-radio-button name="definitionSource" value="definitionSource">{{ 'field.definitionSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="note" value="note">{{ 'field.note' | translate }}</mat-radio-button>
+                <mat-radio-button name="noteSource" value="noteSource">{{ 'field.noteSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="context" value="context">{{ 'field.context' | translate }}</mat-radio-button>
+                <mat-radio-button name="contextSource" value="contextSource">{{ 'field.contextSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="metadata" value="metadata">{{ 'field.metadata' | translate }}</mat-radio-button>
+                <mat-radio-button name="abbreviationSource" value="abbreviationSource">{{ 'field.abbreviationSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="country" value="country">{{ 'field.country' | translate }}</mat-radio-button>
+                <mat-radio-button name="terminusSource" value="terminusSource">{{ 'field.terminusSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="comment" value="comment">{{ 'field.comment' | translate }}</mat-radio-button>
+                <mat-radio-button name="nameSource" value="nameSource">{{ 'field.nameSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="metadataSource" value="metadataSource">{{ 'field.metadataSource' | translate }}</mat-radio-button>
+                <mat-radio-button name="phraseologySource" value="phraseologySource">{{ 'field.phraseologySource' | translate }}</mat-radio-button>
+            </div>
+        </mat-radio-group>
+
+        <mat-form-field class="search-control">
+            <input formControlName="searchValue" matInput type="text" placeholder="{{ 'common.searchFor' | translate }}" />
+            @if (form.controls.searchValue.invalid) {
+                <mat-error>
+                    {{ errorService.getControlError(form.controls.searchValue.errors, 'common.searchFor' | translate, 'entry.error') }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="search-control">
+            <input formControlName="replaceValue" matInput type="text" placeholder="{{ 'common.replaceWith' | translate }}" />
+        </mat-form-field>
+    </form>
+</div>

@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "Bk.Termdat.Private.Api": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:22265",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPLICATION_VERSION": "local"
+      }
+    }
+  }
+}

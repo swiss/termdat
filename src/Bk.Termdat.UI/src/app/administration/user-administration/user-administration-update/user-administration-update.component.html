@@ -1,0 +1,73 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ titleTranslateKey | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/administration/userAdministration">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="grid">
+            <!-- ID -->
+            <mat-form-field class="span-7">
+                <mat-label>{{ 'field.id' | translate }}</mat-label>
+                <input matInput type="text" name="id" formControlName="id" />
+            </mat-form-field>
+        </div>
+        <!-- Nachname -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.lastName' | translate }}</mat-label>
+            <input matInput type="text" name="name" formControlName="lastName" />
+        </mat-form-field>
+        <!-- Vorname -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.firstName' | translate }}</mat-label>
+            <input matInput type="text" name="name" formControlName="firstName" />
+        </mat-form-field>
+        <!-- Email Adresse -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.email' | translate }}</mat-label>
+            <input matInput type="text" name="name" formControlName="email" />
+        </mat-form-field>
+        <!-- Rolle -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.role' | translate }}</mat-label>
+            <input matInput type="text" name="name" formControlName="role" />
+        </mat-form-field>
+        <!-- Zuletzt mutiert -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.lastAction' | translate }}</mat-label>
+            <input matInput type="text" name="name" formControlName="lastAction" />
+        </mat-form-field>
+        <!-- T-Sammlungen -->
+        <td-chiplist-autocomplete formControlName="collections" [chips]="collectionChips" required>
+            <mat-label>{{ 'administration.field.collections' | translate }}</mat-label>
+            @for (error of form.controls.collections.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </td-chiplist-autocomplete>
+        <!-- Glossare -->
+        <td-chiplist-autocomplete formControlName="glossaries" [chips]="glossaryChips">
+            <mat-label>{{ 'field.glossaries' | translate }}</mat-label>
+        </td-chiplist-autocomplete>
+        <!-- Information -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.information' | translate }}</mat-label>
+            <textarea formControlName="information" matInput cdkTextareaAutosize></textarea>
+            @for (error of form.controls.information.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+    </form>
+</div>

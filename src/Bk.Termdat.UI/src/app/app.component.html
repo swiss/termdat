@@ -1,0 +1,65 @@
+<ob-master-layout [navigation]="navigation">
+    <ng-container obHeaderTitle>{{ 'application.title' | translate }}</ng-container>
+
+    <!--suppress JSUnusedGlobalSymbols -->
+    <ng-template #obHeaderControl>
+        <button
+            obButton="tertiary"
+            mat-icon-button
+            role="link"
+            [attr.aria-label]="'application.help' | translate"
+            [matTooltip]="'application.help' | translate"
+            [matTooltipPosition]="'below'"
+            (click)="showHelp()"
+        >
+            <mat-icon svgIcon="question_circle" class="ob-icon header-icon" />
+        </button>
+
+        @if (isAuthenticated) {
+            <a
+                obButton="tertiary"
+                class="profile-button"
+                mat-button
+                [routerLink]="['/user']"
+                [matTooltip]="'application.profile' | translate"
+                [matTooltipPosition]="'below'"
+            >
+                <mat-icon svgIcon="person" class="ob-icon header-icon" [title]="''" />
+                <span class="profile-label">{{ userName$ | async }}</span>
+            </a>
+
+            <button
+                obButton="tertiary"
+                mat-icon-button
+                (click)="logout()"
+                [matTooltip]="'application.logout' | translate"
+                [matTooltipPosition]="'below'"
+                [disabled]="unsavedChangesService.unsavedChanges$ | async"
+            >
+                <mat-icon svgIcon="logout" class="ob-icon header-icon" />
+            </button>
+        } @else {
+            <button obButton="tertiary" mat-icon-button (click)="login()" [matTooltip]="'application.login' | translate" [matTooltipPosition]="'below'">
+                <mat-icon svgIcon="login" class="ob-icon header-icon" />
+            </button>
+        }
+    </ng-template>
+
+    <ng-container obFooterInfo>
+        <p>{{ 'title.federalChancellery' | translate }} &copy; {{ currentYear }} | Version: {{ applicationVersion() }}</p>
+        <div class="spacer"></div>
+        <a class="footer-item" [href]="legalFrameWorkLinks[currentLanguage]" icon="none">
+            {{ 'footer.legalframework' | translate }}
+        </a>
+        <a class="footer-item" [href]="impressumLinks[currentLanguage]" icon="none">
+            {{ 'footer.impressum' | translate }}
+        </a>
+        <a class="footer-item" [href]="accessibilityLinks[currentLanguage]" icon="none">
+            {{ 'footer.accessibility' | translate }}
+        </a>
+        <a class="footer-item" [href]="aboutLinks[currentLanguage]" icon="none">
+            {{ 'footer.about' | translate }}
+        </a>
+    </ng-container>
+</ob-master-layout>
+<router-outlet name="side" />

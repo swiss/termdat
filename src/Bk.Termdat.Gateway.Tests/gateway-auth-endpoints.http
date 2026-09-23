@@ -1,0 +1,26 @@
+### Gateway Endpoints - Test Requests
+
+### Base URL for local development
+@baseUrl = http://localhost:22271
+
+### 1. Get user data (requires authentication)
+GET {{baseUrl}}/auth/user
+Accept: application/json
+
+### 2. Initiate login (redirects to OIDC provider)
+GET {{baseUrl}}/auth/login
+
+### 3. Initiate logout (redirects to OIDC provider)
+GET {{baseUrl}}/auth/logout
+
+### 4. Test frontend route (should work without authentication)
+GET {{baseUrl}}/
+Accept: text/html
+
+### 5. Test API systemstatus route
+GET {{baseUrl}}/api/systemstatus
+Accept: application/json
+
+### 6. Test health check endpoint (should work without authentication)
+GET {{baseUrl}}/health
+Accept: text/plain

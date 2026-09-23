@@ -1,0 +1,88 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    @include td-details-with-heading;
+}
+
+.picture-container {
+    display: flex;
+    margin: $ob-spacing-xs $ob-spacing-sm $ob-spacing-default;
+
+    .picture-uploaded {
+        flex: 1 1 auto;
+
+        > img {
+            border: 1px solid $ob-gray-light;
+            object-fit: contain;
+            max-width: 100%;
+            max-height: 500px;
+        }
+    }
+
+    .picture-buttons {
+        align-self: center;
+        flex: 0 0 auto;
+    }
+}
+
+.picture-uploader {
+    padding: $ob-spacing-lg;
+    text-align: center;
+    border: dashed 1px $ob-gray-light;
+    position: relative;
+    margin: 0 auto $ob-spacing-default;
+    background: $ob-gray-extra-light;
+    display: flex;
+    flex-direction: column;
+
+    &.file-over {
+        border-style: solid;
+        opacity: 0.6;
+    }
+
+    input {
+        display: none;
+    }
+
+    .picture-dropzone {
+        position: relative;
+    }
+
+    .picture-dropzone-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $ob-font-size-bigger;
+    }
+
+    .picture-dropzone-icon {
+        font-size: $ob-font-size-xl;
+    }
+
+    .picture-dropzone-format {
+        padding-top: $ob-spacing-default;
+        color: $ob-gray-dark;
+    }
+
+    label {
+        color: $ob-blue-600;
+        text-decoration: underline;
+        font-size: $ob-font-size-lg;
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+            text-decoration: underline;
+            color: $ob-primary;
+        }
+    }
+
+    .picture-progress {
+        opacity: 0;
+
+        &.loading {
+            opacity: 1;
+        }
+    }
+}

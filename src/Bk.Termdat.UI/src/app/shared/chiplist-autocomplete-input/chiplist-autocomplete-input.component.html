@@ -1,0 +1,46 @@
+<mat-form-field>
+    <mat-label><ng-content select="mat-label" /></mat-label>
+
+    <mat-chip-grid #chipList [errorStateMatcher]="errorStateMatcher" (change)="chipList.updateErrorState()">
+        @for (item of selectedChips; track item.value) {
+            <mat-chip-row
+                [removable]="true"
+                [matTooltip]="item.displayText"
+                [matTooltipDisabled]="disableChipTooltips"
+                (removed)="removeItem(item.displayText!)"
+                [class]="item.deleted ? 'deleted' : item.inactive ? 'inactive' : ''"
+            >
+                {{ item.tag }}
+                <mat-icon svgIcon="xmark_circle" class="ob-icon" matChipRemove inline />
+            </mat-chip-row>
+        }
+        <input
+            #autocompleteInput
+            #trigger="matAutocompleteTrigger"
+            [formControl]="autocompleteCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputAddOnBlur]="false"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addItem($event)"
+            (click)="ensureOpenAutocomplete(trigger)"
+            (blur)="onTouched()"
+        />
+    </mat-chip-grid>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectItem($event)">
+        @for (item of filteredChips | async; track item.value) {
+            <mat-option
+                [value]="item.value"
+                [matTooltip]="item.displayText"
+                matTooltipPosition="right"
+                [matTooltipDisabled]="disableAutocompleteTooltips"
+                [ngClass]="{'multi-line': disableAutocompleteEllipsis}"
+            >
+                {{ item.displayText }}
+            </mat-option>
+        }
+    </mat-autocomplete>
+
+    <mat-error><ng-content select="mat-error" /></mat-error>
+</mat-form-field>

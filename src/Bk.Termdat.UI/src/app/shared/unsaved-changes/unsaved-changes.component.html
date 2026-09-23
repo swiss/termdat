@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{ 'unsavedChanges.title' | translate }}</h1>
+<div mat-dialog-content>
+    {{ 'unsavedChanges.text' | translate }}
+</div>
+<div mat-dialog-actions class="changes-buttons-container">
+    <button [mat-dialog-close] color="primary" mat-stroked-button id="unsaved-abort">{{ 'unsavedChanges.abort' | translate }}</button>
+    <button (click)="revert()" color="primary" mat-stroked-button id="unsaved-revert">
+        {{ 'unsavedChanges.revert' | translate }}
+    </button>
+    <button (click)="save()" color="primary" mat-flat-button id="unsaved-save">{{ 'unsavedChanges.save' | translate }}</button>
+</div>

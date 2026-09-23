@@ -1,0 +1,20 @@
+<div class="subject-form">
+    <h6>{{ 'field.subjectDomains' | translate }}{{ required ? ' *' : '' }}</h6>
+    @for (control of formArray.controls; track $index) {
+        <div>
+            @if (subjects) {
+                <td-subject-entry
+                    [formGroup]="$any(control)"
+                    [entrySubject]="entrySubjects[$index]"
+                    [subjects]="subjects"
+                    (subjectRemoved)="removeSubject($index)"
+                />
+            }
+        </div>
+    }
+    <div>
+        <button mat-icon-button obButton="secondary" type="button" (click)="addSubject()" matTooltip="{{ 'entry.subjects.create' | translate }}">
+            <mat-icon svgIcon="plus" class="ob-icon" />
+        </button>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+@if (errorMessage !== undefined) {
+    <ob-alert type="error" role="alert">
+        {{ errorMessage }}
+    </ob-alert>
+}
+
+<div class="upload-dropzone" tdDragAndDropUpload (fileDropped)="onFileDropped($event)">
+    <input #fileDrop type="file" id="fileDrop" (change)="onFileChange($event)" />
+    <div class="upload-dropzone-textcontainer">
+        <mat-icon svgIcon="cloud_upload" class="ob-icon dropzone-icon" />
+        <label for="fileDrop" class="upload-dropzone-label">{{ 'file.import.uploadText' | translate }}</label>
+        <span class="upload-dropzone-text">&nbsp;{{ 'file.import.dropText' | translate }}</span>
+        <div class="upload-dropzone-format">{{ 'file.import.fileFormat' | translate }}</div>
+    </div>
+    <mat-progress-bar mode="indeterminate" color="primary" [ngClass]="{loading: loading}" class="upload-progress" />
+</div>

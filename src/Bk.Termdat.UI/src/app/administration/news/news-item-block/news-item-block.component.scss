@@ -1,0 +1,28 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+.news-item-block {
+    margin-left: $ob-spacing-default;
+    margin-right: $ob-spacing-default;
+    padding: $ob-spacing-sm;
+    display: flex;
+    gap: $ob-spacing-lg;
+    border-bottom: 1px solid $ob-gray-light;
+}
+
+.news-date {
+    flex: 0 0 100px;
+    color: $ob-gray;
+}
+
+.news-content {
+    flex: 1;
+
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.news-text {
+    font-size: 0.9rem;
+}

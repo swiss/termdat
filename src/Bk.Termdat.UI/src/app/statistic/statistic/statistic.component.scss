@@ -1,0 +1,60 @@
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.search-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: $ob-spacing-default;
+}
+
+.layout {
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            .mat-column-searchText,
+            .mat-column-languages,
+            .mat-column-searchFields {
+                width: 20%;
+            }
+
+            .mat-column-numberOfSearches,
+            .mat-column-dateLastSearch,
+            .mat-column-action {
+                width: 10%;
+            }
+
+            @include ob-media-breakpoint-down('md') {
+                .mat-mdc-row .mat-mdc-cell {
+                    width: auto;
+                    display: inherit;
+                }
+            }
+
+            @include ob-media-breakpoint-down('xl') {
+                .mat-column-id {
+                    width: 7.5%;
+                }
+            }
+
+            @include ob-media-breakpoint-down('lg') {
+                .mat-column-action {
+                    width: 10%;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .mat-column-action {
+                    white-space: normal;
+                    word-break: normal;
+                }
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $ob-spacing-sm;
+    }
+}

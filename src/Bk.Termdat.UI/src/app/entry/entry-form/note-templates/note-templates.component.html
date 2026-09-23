@@ -1,0 +1,84 @@
+<!--
+  Template Menu with Dedicated Submenu Instances
+
+  Purpose:
+    Provide correct positioning and behavior for nested Angular Material menus.
+
+  Background:
+    - Previously, all template menu items shared a single submenu reference (#subMenu).
+    - This caused incorrect submenu placement and scrolling issues, where submenus appeared misaligned or detached from their parent menu items.
+
+  Solution:
+    - Each template menu item now has its own submenu instance (#sub0, #sub1, etc.).
+    - This allows Angular Material to properly associate each trigger with its specific submenu.
+    - As a result, submenu positioning, scrolling behavior, and hover interactions now work as expected.
+-->
+<button mat-icon-button obButton="secondary" matTooltip="{{ 'entry.useTemplates' | translate }}" matTooltipPosition="above" [matMenuTriggerFor]="templates">
+    <span class="ob-screen-reader-only">{{ 'entry.useTemplates' | translate }}</span>
+    <mat-icon [svgIcon]="'list_paragraph'" class="ob-icon" />
+</button>
+<mat-menu #templates="matMenu">
+    <h6>{{ 'entry.useTemplates' | translate }}</h6>
+    @for (templateMenu of templateMenuItems; track i; let i = $index) {
+        @if (i === 0) {
+            <button mat-menu-item [matMenuTriggerFor]="sub0" (mouseenter)="setSelectedMenu(templateMenu)">
+                {{ templateMenu.label }}
+            </button>
+            <mat-menu #sub0="matMenu" class="sub-menu">
+                @for (option of templateMenu.options; track option) {
+                    <button mat-menu-item (click)="selectTemplate(option)" (keydown.enter)="selectTemplate(option)">
+                        {{ option }}
+                    </button>
+                }
+            </mat-menu>
+        }
+        @if (i === 1) {
+            <button mat-menu-item [matMenuTriggerFor]="sub1" (mouseenter)="setSelectedMenu(templateMenu)">
+                {{ templateMenu.label }}
+            </button>
+            <mat-menu #sub1="matMenu" class="sub-menu">
+                @for (option of templateMenu.options; track option) {
+                    <button mat-menu-item (click)="selectTemplate(option)" (keydown.enter)="selectTemplate(option)">
+                        {{ option }}
+                    </button>
+                }
+            </mat-menu>
+        }
+        @if (i === 2) {
+            <button mat-menu-item [matMenuTriggerFor]="sub2" (mouseenter)="setSelectedMenu(templateMenu)">
+                {{ templateMenu.label }}
+            </button>
+            <mat-menu #sub2="matMenu" class="sub-menu">
+                @for (option of templateMenu.options; track option) {
+                    <button mat-menu-item (click)="selectTemplate(option)" (keydown.enter)="selectTemplate(option)">
+                        {{ option }}
+                    </button>
+                }
+            </mat-menu>
+        }
+        @if (i === 3) {
+            <button mat-menu-item [matMenuTriggerFor]="sub3" (mouseenter)="setSelectedMenu(templateMenu)">
+                {{ templateMenu.label }}
+            </button>
+            <mat-menu #sub3="matMenu" class="sub-menu">
+                @for (option of templateMenu.options; track option) {
+                    <button mat-menu-item (click)="selectTemplate(option)" (keydown.enter)="selectTemplate(option)">
+                        {{ option }}
+                    </button>
+                }
+            </mat-menu>
+        }
+        @if (i === 4) {
+            <button mat-menu-item [matMenuTriggerFor]="sub4" (mouseenter)="setSelectedMenu(templateMenu)">
+                {{ templateMenu.label }}
+            </button>
+            <mat-menu #sub4="matMenu" class="sub-menu">
+                @for (option of templateMenu.options; track option) {
+                    <button mat-menu-item (click)="selectTemplate(option)" (keydown.enter)="selectTemplate(option)">
+                        {{ option }}
+                    </button>
+                }
+            </mat-menu>
+        }
+    }
+</mat-menu>

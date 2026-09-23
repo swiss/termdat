@@ -1,0 +1,299 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.watchlist' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="secondary" [disabled]="dataSource.data.length === 0" (click)="removeAll()">
+                <mat-icon svgIcon="delete" class="ob-icon" />
+                {{ 'watchlist.removeAll' | translate }}
+            </button>
+
+            <button type="button" mat-button obButton="secondary" [disabled]="!selection.hasValue()" (click)="removeSelected()">
+                <mat-icon svgIcon="minus" class="ob-icon" />
+                {{ 'watchlist.removeSelected' | translate }}
+            </button>
+
+            @if (isAdmin || isWriter) {
+                <button
+                    type="button"
+                    mat-button
+                    obButton="secondary"
+                    class="icon-action-button"
+                    [matTooltip]="'watchlist.exportXlsx' | translate"
+                    [disabled]="!selection.hasValue() || !dataSource.filteredData.length"
+                    (click)="exportXlsx()"
+                >
+                    <mat-icon svgIcon="file_excel" class="ob-icon" />
+                </button>
+            }
+
+            <button
+                type="button"
+                mat-button
+                obButton="secondary"
+                class="icon-action-button"
+                [matTooltip]="'watchlist.export' | translate"
+                [disabled]="!selection.hasValue() || !dataSource.filteredData.length"
+                (click)="exportPdf()"
+            >
+                <mat-icon svgIcon="file_pdf" class="ob-icon" />
+            </button>
+
+            <button
+                type="button"
+                mat-button
+                obButton="secondary"
+                class="icon-action-button"
+                [matTooltip]="'watchlist.exportEntryIdsTxt' | translate"
+                [disabled]="!selection.hasValue() || !dataSource.filteredData.length"
+                (click)="exportListedEntryIdsToTxt()"
+            >
+                <mat-icon svgIcon="file_text" class="ob-icon" />
+            </button>
+
+            @if (isAdmin || isWriter) {
+                <button type="button" mat-button obButton="secondary" [matMenuTriggerFor]="menu" [disabled]="!selection.hasValue()">
+                    {{ 'watchlist.editSelectedEntries' | translate }}
+                </button>
+            }
+            <ng-container>
+                <mat-menu #menu="matMenu">
+                    @if (isAdmin) {
+                        <button mat-menu-item (click)="softDeleteSelected()" [disabled]="(areAllSelectedNotDeleted$ | async) === false">
+                            {{ 'watchlist.deleteSelectedEntries' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin) {
+                        <button mat-menu-item (click)="hardDeleteSelected()" [disabled]="(areAllSelectedDeleted$ | async) === false">
+                            {{ 'watchlist.hardDeleteSelectedEntries' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin) {
+                        <button mat-menu-item (click)="restoreSelected()" [disabled]="(areAllSelectedDeleted$ | async) === false">
+                            {{ 'watchlist.restoreSelectedEntries' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter) {
+                        <button mat-menu-item [disabled]="(areAllSelectedNotDeleted$ | async) === false" (click)="openMultipleEdit()">
+                            {{ 'entry.editHeaderDataMandatoryFields' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter) {
+                        <button mat-menu-item (click)="openHeaderEdit()" [disabled]="(areAllSelectedNotDeleted$ | async) === false">
+                            {{ 'watchlist.editHeaderData' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter) {
+                        <button mat-menu-item (click)="openCommentEdit()" [disabled]="(areAllSelectedNotDeleted$ | async) === false">
+                            {{ 'watchlist.editComments' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter) {
+                        <button mat-menu-item (click)="openConceptSystemEdit()" [disabled]="(areAllSuitableForConceptSystemPositionChange$ | async) === false">
+                            {{ 'watchlist.editConceptSystem' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter || isSuperUser) {
+                        <button mat-menu-item [disabled]="(areAllSelectedNotDeleted$ | async) === false" (click)="openSourceEdit()">
+                            {{ 'watchlist.editSource' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin) {
+                        <button mat-menu-item [disabled]="(areAllSelectedNotDeleted$ | async) === false" (click)="openMoveContent()">
+                            {{ 'watchlist.moveContent' | translate }}
+                        </button>
+                    }
+                    @if (isAdmin || isWriter) {
+                        <button mat-menu-item [disabled]="(areAllSelectedNotDeleted$ | async) === false" (click)="openMultipleSearchAndReplace()">
+                            {{ 'entry.multipleSearchAndReplace' | translate }}
+                        </button>
+                    }
+                </mat-menu>
+            </ng-container>
+        </div>
+    </div>
+    <div class="controls">
+        <div class="two-column-grid">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'watchlist.field.filter' | translate }}</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'watchlist.filterPlaceholder' | translate }}" #input />
+
+                <button type="button" role="button" [obInputClear]="input" (onClear)="clearFilter()">
+                    <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                    <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                </button>
+            </mat-form-field>
+
+            <mat-paginator [pageSize]="pageSizeOptions[0]" [pageSizeOptions]="pageSizeOptions" />
+        </div>
+    </div>
+
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort class="ob-table ob-table-collapse-md sort-table">
+            <caption class="ob-screen-reader-only">
+                {{
+                    'navigation.watchlist' | translate
+                }}
+            </caption>
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef scope="col">
+                    <mat-checkbox
+                        (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && areAllVisibleSelected"
+                        [indeterminate]="selection.hasValue() && !areAllVisibleSelected"
+                        [matTooltip]="'watchlist.selectAll' | translate"
+                        matTooltipPosition="right"
+                    />
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'watchlist.select' | translate">
+                    <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        (change)="toggleRow(row)"
+                        [checked]="selection.isSelected(row)"
+                        [matTooltip]="'watchlist.select' | translate"
+                        [matTooltipDisabled]="row.locked"
+                        matTooltipPosition="right"
+                        [disabled]="row.locked"
+                    />
+                </td>
+            </ng-container>
+
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    scope="col"
+                    mat-sort-header
+                    matTooltip="{{ 'watchlist.tooltip.id' | translate }}"
+                    matTooltipPosition="above"
+                >
+                    {{ 'watchlist.id' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'watchlist.id' | translate">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- EntryId Column -->
+            <ng-container matColumnDef="entryId">
+                <th mat-header-cell *matHeaderCellDef scope="col" mat-sort-header matTooltip="{{ 'field.entryId' | translate }}" matTooltipPosition="above">
+                    {{ 'field.entryId' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.entryId' | translate">
+                    <a [routerLink]="['/search/entry', row.entryId]" [queryParams]="{s: row.searchPhrase}">
+                        {{ row.entryId }}
+                    </a>
+                </td>
+            </ng-container>
+
+            <!-- Identification Column -->
+            <ng-container matColumnDef="identification">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    scope="col"
+                    mat-sort-header
+                    matTooltip="{{ 'field.identification' | translate }}"
+                    matTooltipPosition="above"
+                >
+                    {{ 'field.identification' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.identification' | translate">{{ row.identification }}</td>
+            </ng-container>
+
+            <!-- ConceptSystemValue Column -->
+            <ng-container matColumnDef="conceptSystemPosition.value">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    scope="col"
+                    mat-sort-header
+                    matTooltip="{{ 'field.conceptSystem' | translate }}"
+                    matTooltipPosition="above"
+                >
+                    {{ 'field.conceptSystem' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.conceptSystem' | translate">
+                    {{ row.conceptSystemPosition?.value }}
+                </td>
+            </ng-container>
+
+            <!-- Value Column -->
+            <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef scope="col" mat-sort-header matTooltip="{{ fieldValueTranslation }}" matTooltipPosition="above">
+                    {{ fieldValueTranslation }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="fieldValueTranslation">{{ row.value }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="statusTranslation">
+                <th mat-header-cell *matHeaderCellDef scope="col" mat-sort-header matTooltip="{{ 'field.status' | translate }}" matTooltipPosition="above">
+                    {{ 'field.status' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.status' | translate">
+                    <span
+                        class="chip"
+                        [ngClass]="{
+                            status: !row.isMainOffice,
+                            validated: row.isValidated && row.isMainOffice,
+                            pending: !row.isValidated && row.isMainOffice,
+                        }"
+                    >
+                        {{ row.statusTranslation }}
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- CollectionCode Column -->
+            <ng-container matColumnDef="collection.code">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    scope="col"
+                    mat-sort-header
+                    matTooltip="{{ 'field.collection.abbrevation' | translate }}"
+                    matTooltipPosition="above"
+                >
+                    {{ 'field.collection.abbrevation' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.collection.abbrevation' | translate">
+                    {{ row.collection?.code }}
+                </td>
+            </ng-container>
+
+            <!-- Glossaries Column -->
+            <ng-container matColumnDef="glossaries">
+                <th mat-header-cell *matHeaderCellDef scope="col" mat-sort-header matTooltip="{{ 'field.glossaries' | translate }}" matTooltipPosition="above">
+                    {{ 'field.glossaries' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.glossaries' | translate">
+                    {{ row.glossaries }}
+                </td>
+            </ng-container>
+
+            <!-- AdminInfos Column -->
+            <ng-container matColumnDef="adminInfos">
+                <th mat-header-cell *matHeaderCellDef scope="col" mat-sort-header matTooltip="{{ 'field.adminInfos' | translate }}" matTooltipPosition="above">
+                    {{ 'field.adminInfos' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'field.adminInfos' | translate">
+                    {{ row.adminInfos }}
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.deleted]="row.deleted" [class.locked]="row.locked"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="8">
+                    @if (input.value) {
+                        <span>{{ 'watchlist.noFilteredItems' | translate: {filter: input.value} }}</span>
+                    }
+                    @if (!input.value) {
+                        <span>{{ 'watchlist.noItems' | translate }}</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

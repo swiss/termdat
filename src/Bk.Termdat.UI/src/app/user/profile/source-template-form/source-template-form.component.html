@@ -1,0 +1,90 @@
+<form id="source-template-form" [formGroup]="form">
+    <button
+        mat-icon-button
+        obButton="tertiary"
+        type="button"
+        [matMenuTriggerFor]="popupMenu"
+        #menuTrigger="matMenuTrigger"
+        (click)="$event.stopPropagation(); $event.preventDefault()"
+        [matTooltip]="updateMode ? ('common.update' | translate) : ('common.create' | translate)"
+    >
+        <mat-icon svgIcon="{{ updateMode ? 'pen' : 'plus' }}" />
+    </button>
+    @if (updateMode) {
+        <button obButton="tertiary" mat-icon-button type="button" (click)="deleteEntry()" [matTooltip]="'common.delete' | translate">
+            <mat-icon svgIcon="delete" class="ob-icon" />
+        </button>
+    }
+    <mat-menu (keydown.tab)="$event.stopPropagation()" #popupMenu="matMenu" class="popup-menu">
+        <div (click)="$event.stopPropagation(); $event.preventDefault()">
+            <label id="newSourceTemplate">{{
+                updateMode ? ('profile.sourceTemplates.edit' | translate) : ('profile.sourceTemplates.create' | translate)
+            }}</label>
+            <mat-form-field
+                ><mat-label>DE</mat-label
+                ><input
+                    type="text"
+                    id="de"
+                    (keydown.tab)="$event.stopPropagation()"
+                    formControlName="textDe"
+                    matInput
+                    (click)="$event.stopPropagation(); $event.preventDefault()"
+            /></mat-form-field>
+            <mat-form-field
+                ><mat-label>FR</mat-label
+                ><input
+                    type="text"
+                    id="fr"
+                    (keydown.tab)="$event.stopPropagation()"
+                    formControlName="textFr"
+                    matInput
+                    (click)="$event.stopPropagation(); $event.preventDefault()"
+            /></mat-form-field>
+            <mat-form-field
+                ><mat-label>IT</mat-label
+                ><input
+                    type="text"
+                    id="it"
+                    (keydown.tab)="$event.stopPropagation()"
+                    formControlName="textIt"
+                    matInput
+                    (click)="$event.stopPropagation(); $event.preventDefault()"
+            /></mat-form-field>
+            <mat-form-field
+                ><mat-label>RM</mat-label
+                ><input
+                    type="text"
+                    id="rm"
+                    (keydown.tab)="$event.stopPropagation()"
+                    formControlName="textRm"
+                    matInput
+                    (click)="$event.stopPropagation(); $event.preventDefault()" /></mat-form-field
+            ><mat-form-field
+                ><mat-label>EN</mat-label
+                ><input
+                    type="text"
+                    id="en"
+                    (keydown.tab)="$event.stopPropagation()"
+                    formControlName="textEn"
+                    matInput
+                    (click)="$event.stopPropagation(); $event.preventDefault()"
+            /></mat-form-field>
+            @if (this.isEmpty) {
+                <mat-error>
+                    {{ 'profile.sourceTemplates.notification.error.atLeastOneValue' | translate }}
+                </mat-error>
+            }
+        </div>
+        <div class="action-container" (click)="$event.stopPropagation(); $event.preventDefault()">
+            <button mat-button obButton="secondary" (click)="resetFields()">
+                {{ 'profile.sourceTemplates.reset' | translate }}
+            </button>
+            <button mat-button obButton="secondary" (click)="resetFields(); menuTrigger.closeMenu()">
+                {{ 'profile.sourceTemplates.cancel' | translate }}
+            </button>
+            <button mat-button obButton="primary" type="submit" (click)="createOrUpdateSourceTemplate() && menuTrigger.closeMenu()">
+                {{ 'profile.sourceTemplates.save' | translate }}
+            </button>
+        </div>
+    </mat-menu>
+</form>

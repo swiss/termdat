@@ -1,0 +1,6 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    @include td-details-with-heading;
+}

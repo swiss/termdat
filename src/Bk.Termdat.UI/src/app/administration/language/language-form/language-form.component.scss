@@ -1,0 +1,21 @@
+@use 'src/styles/mixins.scss' as *;
+
+@include td-form-with-descriptions;
+
+// slide-toggle outline & vertical alignment
+::ng-deep .mat-mdc-form-field.hide-outline {
+    .mat-mdc-form-field-flex,
+    .mat-mdc-form-field-flex:hover {
+        .mdc-notched-outline {
+            opacity: 0 !important;
+        }
+    }
+}
+
+// slide-toggle horizontal alignment
+::ng-deep .mat-mdc-form-field.align-right {
+    .mat-mdc-form-field-infix {
+        width: min-content;
+        justify-content: end;
+    }
+}

@@ -1,0 +1,37 @@
+<button mat-button obButton="tertiary" [matMenuTriggerFor]="popover" matTooltip="{{ 'entry.showEntryData' | translate }}" matTooltipPosition="right">
+    <mat-icon svgIcon="list" class="ob-icon" />
+</button>
+<mat-menu #popover="matMenu">
+    <h6>{{ 'entry.showEntryData' | translate }}</h6>
+    <!-- Select/Unselect All -->
+    <div mat-menu-item role="menuitemcheckbox" (click)="menuSelectAll($event, !showAll)" (keydown.enter)="menuSelectAll($event, !showAll)">
+        <mat-checkbox
+            id="select-all"
+            [checked]="showAll"
+            (change)="selectAll(!showAll)"
+            (click)="$event.stopPropagation()"
+            (keydown.enter)="$event.stopPropagation()"
+        >
+            {{ 'entry.selectAll' | translate }}
+        </mat-checkbox>
+    </div>
+    <!-- Show / Hide specific field -->
+    @for (fieldName of fieldNames; track fieldName; let i = $index) {
+        <div
+            mat-menu-item
+            role="menuitemcheckbox"
+            (click)="menuShow($event, fieldName, !fieldVisibility[fieldName])"
+            (keydown.enter)="menuShow($event, fieldName, !fieldVisibility[fieldName])"
+        >
+            <mat-checkbox
+                [id]="fieldName"
+                [checked]="fieldVisibility[fieldName]!"
+                (change)="show(fieldName, !fieldVisibility[fieldName])"
+                (click)="$event.stopPropagation()"
+                (keydown.enter)="$event.stopPropagation()"
+            >
+                {{ 'field.' + fieldName | translate }}
+            </mat-checkbox>
+        </div>
+    }
+</mat-menu>

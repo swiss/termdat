@@ -1,0 +1,451 @@
+@if (showForm) {
+    <form [formGroup]="form!" class="extended-search-form" (submit)="search()" (reset)="reset()">
+        <div class="default">
+            <!-- Entry-IDs -->
+            <div class="search-control">
+                <div class="search">
+                    <mat-form-field id="search-input">
+                        <mat-label>{{ 'search.extended.entryIds' | translate }}</mat-label>
+                        <input
+                            formControlName="entryIds"
+                            type="text"
+                            name="entryIds"
+                            matInput
+                            #entryIdsControl
+                            placeholder="{{ 'search.extended.entryIds' | translate }}"
+                        />
+                        <button type="button" role="button" [obInputClear]="entryIdsControl" (onClear)="clear('entryIds')">
+                            <mat-icon svgIcon="xmark_circle" class="ob-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.clear' | translate }}</span>
+                        </button>
+                        @for (error of form!.controls.entryIds.errors | keyvalue; track error.key) {
+                            <mat-error>
+                                {{ 'i18n.validation.entryIds.error' | translate }}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="search-toggle">
+                <!-- Terminologiebüro -->
+                @if (officeChips) {
+                    <td-chiplist-autocomplete formControlName="offices" [chips]="officeChips" class="search-control">
+                        <mat-label>{{ 'search.extended.offices' | translate }}</mat-label>
+                    </td-chiplist-autocomplete>
+                }
+                <mat-slide-toggle
+                    formControlName="officesPriority"
+                    class="priority-toggler"
+                    [matTooltip]="'search.extended.priority' | translate"
+                    [matTooltipDisabled]="!showSlideToggleTooltip"
+                >
+                    {{ 'search.extended.priority' | translate }}
+                </mat-slide-toggle>
+            </div>
+
+            <div class="search-toggle">
+                <!-- Termdat Fach- und Sachgebiet -->
+                @if (subjectDomainChips) {
+                    <td-chiplist-autocomplete
+                        formControlName="subjectDomains"
+                        [chips]="subjectDomainChips"
+                        [disableAutocompleteTooltips]="true"
+                        [disableChipTooltips]="true"
+                        class="search-control"
+                    >
+                        <mat-label>{{ 'field.subjectDomains' | translate }}</mat-label>
+                    </td-chiplist-autocomplete>
+                }
+                <mat-slide-toggle
+                    formControlName="subjectDomainsPriority"
+                    class="priority-toggler"
+                    [matTooltip]="'search.extended.priority' | translate"
+                    [matTooltipDisabled]="!showSlideToggleTooltip"
+                >
+                    {{ 'search.extended.priority' | translate }}
+                </mat-slide-toggle>
+            </div>
+
+            <div class="search-toggle">
+                <!-- Terminologiesammlung -->
+                @if (collectionChips) {
+                    <td-chiplist-autocomplete formControlName="collections" [chips]="collectionChips" class="search-control">
+                        <mat-label>{{ 'search.extended.collections' | translate }}</mat-label>
+                    </td-chiplist-autocomplete>
+                }
+                <mat-slide-toggle
+                    formControlName="collectionsPriority"
+                    class="priority-toggler"
+                    [matTooltip]="'search.extended.priority' | translate"
+                    [matTooltipDisabled]="!showSlideToggleTooltip"
+                >
+                    {{ 'search.extended.priority' | translate }}
+                </mat-slide-toggle>
+                @if (isAdmin) {
+                    <mat-slide-toggle
+                        formControlName="collectionsExclude"
+                        class="exclude-toggler"
+                        [matTooltip]="'search.extended.exclude' | translate"
+                        [matTooltipDisabled]="!showSlideToggleTooltip"
+                    >
+                        {{ 'search.extended.exclude' | translate }}
+                    </mat-slide-toggle>
+                }
+            </div>
+
+            <!-- Glossare -->
+            <div class="search-toggle">
+                @if (glossaryChips) {
+                    <td-chiplist-autocomplete formControlName="glossaries" [chips]="glossaryChips" class="search-control">
+                        <mat-label>{{ 'search.extended.glossaries' | translate }}</mat-label>
+                    </td-chiplist-autocomplete>
+                }
+                @if (isAdmin) {
+                    <mat-slide-toggle
+                        formControlName="glossariesExclude"
+                        class="exclude-toggler"
+                        [matTooltip]="'search.extended.exclude' | translate"
+                        [matTooltipDisabled]="!showSlideToggleTooltip"
+                    >
+                        {{ 'search.extended.exclude' | translate }}
+                    </mat-slide-toggle>
+                }
+            </div>
+
+            <div class="search-toggle">
+                <!-- Bearbeitungsstatus -->
+                <mat-form-field class="search-control">
+                    <mat-label>{{ 'field.status' | translate }}</mat-label>
+                    <mat-select multiple formControlName="status">
+                        @for (option of states; track option.id) {
+                            <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle
+                    formControlName="statusPriority"
+                    class="priority-toggler"
+                    [matTooltip]="'search.extended.priority' | translate"
+                    [matTooltipDisabled]="!showSlideToggleTooltip"
+                >
+                    {{ 'search.extended.priority' | translate }}
+                </mat-slide-toggle>
+            </div>
+        </div>
+
+        @if (isAdmin || isSuperUser || isWriter || isSuperReader) {
+            <div class="admin">
+                @if (isAdmin || isSuperUser || isWriter || isSuperReader) {
+                    <div class="search-toggle">
+                        <!-- Verwaltungsangaben -->
+                        @if (adminInfoChips) {
+                            <td-chiplist-autocomplete formControlName="adminInfos" [chips]="adminInfoChips" class="search-control">
+                                <mat-label>{{ 'field.adminInfos' | translate }}</mat-label>
+                            </td-chiplist-autocomplete>
+                        }
+                        <mat-slide-toggle
+                            formControlName="adminInfosPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                        @if (isAdmin) {
+                            <mat-slide-toggle
+                                formControlName="adminInfosExclude"
+                                class="exclude-toggler"
+                                [matTooltip]="'search.extended.exclude' | translate"
+                                [matTooltipDisabled]="!showSlideToggleTooltip"
+                            >
+                                {{ 'search.extended.exclude' | translate }}
+                            </mat-slide-toggle>
+                        }
+                    </div>
+                    <mat-form-field class="search-control">
+                        <!-- Enthält Kommentar -->
+                        <mat-label>{{ 'field.commentStatus' | translate }}</mat-label>
+                        <mat-select multiple formControlName="commentStatus">
+                            @for (option of commentStatusOptions; track option.id) {
+                                <mat-option [value]="option.id">{{ option.name }} </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                }
+
+                @if (isAdmin || isSuperUser) {
+                    <div class="search-toggle">
+                        @if (createdByUserAccounts$ | async; as createdByUserAccounts) {
+                            <mat-form-field class="search-control">
+                                <!-- Erstellt von -->
+                                <mat-label>{{ 'field.createdBy' | translate }}</mat-label>
+                                <input formControlName="createdBy" matInput type="text" [matAutocomplete]="createdByAuto" />
+                                <mat-autocomplete #createdByAuto="matAutocomplete">
+                                    @for (option of createdByUserAccounts; track option.userName) {
+                                        <mat-option [value]="option.userName" matTooltip="{{ option.userName }}" matTooltipPosition="right">
+                                            {{ option.lastName }}, {{ option.firstName }} ({{ option.userName }})
+                                        </mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        }
+                        <mat-slide-toggle
+                            formControlName="createdByPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                        @if (isAdmin) {
+                            <mat-slide-toggle
+                                formControlName="createdByExclude"
+                                class="exclude-toggler"
+                                [matTooltip]="'search.extended.exclude' | translate"
+                                [matTooltipDisabled]="!showSlideToggleTooltip"
+                            >
+                                {{ 'search.extended.exclude' | translate }}
+                            </mat-slide-toggle>
+                        }
+                    </div>
+                }
+                @if (isWriter) {
+                    <div class="search-toggle">
+                        <div class="search-control search-checkbox">
+                            <!-- Erstellt von (als Checkbox "nur meine") -->
+                            <mat-checkbox formControlName="createdByUser">
+                                {{ 'field.createdByUser' | translate }}
+                            </mat-checkbox>
+                        </div>
+                        <mat-slide-toggle
+                            formControlName="createdByPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                    </div>
+                }
+                @if (isAdmin || isSuperUser) {
+                    <div class="search-toggle">
+                        @if (modifiedByUserAccounts$ | async; as modifiedByUserAccounts) {
+                            <mat-form-field class="search-control">
+                                <!-- Geändert von -->
+                                <mat-label>{{ 'field.modifiedBy' | translate }}</mat-label>
+                                <input formControlName="modifiedBy" matInput type="text" [matAutocomplete]="modifiedByAuto" />
+                                <mat-autocomplete #modifiedByAuto="matAutocomplete">
+                                    @for (option of modifiedByUserAccounts; track option.userName) {
+                                        <mat-option [value]="option.userName" matTooltip="{{ option.userName }}" matTooltipPosition="right">
+                                            {{ option.lastName }}, {{ option.firstName }} ({{ option.userName }})
+                                        </mat-option>
+                                    }
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        }
+                        <mat-slide-toggle
+                            formControlName="modifiedByPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                        @if (isAdmin) {
+                            <mat-slide-toggle
+                                formControlName="modifiedByExclude"
+                                class="exclude-toggler"
+                                [matTooltip]="'search.extended.exclude' | translate"
+                                [matTooltipDisabled]="!showSlideToggleTooltip"
+                            >
+                                {{ 'search.extended.exclude' | translate }}
+                            </mat-slide-toggle>
+                        }
+                    </div>
+                }
+                @if (isWriter) {
+                    <div class="search-toggle">
+                        <div class="search-control search-checkbox">
+                            <!-- Geändert von (als Checkbox "nur meine") -->
+                            <mat-checkbox formControlName="modifiedByUser">
+                                {{ 'field.modifiedByUser' | translate }}
+                            </mat-checkbox>
+                        </div>
+                        <mat-slide-toggle
+                            formControlName="modifiedByPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                    </div>
+                }
+                @if (isAdmin || isSuperReader) {
+                    <div class="search-toggle">
+                        <mat-form-field class="search-control">
+                            <!-- Zeitraum von - bis -->
+                            <mat-label>{{ 'search.extended.timeSpan' | translate }}</mat-label>
+                            <mat-date-range-input [rangePicker]="picker">
+                                <input matStartDate formControlName="modifiedFrom" placeholder="{{ 'search.extended.timeSpan.start' | translate }}" />
+                                <input matEndDate formControlName="modifiedTo" placeholder="{{ 'search.extended.timeSpan.end' | translate }}" />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker" />
+                            <mat-date-range-picker #picker />
+                            @for (error of form!.controls.modifiedFrom.errors || form!.controls.modifiedTo.errors | keyvalue; track error.key) {
+                                <mat-error>
+                                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                        <mat-slide-toggle
+                            formControlName="modifiedPeriodPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                        @if (isAdmin) {
+                            <mat-slide-toggle
+                                formControlName="modifiedPeriodExclude"
+                                class="exclude-toggler"
+                                [matTooltip]="'search.extended.exclude' | translate"
+                                [matTooltipDisabled]="!showSlideToggleTooltip"
+                            >
+                                {{ 'search.extended.exclude' | translate }}
+                            </mat-slide-toggle>
+                        }
+                    </div>
+                }
+
+                @if (isSuperUser || isAdmin) {
+                    <div class="search-control">
+                        <!-- Verwandte Sammlungen -->
+                        @if (relatedCollectionChips) {
+                            <td-chiplist-autocomplete formControlName="relatedCollections" [chips]="relatedCollectionChips" class="search-control">
+                                <mat-label>{{ 'search.extended.relatedCollections' | translate }}</mat-label>
+                            </td-chiplist-autocomplete>
+                        }
+                    </div>
+                    <div class="search-toggle">
+                        <!-- Zuverlässigkeitscode -->
+                        <mat-form-field class="search-control">
+                            <mat-label>{{ 'search.extended.reliability' | translate }}</mat-label>
+                            <mat-select multiple formControlName="reliability">
+                                @for (option of reliabilities; track option.id) {
+                                    <mat-option [value]="option.id">{{ option.id + 1 }} - {{ option.name }}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-slide-toggle
+                            formControlName="reliabilityPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                    </div>
+                }
+
+                @if (isAdmin) {
+                    <div class="search-toggle">
+                        <!-- Gelöscht -->
+                        <div class="search-control search-checkbox">
+                            <mat-checkbox formControlName="deleted">
+                                {{ 'search.extended.deleted' | translate }}
+                            </mat-checkbox>
+                        </div>
+                        <mat-slide-toggle
+                            formControlName="deletedPriority"
+                            class="priority-toggler"
+                            [matTooltip]="'search.extended.priority' | translate"
+                            [matTooltipDisabled]="!showSlideToggleTooltip"
+                        >
+                            {{ 'search.extended.priority' | translate }}
+                        </mat-slide-toggle>
+                    </div>
+                }
+                @if (isAdmin || isWriter || isSuperUser) {
+                    <div class="search-toggle">
+                        <!-- Einträge mit fehlender Quellenangabe -->
+                        <div class="search-control search-checkbox">
+                            <mat-checkbox formControlName="hasMissingSource">
+                                {{ 'search.extended.hasMissingSource' | translate }}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="fields row">
+            <fieldset>
+                <legend>
+                    {{ 'search.extended.searchIn' | translate }}
+                </legend>
+                <section class="checkbox two-column-grid" formGroupName="fields">
+                    <!-- Terminus -->
+                    <mat-checkbox formControlName="term">
+                        {{ 'field.terminus' | translate }}
+                    </mat-checkbox>
+                    <!-- Name -->
+                    <mat-checkbox formControlName="name">
+                        {{ 'field.name' | translate }}
+                    </mat-checkbox>
+                    <!-- Abkürzung -->
+                    <mat-checkbox formControlName="abbreviation">
+                        {{ 'field.abbreviation' | translate }}
+                    </mat-checkbox>
+                    <!-- Phraseologie -->
+                    <mat-checkbox formControlName="phraseology">
+                        {{ 'field.phraseology' | translate }}
+                    </mat-checkbox>
+                    <!-- Definition -->
+                    <mat-checkbox formControlName="definition">
+                        {{ 'field.definition' | translate }}
+                    </mat-checkbox>
+                    <!-- Anmerkung -->
+                    <mat-checkbox formControlName="note">
+                        {{ 'field.note' | translate }}
+                    </mat-checkbox>
+                    <!-- Kontext -->
+                    <mat-checkbox formControlName="context">
+                        {{ 'field.context' | translate }}
+                    </mat-checkbox>
+                    <!-- Quelle -->
+                    <mat-checkbox formControlName="source">
+                        {{ 'search.extended.source' | translate }}
+                    </mat-checkbox>
+                    <!-- Metadaten -->
+                    <mat-checkbox formControlName="metadata">
+                        {{ 'field.metadata' | translate }}
+                    </mat-checkbox>
+                    <!-- Land -->
+                    <mat-checkbox formControlName="country">
+                        {{ 'field.country' | translate }}
+                    </mat-checkbox>
+                    <!-- Kommentar -->
+                    @if (isAdmin || isSuperUser || isWriter || isSuperReader) {
+                        <mat-checkbox formControlName="comment">
+                            {{ 'field.comment' | translate }}
+                        </mat-checkbox>
+                    }
+                </section>
+            </fieldset>
+
+            <div class="buttons">
+                <button mat-button obButton="primary" type="submit">
+                    <mat-icon svgIcon="search" class="ob-icon" />
+                    {{ 'common.search' | translate }}
+                </button>
+                <button mat-button obButton="secondary" type="reset">
+                    <mat-icon svgIcon="xmark" class="ob-icon" />
+                    {{ 'search.extended.cancel' | translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+}

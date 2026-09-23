@@ -1,0 +1,21 @@
+@use '@oblique/oblique/styles/scss/core/variables' as *;
+
+::ng-deep {
+    .popup-menu {
+        padding: $ob-spacing-sm $ob-spacing-default $ob-spacing-sm;
+
+        &.mat-mdc-menu-panel {
+            min-width: 350px;
+            max-width: fit-content;
+        }
+
+        .action-container {
+            text-align: right;
+            padding-top: $ob-spacing-default;
+
+            button + button {
+                margin-left: $ob-spacing-sm;
+            }
+        }
+    }
+}

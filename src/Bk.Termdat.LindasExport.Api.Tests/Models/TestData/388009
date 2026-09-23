@@ -1,0 +1,99 @@
+<https://register.ld.admin.ch/termdat/MET16> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/MET16> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyCollection> .
+<https://register.ld.admin.ch/termdat/MET16> <http://schema.org/identifier> "MET16"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/MET16> <http://schema.org/name> "Terminologie der Metrologie"@de .
+<https://register.ld.admin.ch/termdat/MET16> <http://schema.org/name> "Terminology of Metrology"@en .
+<https://register.ld.admin.ch/termdat/MET16> <http://schema.org/name> "Terminologie de la m\u00E9trologie"@fr .
+<https://register.ld.admin.ch/termdat/MET16> <http://schema.org/name> "Terminologia della metrologia"@it .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/dateModified> "2000-01-01T00:01:01.0000000"^^<xsd:dateTime> .
+<https://register.ld.admin.ch/termdat/388009> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/InProgressEntry> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/terminology-office/C-Office> .
+<https://register.ld.admin.ch/termdat/terminology-office/C-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/terminology-office/C-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyOffice> .
+<https://register.ld.admin.ch/termdat/terminology-office/C-Office> <http://schema.org/identifier> "C-Office"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/terminology-office/C-Office> <http://schema.org/name> "C-EN"@en .
+<https://register.ld.admin.ch/termdat/388009> <https://schema.ld.admin.ch/reliabilityCode> <https://register.ld.admin.ch/termdat/reliability-code/3> .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/identifier> "3"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Fachlich \u00FCberpr\u00FCft"@de .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Fiche contr\u00F4l\u00E9e par les experts"@fr .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Scheda convalidata da esperti"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Checked by specialist"@en .
+<https://register.ld.admin.ch/termdat/388009> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/388009> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Name> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/identifier> "388009"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/URL> "https://www.termdat.bk.admin.ch/entry/388009"^^<xsd:anyURI> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/MET16> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009> <http://www.lexinfo.net/ontology/3.0/lexinfo#hyponym> <https://register.ld.admin.ch/termdat/388010> .
+<https://register.ld.admin.ch/termdat/388009> <http://www.lexinfo.net/ontology/3.0/lexinfo#hypernym> <https://register.ld.admin.ch/termdat/388012> .
+<https://register.ld.admin.ch/termdat/388009/term> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/388009/term> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/388009/term> .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Abbreviation> .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/388009/abbreviation> .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/name> "Ampere"@de .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/citation> "Einheitenverordnung, Art. 6 (SR 941.202, Stand 2013-01)"@de .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/alternateName> "A"@de .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/description> "St\u00E4rke eines zeitlich unver\u00E4nderlichen elektrischen Stromes, der, durch zwei im Vakuum parallel im Abstand 1 Meter voneinander angeordnete, geradlinige, unendlich lange Leiter von vernachl\u00E4ssigbar kleinem, kreisf\u00F6rmigem Querschnitt fliessend, zwischen diesen Leitern je 1 Meter Leiterl\u00E4nge die Kraft 2 \u00B7 10 -7 Newton hervorrufen w\u00FCrde."@de .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/name> "Einheit der elektrischen Stromst\u00E4rke"@de .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/citation> "PTB-Mitteilungen, Das Internationale Einheitensystem (SI), Heft 2, 2007, S. 156 Abs. 2.1.1.4"@de .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/alternateName> "A"@de .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/description> "St\u00E4rke eines zeitlich unver\u00E4nderlichen elektrischen Stromes, der, durch zwei im Vakuum parallel im Abstand 1 Meter voneinander angeordnete, geradlinige, unendlich lange Leiter von vernachl\u00E4ssigbar kleinem, kreisf\u00F6rmigem Querschnitt fliessend, zwischen diesen Leitern je 1 Meter Leiterl\u00E4nge die Kraft 2 \u00B7 10 -7 Newton hervorrufen w\u00FCrde."@de .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/name> "A"@de .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/citation> "Einheitenverordnung, Art. 6 (SR 941.202, Stand 2013-01)"@de .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/description> "St\u00E4rke eines zeitlich unver\u00E4nderlichen elektrischen Stromes, der, durch zwei im Vakuum parallel im Abstand 1 Meter voneinander angeordnete, geradlinige, unendlich lange Leiter von vernachl\u00E4ssigbar kleinem, kreisf\u00F6rmigem Querschnitt fliessend, zwischen diesen Leitern je 1 Meter Leiterl\u00E4nge die Kraft 2 \u00B7 10 -7 Newton hervorrufen w\u00FCrde."@de .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/name> "amp\u00E8re"@fr .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/citation> "O Unit\u00E9s, art. 6 (RS 941.202, \u00E9tat 2013-01)"@fr .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/alternateName> "A"@fr .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/description> "Intensit\u00E9 d'un courant constant qui, maintenu dans deux conducteurs parall\u00E8les, rectilignes, de longueur infinie, de section circulaire n\u00E9gligeable et plac\u00E9s \u00E0 une distance de 1 m\u00E8tre l'un de l'autre dans le vide, produirait entre ces conducteurs une force \u00E9gale \u00E0 2 \u00B7 10 -7 newton par m\u00E8tre de longueur."@fr .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/name> "unit\u00E9 d'intensit\u00E9 du courant \u00E9lectrique"@fr .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/citation> "Techniques de l'ing\u00E9nieur, Organisation et vocabulaire de la m\u00E9trologie, \u00C9talons m\u00E9trologiques fondamentaux - \u00C9talons \u00E9lectriques, al. 5, 2015 (Internet, 2016-01-25)"@fr .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/alternateName> "A"@fr .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/description> "Intensit\u00E9 d'un courant constant qui, maintenu dans deux conducteurs parall\u00E8les, rectilignes, de longueur infinie, de section circulaire n\u00E9gligeable et plac\u00E9s \u00E0 une distance de 1 m\u00E8tre l'un de l'autre dans le vide, produirait entre ces conducteurs une force \u00E9gale \u00E0 2 \u00B7 10 -7 newton par m\u00E8tre de longueur."@fr .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/name> "A"@fr .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/citation> "O Unit\u00E9s, art. 6 (RS 941.202, \u00E9tat 2013-01)"@fr .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/description> "Intensit\u00E9 d'un courant constant qui, maintenu dans deux conducteurs parall\u00E8les, rectilignes, de longueur infinie, de section circulaire n\u00E9gligeable et plac\u00E9s \u00E0 une distance de 1 m\u00E8tre l'un de l'autre dans le vide, produirait entre ces conducteurs une force \u00E9gale \u00E0 2 \u00B7 10 -7 newton par m\u00E8tre de longueur."@fr .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/name> "amp\u00E8re (a); ampere (b)"@it .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/citation> "(a) O Unit\u00E0, art. 6 (RS 941.202, stato 2013-01); (b) Treccani, Sistemi di Unit\u00E0, 2016, (Internet, 2016-01-25/))"@it .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/alternateName> "A"@it .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/description> "Intensit\u00E0 di una corrente elettrica costante che, percorrendo due conduttori paralleli rettilinei, di lunghezza infinita, di sezione circolare trascurabile, posti alla distanza di un metro l'uno dall'altro nel vuoto, produrrebbe fra questi conduttori una forza uguale a 2 \u00B7 10 -7 newton su ogni metro di lunghezza."@it .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/name> "unit\u00E0 d'intensit\u00E0 di corrente elettrica"@it .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/citation> "Treccani, Sistemi di Unit\u00E0, 2016, (Internet, 2016-01-25/))"@it .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/alternateName> "A"@it .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/description> "Intensit\u00E0 di una corrente elettrica costante che, percorrendo due conduttori paralleli rettilinei, di lunghezza infinita, di sezione circolare trascurabile, posti alla distanza di un metro l'uno dall'altro nel vuoto, produrrebbe fra questi conduttori una forza uguale a 2 \u00B7 10 -7 newton su ogni metro di lunghezza."@it .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/name> "A"@it .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/citation> "O Unit\u00E0, art. 6 (RS 941.202, stato 2013-01)"@it .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/description> "Intensit\u00E0 di una corrente elettrica costante che, percorrendo due conduttori paralleli rettilinei, di lunghezza infinita, di sezione circolare trascurabile, posti alla distanza di un metro l'uno dall'altro nel vuoto, produrrebbe fra questi conduttori una forza uguale a 2 \u00B7 10 -7 newton su ogni metro di lunghezza."@it .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/name> "ampere"@en .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/citation> "Wikipedia, Ampere, 2016-02-23 (Internet, 2016-02-29)"@en .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/alternateName> "A"@en .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/description> "Parliamentary procedural request instructing the Federal Council to submit a specific draft bill to the Federal Assembly or to take appropriate measures."@en .
+<https://register.ld.admin.ch/termdat/388009> <https://schema.ld.admin.ch/termNote> "ampere-note-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009> <https://schema.ld.admin.ch/linguisticContext> "ampere-context-1-en"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009> <https://schema.ld.admin.ch/applicableCountry> "ampere-country-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/name> "unit of electric current"@en .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/citation> "Wikipedia, Ampere, 2016-02-23 (Internet, 2016-02-29)"@en .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/alternateName> "A"@en .
+<https://register.ld.admin.ch/termdat/388009/term> <http://schema.org/description> "Parliamentary procedural request instructing the Federal Council to submit a specific draft bill to the Federal Assembly or to take appropriate measures."@en .
+<https://register.ld.admin.ch/termdat/388009/term> <https://schema.ld.admin.ch/termNote> "ampere-note-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009/term> <https://schema.ld.admin.ch/linguisticContext> "ampere-context-1-en"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009/term> <https://schema.ld.admin.ch/applicableCountry> "ampere-country-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/name> "A"@en .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/citation> "Wikipedia, Ampere, 2016-02-23 (Internet, 2016-02-29)"@en .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <http://schema.org/description> "Parliamentary procedural request instructing the Federal Council to submit a specific draft bill to the Federal Assembly or to take appropriate measures."@en .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <https://schema.ld.admin.ch/termNote> "ampere-note-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <https://schema.ld.admin.ch/linguisticContext> "ampere-context-1-en"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009/abbreviation> <https://schema.ld.admin.ch/applicableCountry> "ampere-country-1-en"@en .
+<https://register.ld.admin.ch/termdat/388009> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/388009/2/en> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Synonym> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://schema.org/position> "2"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://schema.org/name> "unity of electric current"@en .
+<https://register.ld.admin.ch/termdat/388009/2/en> <http://schema.org/citation> "NIST, The NIST Reference on Constants, Units, and Uncertainty, International System of Units (SI), Historical context, Unit of electric current, 2016 (Internet, 2016-01-25)"@en .
+<https://register.ld.admin.ch/termdat/388009/2/en> <https://schema.ld.admin.ch/termNote> "ampere-note-2-en"@en .
+<https://register.ld.admin.ch/termdat/388009/2/en> <https://schema.ld.admin.ch/linguisticContext> "ampere-context-2-en"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/388009/2/en> <https://schema.ld.admin.ch/applicableCountry> "ampere-country-2-en"@en .

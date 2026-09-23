@@ -1,0 +1,15 @@
+@use 'src/styles/variables.scss' as *;
+
+.checkbox-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: $ob-spacing-sm 0;
+
+    .checkbox {
+        flex: 0 1 50%;
+    }
+}
+
+.add-language-error {
+    color: $ob-error;
+}

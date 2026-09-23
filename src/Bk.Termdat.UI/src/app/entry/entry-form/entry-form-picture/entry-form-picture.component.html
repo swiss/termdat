@@ -1,0 +1,156 @@
+<details>
+    <summary [ngClass]="{invalid: form.touched && form.invalid}">
+        <h6>{{ 'field.picture' | translate }}</h6>
+        <button mat-button obButton="tertiary" type="button" (click)="deletePictureData()" [disabled]="!hasData">
+            <mat-icon svgIcon="minus" class="ob-icon" />&nbsp;{{ 'entry.removePictureData' | translate }}
+        </button>
+    </summary>
+    <div class="picture-form">
+        @if (_picture?.entryId || pictureData) {
+            <div class="picture-container">
+                <div class="picture-uploaded">
+                    @if (_picture?.entryId) {
+                        <img src="/api/pictures/{{ _picture!.entryId }}?t={{ timestamp }}" alt="{{ 'field.picture' | translate }}" />
+                    } @else {
+                        <img [src]="pictureData" alt="{{ 'field.picture' | translate }}" />
+                    }
+                </div>
+                <div class="picture-buttons">
+                    <button mat-button obButton="secondary" type="button" (click)="deletePicture()">
+                        <mat-icon svgIcon="delete" class="ob-icon" />&nbsp;{{ 'entry.removePicture' | translate }}
+                    </button>
+                </div>
+            </div>
+        } @else {
+            @if (error !== undefined) {
+                <ob-alert type="error" id="picture-upload-error" role="alert">
+                    @switch (error) {
+                        @case (PictureUploadError.General) {
+                            {{ 'entry.picture.error.general' | translate }}&nbsp;<a
+                                href="https://en.wikipedia.org/wiki/Comparison_of_web_browsers#Image_format_support"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{{ 'entry.picture.error.generalMore' | translate }}</a
+                            >
+                        }
+                        @case (PictureUploadError.Size) {
+                            {{ 'entry.picture.error.size' | obTranslateParams: {size: displaySize | fileSize: 0} }}
+                        }
+                        @case (PictureUploadError.FileType) {
+                            {{ 'entry.picture.error.fileType' | translate }}
+                        }
+                        @case (PictureUploadError.Multiple) {
+                            {{ 'entry.picture.error.multiple' | translate }}
+                        }
+                    }
+                </ob-alert>
+            }
+            <div class="picture-uploader" tdDragAndDropUpload (fileDropped)="onFileDropped($event)">
+                <input type="file" id="picture-select" accept="image/*" (change)="onFileChange($event)" />
+                <div class="picture-dropzone">
+                    <div class="picture-dropzone-top">
+                        <mat-icon svgIcon="cloud_upload" class="ob-icon picture-dropzone-icon" />
+                        <label for="picture-select" class="picture-dropzone-label">{{ 'entry.picture.uploadText' | translate }}</label>
+                        <span class="picture-dropzone-text">&nbsp;{{ 'entry.picture.dropText' | translate }}</span>
+                    </div>
+                    <div class="picture-dropzone-format">
+                        {{ 'entry.picture.hintText' | obTranslateParams: {size: displaySize | fileSize: 0} }}
+                    </div>
+                </div>
+                <mat-progress-bar mode="indeterminate" color="primary" [ngClass]="{loading: loading}" class="picture-progress" />
+            </div>
+        }
+        <form [formGroup]="form">
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.descriptionDe' | translate }}</mat-label>
+                <textarea matInput formControlName="descriptionDe" cdkTextareaAutosize></textarea>
+                @if (form.controls.descriptionDe.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.descriptionDe.errors, 'field.picture.descriptionDe' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.sourceDe' | translate }}</mat-label>
+                <textarea matInput formControlName="sourceDe" cdkTextareaAutosize></textarea>
+                @if (form.controls.sourceDe.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.sourceDe.errors, 'field.picture.sourceDe' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.descriptionFr' | translate }}</mat-label>
+                <textarea matInput formControlName="descriptionFr" cdkTextareaAutosize></textarea>
+                @if (form.controls.descriptionFr.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.descriptionFr.errors, 'field.picture.descriptionFr' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.sourceFr' | translate }}</mat-label>
+                <textarea matInput formControlName="sourceFr" cdkTextareaAutosize></textarea>
+                @if (form.controls.sourceFr.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.sourceFr.errors, 'field.picture.sourceFr' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.descriptionIt' | translate }}</mat-label>
+                <textarea matInput formControlName="descriptionIt" cdkTextareaAutosize></textarea>
+                @if (form.controls.descriptionIt.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.descriptionIt.errors, 'field.picture.descriptionIt' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.sourceIt' | translate }}</mat-label>
+                <textarea matInput formControlName="sourceIt" cdkTextareaAutosize></textarea>
+                @if (form.controls.sourceIt.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.sourceIt.errors, 'field.picture.sourceIt' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.descriptionRm' | translate }}</mat-label>
+                <textarea matInput formControlName="descriptionRm" cdkTextareaAutosize></textarea>
+                @if (form.controls.descriptionRm.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.descriptionRm.errors, 'field.picture.descriptionRm' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.sourceRm' | translate }}</mat-label>
+                <textarea matInput formControlName="sourceRm" cdkTextareaAutosize></textarea>
+                @if (form.controls.sourceRm.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.sourceRm.errors, 'field.picture.sourceRm' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.descriptionEn' | translate }}</mat-label>
+                <textarea matInput formControlName="descriptionEn" cdkTextareaAutosize></textarea>
+                @if (form.controls.descriptionEn.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.descriptionEn.errors, 'field.picture.descriptionEn' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'field.picture.sourceEn' | translate }}</mat-label>
+                <textarea matInput formControlName="sourceEn" cdkTextareaAutosize></textarea>
+                @if (form.controls.sourceEn.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.sourceEn.errors, 'field.picture.sourceEn' | translate, 'entry.picture.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </form>
+    </div>
+</details>

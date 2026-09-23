@@ -1,0 +1,1133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE martif SYSTEM "TBXcoreStructV02.dtd">
+<martif type='TBX' xml:lang='en'>
+
+  <martifHeader>
+
+    <fileDesc>
+      <titleStmt>
+        <title>Transit NXT TermStar export file</title>
+      </titleStmt>
+      <publicationStmt>
+        <p></p>
+      </publicationStmt>
+      <sourceDesc>
+        <p>TermStar dictionary</p>
+      </sourceDesc>
+
+    </fileDesc>
+    <encodingDesc>
+      <p type="XCSURI">http://www.lisa.org/fileadmin/standards/tbx/TBXXCSV02.xcs</p>
+    </encodingDesc>
+    <revisionDesc>
+      <change>
+        <p>2024-02-26T14:37:05Z</p>
+      </change>
+    </revisionDesc>
+
+  </martifHeader>
+
+  <text>
+    <body>
+
+      <termEntry id='eid-1'>
+        <admin type="GUID">{E0FE45F6-61C9-40D3-B965-78B016151550}</admin>
+        <transacGrp>
+          <transac type="transactionType">origination</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-14T12:38:26Z</date>
+        </transacGrp>
+        <transacGrp>
+          <transac type="transactionType">modification</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-15T08:38:26Z</date>
+        </transacGrp>
+
+        <langSet xml:lang="de-ch">
+          <descrip type='explanation'>Anmerkung beim 1. Synonym + EXP: [Inhalt Info1] (EDA)</descrip>
+          <note>Quelle der Anmerkung beim 1. Synonym (EDA)</note>
+          <descripGrp>
+            <descrip type='definition'>Definition (Ebene Sprache)</descrip>
+            <descripNote type='definitionType'>Quelle Definition (Ebene Sprache)</descripNote>
+          </descripGrp>
+          <ntig id="tid-1">
+            <termGrp>
+              <term>Terminus Benennung</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>Anmerkung Terminus Benennung</termNote>
+              <termNote type='usageNoteSource'>Quelle Anmerkung Terminus Benennung</termNote>
+              <termNote type='GUID'>{603E7387-000A-4849-82AD-0E8A1B5428B2}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-14T12:38:26Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T08:38:26Z</date>
+            </transacGrp>
+            <descripGrp>
+              <descrip type="context">Kontext Terminus Benennung</descrip>
+              <descripNote type="contextType">Quelle Kontext Terminus Benennung</descripNote>
+            </descripGrp>
+            <admin type='entrySource'>Quelle Terminus Benennung</admin>
+            <descripGrp>
+              <descrip type='definition'>Definition (Ebene Terminus Benennung)</descrip>
+              <descripNote type='definitionType'>Quelle Definition (Ebene Terminus Benennung)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-2">
+            <termGrp>
+              <term>Abkürzung</term>
+              <termNote type='termType'>abbreviation</termNote>
+              <termNote type='usageNote'>Anmerkung Abkürzung</termNote>
+              <termNote type='usageNoteSource'>Quelle Anmerkung Abkürzung</termNote>
+              <termNote type='GUID'>{6E9E2BF2-B522-4E66-8F25-AD9DCBD0EF7A}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-14T12:38:26Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T08:38:26Z</date>
+            </transacGrp>
+            <descripGrp>
+              <descrip type="context">Kontext Abkürzung</descrip>
+              <descripNote type="contextType">Quelle Kontext Abkürzung</descripNote>
+            </descripGrp>
+            <admin type='entrySource'>Quelle Abkürzung</admin>
+            <descripGrp>
+              <descrip type='definition'>Definition Abkürzung (Ebene Terminus)</descrip>
+              <descripNote type='definitionType'>Quelle Definition Abkürzung (Ebene Terminus)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-3">
+            <termGrp>
+              <term>Terminus Synonym</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='usageNote'>Anmerkung Terminus Synonym</termNote>
+              <termNote type='usageNoteSource'>Quelle Anmerkung Terminus Synonym</termNote>
+              <termNote type='GUID'>{CB1E0BEC-7A7B-4EED-9FC8-8ABE13BA4B3A}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-14T12:40:48Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T08:38:26Z</date>
+            </transacGrp>
+            <descripGrp>
+              <descrip type="context">Kontext Terminus Synonym</descrip>
+              <descripNote type="contextType">Quelle Kontext Terminus Synonym</descripNote>
+            </descripGrp>
+            <admin type='entrySource'>Quelle Terminus Synonym</admin>
+            <descripGrp>
+              <descrip type='definition'>Definition (Ebene Terminus Synonym)</descrip>
+              <descripNote type='definitionType'>Quelle Definition (Ebene Terminus Synonym)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-4">
+            <termGrp>
+              <term>Terminus + USG: zu vermeiden</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>Anmerkung Terminus (zu vermeiden)</termNote>
+              <termNote type='usageNoteSource'>Quelle Anmerkung Terminus (zu vermeiden)</termNote>
+              <termNote type='GUID'>{FFEE7B65-68FA-4303-9A11-E9B2748D1D03}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-14T12:40:48Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T08:38:26Z</date>
+            </transacGrp>
+            <descripGrp>
+              <descrip type="context">Kontext Terminus (zu vermeiden)</descrip>
+              <descripNote type="contextType">Quelle Kontext Terminus (zu vermeiden)</descripNote>
+            </descripGrp>
+            <admin type='entrySource'>Quelle Terminus (zu vermeiden)</admin>
+            <descripGrp>
+              <descrip type='definition'>Definition Terminus (zu vermeiden) (Ebene Terminus)</descrip>
+              <descripNote type='definitionType'>Quelle Definition Terminus (zu vermeiden) (Ebene
+                Terminus)</descripNote>
+            </descripGrp>
+          </ntig>
+
+        </langSet>
+      </termEntry>
+
+      <termEntry id='eid-2'>
+        <admin type="GUID">{00CB09AA-FFC2-4008-833A-BBA336AEC164}</admin>
+        <transacGrp>
+          <transac type="transactionType">origination</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-15T09:57:50Z</date>
+        </transacGrp>
+        <transacGrp>
+          <transac type="transactionType">modification</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-15T10:09:10Z</date>
+        </transacGrp>
+
+        <langSet xml:lang="fr-ch">
+          <ntig id="tid-8">
+            <termGrp>
+              <term>TARMED</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>DOM: assurance-maladie; USG: privilégié; variante
+                &quot;TarMed&quot; à éviter; EXP: tarif uniforme fixé par convention entre les
+                partenaires tarifaires (ou fixé d’office par le Conseil fédéral) et appliqué par les
+                hôpitaux et par les cabinets médicaux dans l&apos;ensemble de la Suisse</termNote>
+              <termNote type='usageNoteSource'>d&apos;après LF Assurance-maladie, art. 46 (RS
+                832.10, état 2018-01) et OFSP, Thèmes &gt; Assurances &gt; Assurance-maladie &gt;
+                Prestations et tarifs &gt; Prestations médicales &gt; Système tarifaire TARMED
+                (\h!https://www.bag.admin.ch/bag/fr/home/themen/versicherungen/krankenversicherung/krankenversicherung-leistungen-tarife/Aerztliche-Leistungen-in-der-Krankenversicherung/Tarifsystem-Tarmed.html!Internet,
+                2017-10-04\s)</termNote>
+              <termNote type='GUID'>{EE5EDA6E-C138-4006-A578-A945A1054C50}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <descripGrp>
+              <descrip type="context">Pour la facturation à leurs patients, les médecins appliquent
+                un tarif uniforme: le TARMED. Avec plus de 4600 positions, il comprend la
+                quasi-totalité des prestations médicales et paramédicales fournies au cabinet
+                médical et dans le domaine hospitalier ambulatoire.</descrip>
+              <descripNote type="contextType">FMH &gt; Tarifs ambulatoires &gt; TARMED Tarif
+                (\h!https://www.fmh.ch/404.html!Internet, 2016-09-06\s)</descripNote>
+            </descripGrp>
+            <admin type='entrySource'>O Fixation et adaptation de structures tarifaires dans
+              l’assurance-maladie, art. 2 al. 1 (RS 832.102.5, état 2018-01)</admin>
+          </ntig>
+
+          <ntig id="tid-9">
+            <termGrp>
+              <term>structure tarifaire pour les prestations médicales</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{857CFD7A-8D55-4E23-B84F-E0B257161917}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <admin type='entrySource'>O Fixation et adaptation de structures tarifaires dans
+              l’assurance-maladie, art. 2 al. 1 (RS 832.102.5, état 2018-01)</admin>
+          </ntig>
+
+          <ntig id="tid-12">
+            <termGrp>
+              <term>grille tarifaire TARMED</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: à éviter</termNote>
+              <termNote type='GUID'>{AE7AD159-AC11-4717-BE75-79C872808038}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:07:59Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:07:59Z</date>
+            </transacGrp>
+            <admin type='entrySource'>d&apos;après Po. Lohr (17.3540), Pour des soins sans
+              discrimination, 2017-06-15
+              (\h!https://www.parlament.ch/fr/ratsbetrieb/suche-curia-vista/geschaeft?AffairId=20173540!Internet,
+              2017-10-04\s)</admin>
+          </ntig>
+
+          <ntig id="tid-10">
+            <termGrp>
+              <term>tarif médical et catalogue des prestations hospitalières</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: à éviter</termNote>
+              <termNote type='GUID'>{51EDCCC9-C1D4-4044-8DBE-C3F27ED5C4BB}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:01:42Z</date>
+            </transacGrp>
+            <admin type='entrySource'>FMH, Convention-cadre TARMED, art. 1 al. 1, 2005-06-05
+              (\h!https://www.fmh.ch/files/pdf9/convention-cadre.pdf!Internet, 2016-03-31\s)</admin>
+          </ntig>
+
+          <ntig id="tid-11">
+            <termGrp>
+              <term>Tarmed</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: à éviter, même si courant</termNote>
+              <termNote type='GUID'>{3D6347D9-3832-4C8D-A316-B87923E9B861}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:06:32Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T10:06:32Z</date>
+            </transacGrp>
+            <admin type='entrySource'>ATUPRI, Comprendre enfin sa facture de médecin, 2017-01-11
+              (\h!https://www.atupri.ch/fr/blog/perspectives/tarmed!Internet, 2017-10-04\s)</admin>
+          </ntig>
+
+        </langSet>
+
+        <langSet xml:lang="de-ch">
+          <ntig id="tid-5">
+            <termGrp>
+              <term>TARMED</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>DOM: Krankenversicherung; USG: bevorzugt; EXP:
+                &quot;TARMED&quot; ist das Initialwort (Akronym) des französischen Namens
+                &quot;tarif médical&quot;; verträglich vereinbarter oder von Amtes wegen durch den
+                Bundesrat festgesetzter einheitlicher Tarif, der gesamtschweizerisch in Spitälern
+                und Arztpraxen verwendet wird</termNote>
+              <termNote type='usageNoteSource'>nach BG Krankenversicherung, Art. 46 (SR 832.10,
+                Stand 2018-01) und BAG, Themen &gt; Versicherungen &gt; Krankenversicherung &gt;
+                Leistungen und Tarife &gt; Ärztliche Leistungen &gt; Tarifsystem TARMED
+                (\h!https://www.bag.admin.ch/bag/de/home/themen/versicherungen/krankenversicherung/krankenversicherung-leistungen-tarife/Aerztliche-Leistungen-in-der-Krankenversicherung/Tarifsystem-Tarmed.html!Internet,
+                20147-10-04\s)</termNote>
+              <termNote type='GUID'>{6C687625-6B22-435C-B99F-CFD71575801B}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <admin type='entrySource'>V Festlegung und Anpassung von Tarifstrukturen in der
+              Krankenversicherung, Art. 2 Abs. 1 (SR 832.102.5, Stand 2018-01)</admin>
+          </ntig>
+
+          <ntig id="tid-6">
+            <termGrp>
+              <term>Tarifstruktur für ärztliche Leistungen</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{4999DF46-B582-4139-A703-0ED16D0FB004}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <admin type='entrySource'>V Festlegung und Anpassung von Tarifstrukturen in der
+              Krankenversicherung, Art. 2 Abs. 1 (SR 832.102.5, Stand 2018-01)</admin>
+          </ntig>
+
+          <ntig id="tid-7">
+            <termGrp>
+              <term>Arzttarif und Spitalleistungskatalog</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: zu vermeiden</termNote>
+              <termNote type='GUID'>{5E04ED28-3D17-44D1-AFE5-726AEEE273F4}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-15T09:57:50Z</date>
+            </transacGrp>
+            <admin type='entrySource'>FMH, Rahmenvertrag TARMED, Art. 1 Abs. 1, 2002-06-05
+              (\h!https://www.fmh.ch/files/pdf5/rahmenvertrag_d.pdf!Internet, 2016-03-31\s)</admin>
+          </ntig>
+
+        </langSet>
+      </termEntry>
+
+      <termEntry id='eid-3'>
+        <admin type="GUID">{AA44B3EB-07D6-47CA-A9E4-D44C2CB5AAF9}</admin>
+        <transacGrp>
+          <transac type="transactionType">origination</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T07:14:49Z</date>
+        </transacGrp>
+        <transacGrp>
+          <transac type="transactionType">modification</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T09:14:20Z</date>
+        </transacGrp>
+
+        <langSet xml:lang="fr-ch">
+          <ntig id="tid-14">
+            <termGrp>
+              <term>îlotage</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>EXP: une ou plusieurs centrales de production alimentent
+                les clients raccordés en assurant le réglage de la tension et de la fréquence; cette
+                situation n&apos;est pas un mode de fonctionnement usuel des réseaux, mais peut se
+                produire en régime perturbé</termNote>
+              <termNote type='usageNoteSource'>Canton FR, Rupture d’approvisionnement électrique
+                &gt; Dangers techniques: Electricité
+                (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+                2022-09-14\s)</termNote>
+              <termNote type='GUID'>{7C8107BB-D92A-4921-9FB5-B5B70673991B}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Canton FR, Rupture d’approvisionnement électrique &gt; Dangers
+              techniques: Electricité
+              (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+              2022-09-14\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Régime d&apos;exploitation d&apos;une partie de réseau
+                électrique (îlot) fonctionnant de manière autonome et sans interconnexion avec le
+                réseau principal.</descrip>
+              <descripNote type='definitionType'>Canton FR, Rupture d’approvisionnement électrique
+                &gt; Dangers techniques: Electricité
+                (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+                2022-09-14\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-16">
+            <termGrp>
+              <term>exploitation en îlot</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{EC513204-8E23-48BC-BA8A-C00C773C429B}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:12:10Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:12:10Z</date>
+            </transacGrp>
+            <admin type='entrySource'>ESTI, Directive ESTI n° 220 Exigences sur les installations de
+              production d&apos;énergie, 2021-07-01, p. 5
+              (\h!https://www.esti.admin.ch/inhalte/ESTI_220_0621_FR.pdf!Internet, 2023-04-28\s)</admin>
+          </ntig>
+
+          <ntig id="tid-15">
+            <termGrp>
+              <term>fonctionnement en îlot</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{E0908E71-6E9E-4F3A-AF86-05F40B6B45BF}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <admin type='entrySource'>ESTI, Directive ESTI n° 220 Exigences sur les installations de
+              production d&apos;énergie, 2021-07-01, p. 25
+              (\h!https://www.esti.admin.ch/inhalte/ESTI_220_0621_FR.pdf!Internet, 2023-04-28\s)</admin>
+          </ntig>
+
+        </langSet>
+
+        <langSet xml:lang="de-ch">
+          <descripGrp>
+            <descrip type='definition'>Definition auf Sprachebene</descrip>
+            <descripNote type='definitionType'>mec</descripNote>
+          </descripGrp>
+          <ntig id="tid-13">
+            <termGrp>
+              <term>Inselbetrieb 2 DEF</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>EXP: ein oder mehrere Kraftwerke versorgen die
+                angeschlossenen Kunden und garantieren so die Regelung der Netzspannung und der
+                Netzfrequenz; diese Situation entspricht nicht der regulären Funktionsweise eines
+                Netzes, kann aber bei Störungen vorkommen</termNote>
+              <termNote type='usageNoteSource'>nach Kanton FR, Stromversorgungsunterbruch &gt;
+                Technische Gefahren: Strom
+                (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+                2022-09-14\s)</termNote>
+              <termNote type='GUID'>{B08CEDB8-D4A8-41E8-9CB3-C23225271D84}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T07:14:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:14:20Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Kanton FR, Stromversorgungsunterbruch &gt; Technische
+              Gefahren: Strom
+              (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+              2022-09-14\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Betrieb eines Teils des Elektrizitätsnetzes (Insel), der
+                eigenständig und ohne Austausch mit dem Hauptnetz funktioniert.</descrip>
+              <descripNote type='definitionType'>nach Kanton FR, Stromversorgungsunterbruch &gt;
+                Technische Gefahren: Strom
+                (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+                2022-09-14\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+        </langSet>
+      </termEntry>
+
+      <termEntry id='eid-4'>
+        <admin type="GUID">{168AF283-29B9-45CF-BADC-EB3B53B8FBD5}</admin>
+        <transacGrp>
+          <transac type="transactionType">origination</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T07:14:49Z</date>
+        </transacGrp>
+        <transacGrp>
+          <transac type="transactionType">modification</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T07:14:49Z</date>
+        </transacGrp>
+
+        <langSet xml:lang="fr-ch">
+          <ntig id="tid-18">
+            <termGrp>
+              <term>îlotage</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>EXP: une ou plusieurs centrales de production alimentent
+                les clients raccordés en assurant le réglage de la tension et de la fréquence; cette
+                situation n&apos;est pas un mode de fonctionnement usuel des réseaux, mais peut se
+                produire en régime perturbé</termNote>
+              <termNote type='usageNoteSource'>Canton FR, Rupture d’approvisionnement électrique
+                &gt; Dangers techniques: Electricité
+                (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+                2022-09-14\s)</termNote>
+              <termNote type='GUID'>{18BDBC36-A978-4956-B7B9-2253108C2212}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Canton FR, Rupture d’approvisionnement électrique &gt; Dangers
+              techniques: Electricité
+              (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+              2022-09-14\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Régime d&apos;exploitation d&apos;une partie de réseau
+                électrique (îlot) fonctionnant de manière autonome et sans interconnexion avec le
+                réseau principal.</descrip>
+              <descripNote type='definitionType'>Canton FR, Rupture d’approvisionnement électrique
+                &gt; Dangers techniques: Electricité
+                (\h!https://www.fr.ch/dsjs/sscm/dangers-techniques/rupture-dapprovisionnement-electrique!Internet,
+                2022-09-14\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-19">
+            <termGrp>
+              <term>exploitation en îlot</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{8F6003F3-EF17-4DED-83B9-F4E59561AD65}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:12:10Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:12:10Z</date>
+            </transacGrp>
+            <admin type='entrySource'>ESTI, Directive ESTI n° 220 Exigences sur les installations de
+              production d&apos;énergie, 2021-07-01, p. 5
+              (\h!https://www.esti.admin.ch/inhalte/ESTI_220_0621_FR.pdf!Internet, 2023-04-28\s)</admin>
+          </ntig>
+
+          <ntig id="tid-20">
+            <termGrp>
+              <term>fonctionnement en îlot</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{7E111865-887F-4B89-B4DB-DB9C10EFAEF9}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T09:07:49Z</date>
+            </transacGrp>
+            <admin type='entrySource'>ESTI, Directive ESTI n° 220 Exigences sur les installations de
+              production d&apos;énergie, 2021-07-01, p. 25
+              (\h!https://www.esti.admin.ch/inhalte/ESTI_220_0621_FR.pdf!Internet, 2023-04-28\s)</admin>
+          </ntig>
+
+        </langSet>
+
+        <langSet xml:lang="de-ch">
+          <ntig id="tid-17">
+            <termGrp>
+              <term>Inselbetrieb</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>EXP: ein oder mehrere Kraftwerke versorgen die
+                angeschlossenen Kunden und garantieren so die Regelung der Netzspannung und der
+                Netzfrequenz; diese Situation entspricht nicht der regulären Funktionsweise eines
+                Netzes, kann aber bei Störungen vorkommen</termNote>
+              <termNote type='usageNoteSource'>nach Kanton FR, Stromversorgungsunterbruch &gt;
+                Technische Gefahren: Strom
+                (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+                2022-09-14\s)</termNote>
+              <termNote type='GUID'>{46D7FB2B-1E6B-48B0-9017-390BE71D1E3F}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T07:14:49Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T07:14:49Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Kanton FR, Stromversorgungsunterbruch &gt; Technische
+              Gefahren: Strom
+              (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+              2022-09-14\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Betrieb eines Teils des Elektrizitätsnetzes (Insel), der
+                eigenständig und ohne Austausch mit dem Hauptnetz funktioniert.</descrip>
+              <descripNote type='definitionType'>nach Kanton FR, Stromversorgungsunterbruch &gt;
+                Technische Gefahren: Strom
+                (\h!https://www.fr.ch/de/sjsd/azsm/technische-gefahren/stromversorgungsunterbruch!Internet,
+                2022-09-14\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+        </langSet>
+      </termEntry>
+
+      <termEntry id='eid-5'>
+        <admin type="GUID">{86821716-2F6C-42AC-8A09-6FB10EBE5C0B}</admin>
+        <transacGrp>
+          <transac type="transactionType">origination</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T12:18:34Z</date>
+        </transacGrp>
+        <transacGrp>
+          <transac type="transactionType">modification</transac>
+          <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+          <date>2024-02-19T12:50:06Z</date>
+        </transacGrp>
+
+        <langSet xml:lang="fr-ch">
+          <ntig id="tid-31">
+            <termGrp>
+              <term>SRAS-CoV-2</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>EXP: le SRAS-CoV-2 est le virus responsable de la COVID-19;
+                bien que le terme anglais SARS-CoV-2 (de severe acute respiratory syndrome
+                coronavirus 2) soit la désignation officielle retenue en février 2020 par le Comité
+                international de taxonomie des virus, cette désignation a été partiellement
+                francisée en SRAS-CoV-2 par l&apos;Organisation mondiale de la santé afin de
+                concorder avec le sigle déjà retenu, en français, pour désigner le syndrome
+                respiratoire aigu sévère (SRAS)</termNote>
+              <termNote type='usageNoteSource'>d&apos;après Le grand dictionnaire terminologique,
+                &quot;SRAS-CoV-2&quot;
+                (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+                2020-03-20\s)</termNote>
+              <termNote type='GUID'>{DEADB59C-A32E-4639-822D-F07759B1F7CD}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:09Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:50:06Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Le grand dictionnaire terminologique, &quot;SRAS-CoV-2&quot;
+              (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+              2020-03-20\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Coronavirus potentiellement mortel pour les personnes
+                vulnérables, qui s&apos;est déclaré à Wuhan en 2019, transmis entre humains par
+                l&apos;inhalation de gouttelettes infectieuses ou par contact avec une surface
+                contaminée, et qui entraîne de la toux et des difficultés respiratoires accompagnées
+                de fièvre.</descrip>
+              <descripNote type='definitionType'>Le grand dictionnaire terminologique,
+                &quot;SRAS-CoV-2&quot;
+                (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+                2020-03-20\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-32">
+            <termGrp>
+              <term>coronavirus 2 du syndrome respiratoire aigu sévère</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{07D36F4D-7DEC-4D9E-9595-75D0986523B3}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:09Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:09Z</date>
+            </transacGrp>
+            <admin type='entrySource'>WHO, &quot;Appellation de la maladie à coronavirus 2019
+              (COVID-19) et du virus qui la cause, 2020-04
+              (\h!https://www.who.int/fr/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-(covid-2019!Internet,
+              2020-05-07\s)</admin>
+          </ntig>
+
+          <ntig id="tid-34">
+            <termGrp>
+              <term>nouveau coronavirus</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{F636C041-00AB-4126-95E2-541144D34C35}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:44:24Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:44:24Z</date>
+            </transacGrp>
+            <admin type='entrySource'>OFSP, Maladies &gt; Maladies infectieuses : flambées,
+              épidémies, pandémies &gt; Flambées et épidémies actuelles &gt; Nouveau coronavirus
+              (\h!https://www.bag.admin.ch/bag/fr/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov.html!Internet,
+              2020-03-26\s)</admin>
+          </ntig>
+
+          <ntig id="tid-36">
+            <termGrp>
+              <term>coronavirus de Wuhan</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: à éviter; abandonné au profit de l&apos;appellation
+                officielle SRAS-CoV-2</termNote>
+              <termNote type='usageNoteSource'>d&apos;après Le grand dictionnaire terminologique,
+                &quot;SRAS-CoV-2&quot;
+                (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+                2020-03-20\s)</termNote>
+              <termNote type='GUID'>{339F243E-F0C7-4A6A-A949-030D28A7EA9F}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:48:38Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:48:38Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Le grand dictionnaire terminologique, &quot;SRAS-CoV-2&quot;
+              (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+              2020-03-20\s)</admin>
+          </ntig>
+
+          <ntig id="tid-35">
+            <termGrp>
+              <term>nCoV-2019</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='GUID'>{0D4F802C-961D-42E7-9817-C25F1D20BE15}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:47:55Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:47:55Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Le grand dictionnaire terminologique, &quot;SRAS-CoV-2&quot;
+              (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+              2020-03-20\s)</admin>
+          </ntig>
+
+          <ntig id="tid-33">
+            <termGrp>
+              <term>nouveau coronavirus 2019</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: à éviter; EXP: terme et abréviation utilisés au début
+                de l&apos;épidémie et abandonnés au profit de l&apos;appellation officielle
+                SRAS-CoV-2</termNote>
+              <termNote type='usageNoteSource'>Le grand dictionnaire terminologique,
+                &quot;SRAS-CoV-2&quot;
+                (http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605)</termNote>
+              <termNote type='GUID'>{FD2B2D9B-BB01-4F2E-85A8-85C0E78698B6}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:09Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:09Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Le grand dictionnaire terminologique, &quot;SRAS-CoV-2&quot;
+              (\h!http://www.granddictionnaire.com/ficheOqlf.aspx?Id_Fiche=26557605!Internet,
+              2020-03-20\s)</admin>
+          </ntig>
+
+        </langSet>
+
+        <langSet xml:lang="de-ch">
+          <ntig id="tid-21">
+            <termGrp>
+              <term>Coronavirus SARS-CoV-2</term>
+              <termNote type='termType'>fullForm</termNote>
+              <termNote type='usageNote'>USG: der Terminus ist eher selten, meistens wird
+                &quot;SARS-CoV-2&quot; als Bezeichnung für das Virus verwendet; Schreibvariante des
+                Terminus: Coronavirus Sars-CoV-2 (a); &quot;SARS-CoV-2&quot; ist die bei der WHO und
+                in wissenschaftlichen Texten übliche Schreibweise; &quot;Sars-CoV-2&quot; herrscht
+                v. a. auch in den deutschsprachigen Medien vor; EXP: &quot;SARS-CoV-2&quot; ist die
+                Abkürzung der englischen Bezeichnung &quot;severe acute respiratory syndrome
+                coronavirus 2&quot; (b); das ursprünglich von Tieren auf den Menschen übertragene
+                Virus wird mittels Tröpfcheninfektion von Mensch zu Mensch übertragen; es ist der
+                Erreger der 2019 ausgebrochenen Coronavirus-Pandemie (c)</termNote>
+              <termNote type='usageNoteSource'>(a) V Proximity-Tracing-System für das Coronavirus
+                Sars-CoV-2, Tit. (SR 818.101.25, Stand 2020-06); (b) nach WHO, Naming the
+                coronavirus disease (COVID-19) and the virus that causes it, 2020
+                (\h!https://www.who.int/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-covid-2019!Internet,
+                2020-03-11\s)); (c) nach BAG, Krankheiten &gt; Infektionskrankheiten: Ausbrüche,
+                Epidemien, Pandemien &gt; Aktuelle Ausbrüche und Epidemien &gt; Neues Coronavirus
+                (\h!https://www.bag.admin.ch/bag/de/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov.html!Internet,
+                2020-03-03\s), Helmholtz Zentrum München/Deutsches Zentrum für Lungenforschung
+                (DZL), Lungeninformationsdienst, Krankheiten &gt; Virale Infekte &gt; SARS
+                (\h!https://www.lungeninformationsdienst.de/krankheiten/virale-infekte/sars/index.html!Internet,
+                2020-03-02\s) und Wikipedia, &quot;SARS-CoV-2&quot;
+                (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</termNote>
+              <termNote type='GUID'>{375F4EA9-7DB8-442B-80BA-04032A66F4FF}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:39:00Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Robert Koch-Institut, Infektionskrankheiten A-Z &gt; COVID-19
+              (Coronavirus SARS-CoV-2)
+              (\h!https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/nCoV.html!Internet,
+              2020-03-16\s)</admin>
+            <descripGrp>
+              <descrip type='definition'>Coronavirus, das die Coronavirus-Krankheit-2019 (COVID-19)
+                verursacht.</descrip>
+              <descripNote type='definitionType'>nach Wikipedia, &quot;SARS-CoV-2&quot;
+                (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</descripNote>
+            </descripGrp>
+          </ntig>
+
+          <ntig id="tid-26">
+            <termGrp>
+              <term>2019-nCoV</term>
+              <termNote type='termType'>abbreviation</termNote>
+              <termNote type='GUID'>{1C49E17E-3DCF-4F87-9F72-AF95DF000AAC}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:32:16Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:32:16Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Wikipedia, &quot;SARS-CoV-2&quot;
+              (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</admin>
+          </ntig>
+
+          <ntig id="tid-25">
+            <termGrp>
+              <term>Sars-CoV-2</term>
+              <termNote type='termType'>abbreviation</termNote>
+              <termNote type='GUID'>{7A37074A-EAE0-4C54-AE37-393F752EED22}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:31:00Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:31:00Z</date>
+            </transacGrp>
+            <admin type='entrySource'>V Proximity-Tracing-System für das Coronavirus Sars-CoV-2,
+              Tit. (SR 818.101.25, Stand 2020-06)</admin>
+          </ntig>
+
+          <ntig id="tid-22">
+            <termGrp>
+              <term>SARS-CoV-2</term>
+              <termNote type='termType'>abbreviation</termNote>
+              <termNote type='GUID'>{808427CB-1FAA-4BCB-B8BF-2FD666378D87}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Robert Koch-Institut, Infektionskrankheiten A-Z &gt; COVID-19
+              (Coronavirus SARS-CoV-2) &gt; Steckbrief zur Coronavirus-Krankheit-2019 (COVID-19)
+              (\h!https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html!Internet,
+              2020-03-16\s)</admin>
+          </ntig>
+
+          <ntig id="tid-29">
+            <termGrp>
+              <term>Corona</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='usageNote'>USG: übliche Kurzform, eher umgangssprachlich und
+                journalistisch; häufig in Wortverbindungen wie &quot;Corona-Situation&quot;,
+                &quot;Corona-Krise&quot;, &quot;Corona-Pandemie&quot;,
+                &quot;Corona-Massnahmen&quot;, &quot;Corona-Fälle&quot;,
+                &quot;Corona-Infizierte&quot; oder &quot;Corona-Patienten&quot;; EXP: bezeichnet oft
+                auch die von SARS-CoV-2 verursachte Krankheit (COVID-2019), die 2020 entstandene
+                Pandemie oder die damit verbundene Krisensituation</termNote>
+              <termNote type='usageNoteSource'>BK, Sektion Terminologie, 2020</termNote>
+              <termNote type='GUID'>{92E01EAE-59CD-4452-8F5A-1A9B45C6B034}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:36:22Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:36:22Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Wikipedia, &quot;SARS-CoV-2&quot;
+              (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</admin>
+          </ntig>
+
+          <ntig id="tid-28">
+            <termGrp>
+              <term>Coronavirus</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='usageNote'>EXP: eigentlich Oberbegriff für viele verschiedene
+                Virenarten, wird aber umgangssprachlich häufig auch für den Typ SARS-CoV-2
+                verwendetKontextUm eine Übertragung des Coronavirus zu verhindern und die
+                Verbreitung einzudämmen, müssen die Menschen Abstand halten.</termNote>
+              <termNote type='usageNoteSource'>BAG, MM Bundesrat verschärft Massnahmen gegen das
+                Coronavirus zum Schutz der Gesundheit und unterstützt betroffene Branchen,
+                2020-03-13
+                (\h!https://www.admin.ch/gov/de/start/dokumentation/medienmitteilungen.msg-id-78437.html!Internet,
+                2020-03-16\s)</termNote>
+              <termNote type='GUID'>{413E5E1A-B493-4C96-A98D-2FE5B0B93EB7}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:33:48Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:33:48Z</date>
+            </transacGrp>
+            <admin type='entrySource'>BAG, MM Bundesrat verschärft Massnahmen gegen das Coronavirus
+              zum Schutz der Gesundheit und unterstützt betroffene Branchen, 2020-03-13
+              (\h!https://www.admin.ch/gov/de/start/dokumentation/medienmitteilungen.msg-id-78437.html!Internet,
+              2020-03-16\s)</admin>
+          </ntig>
+
+          <ntig id="tid-30">
+            <termGrp>
+              <term>COVID-19-Virus</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='usageNote'>USG: eher umgangssprachlich; geläufige Schreibvariante:
+                Covid-19-Virus</termNote>
+              <termNote type='usageNoteSource'>nach Wikipedia, &quot;SARS-CoV-2&quot;
+                (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</termNote>
+              <termNote type='GUID'>{C6FD664D-010E-4D11-A531-FDCE6A2DB4AD}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:37:15Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:37:15Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Deutsches Komitee für UNICEF, Coronavirus: Das sollten Eltern
+              und Schwangere wissen, 2020-03-06
+              (\h!https://www.unicef.de/informieren/aktuelles/blog/coronavirus-das-sollten-eltern-und-schwangere-wissen/211680!Internet,
+              2020-02-18\s)</admin>
+          </ntig>
+
+          <ntig id="tid-23">
+            <termGrp>
+              <term>neuartiges Coronavirus</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='usageNote'>USG: die Abkürzung &quot;2019-nCoV&quot; ist veraltet</termNote>
+              <termNote type='usageNoteSource'>nach Wikipedia, &quot;SARS-CoV-2&quot; (\h!nach
+                Wikipedia, &quot;SARS-CoV-2&quot; (Internet, 2020-02-18) und Deutsches Institut für
+                Medizinische Dokumentation und Information (DIMDI), ICD-10 (WHO und GM): U07.1
+                kodiert COVID-19, Coronavirus-Krankheit-2019, 2020-02-17 (Internet,
+                2020-03-16)!Internet, 2020-02-18\s) und Deutsches Institut für Medizinische
+                Dokumentation und Information (DIMDI), ICD-10 (WHO und GM): U07.1 kodiert COVID-19,
+                Coronavirus-Krankheit-2019, 2020-02-17
+                (\h!https://www.dimdi.de/dynamic/de/das-dimdi/aktuelles/meldung/icd-10-who-und-gm-u07.1-kodiert-covid-19-coronavirus-krankheit-2019/!Internet,
+                2020-03-16\s)</termNote>
+              <termNote type='GUID'>{1CEE00C3-81BC-47EE-84D5-9FB30A6A1CD6}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Robert Koch-Institut, Infektionskrankheiten A-Z &gt;
+              Coronavirus SARS-CoV-2 &gt; SARS-CoV-2: Informationen des Robert Koch-Instituts zu
+              empfohlenen Infektionsschutzmaßnahmen und Zielen (\h!Robert Koch-Institut,
+              Infektionskrankheiten A-Z &gt; Coronavirus SARS-CoV-2 &gt; SARS-CoV-2: Informationen
+              des Robert Koch-Instituts zu empfohlenen Infektionsschutzmaßnahmen und Zielen
+              (Internet, 2020-04-22)!Internet, 2020-04-22\s)</admin>
+          </ntig>
+
+          <ntig id="tid-27">
+            <termGrp>
+              <term>neues Coronavirus</term>
+              <termNote type='termType'>synonym</termNote>
+              <termNote type='GUID'>{E256295E-7450-4FF9-B265-67C65327C699}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:33:03Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:33:03Z</date>
+            </transacGrp>
+            <admin type='entrySource'>BAG, MM Neue Hygiene- und Verhaltensregeln zum Schutz gegen
+              das neue Coronavirus, 2020-03-02
+              (\h!https://www.bag.admin.ch/bag/de/home/das-bag/aktuell/medienmitteilungen.msg-id-78304.html!Internet,
+              2020-03-16\s)</admin>
+          </ntig>
+
+          <ntig id="tid-24">
+            <termGrp>
+              <term>Wuhan-Virus</term>
+              <termNote type='termType'>negative term</termNote>
+              <termNote type='usageNote'>USG: zu vermeiden; EXP: benannt nach der chinesischen Stadt
+                Wuhan, in der das Virus im Januar 2020 neu identifiziert wurde</termNote>
+              <termNote type='usageNoteSource'>nach Wikipedia, &quot;SARS-CoV-2&quot;
+                (\h!https://de.wikipedia.org/wiki/SARS-CoV-2!Internet, 2020-02-18\s)</termNote>
+              <termNote type='GUID'>{A7C03D9C-5952-40CA-B24B-E75B1FD24007}</termNote>
+            </termGrp>
+            <transacGrp>
+              <transac type="transactionType">origination</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <transacGrp>
+              <transac type="transactionType">modification</transac>
+              <transacNote type="responsibility">Messina Chiara BK (bk)</transacNote>
+              <date>2024-02-19T12:18:34Z</date>
+            </transacGrp>
+            <admin type='entrySource'>Wikipedia, &quot;SARS-CoV-2&quot; (\h!Wikipedia,
+              &quot;SARS-CoV-2&quot; (Internet, 2020-02-18)!Internet, 2020-02-18\s)</admin>
+          </ntig>
+
+        </langSet>
+      </termEntry>
+
+
+    </body>
+
+    <back>
+    </back>
+
+  </text>
+</martif>

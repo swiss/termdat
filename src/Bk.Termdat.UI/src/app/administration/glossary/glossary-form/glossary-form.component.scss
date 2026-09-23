@@ -1,0 +1,7 @@
+@use 'src/styles/mixins.scss' as *;
+
+@include td-form-with-descriptions;
+
+.audit-grid {
+    column-gap: 0.75rem;
+}

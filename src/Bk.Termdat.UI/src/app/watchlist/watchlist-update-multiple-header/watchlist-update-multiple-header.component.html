@@ -1,0 +1,73 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'entry.multiEditHeaderDataMandatoryFields' | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="two-column-grid">
+            <td-autocomplete formControlName="office" [options]="offices">
+                <mat-label>{{ 'field.office' | translate }}</mat-label>
+                @if (form.controls.office.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.office.errors, 'field.office' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-autocomplete>
+
+            <td-autocomplete formControlName="collection" [options]="collections">
+                <mat-label>{{ 'field.collection' | translate }}</mat-label>
+                @if (form.controls.collection.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.collection.errors, 'field.collection' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-autocomplete>
+        </div>
+
+        <div class="two-column-grid">
+            <mat-form-field>
+                <mat-label>{{ 'field.reliability' | translate }}</mat-label>
+                <mat-select formControlName="reliability">
+                    @for (option of reliabilities; track option.id) {
+                        <mat-option [value]="option.id">{{ option.id + 1 }} - {{ option.name }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.controls.reliability.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.reliability.errors, 'field.reliability' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>{{ 'field.status' | translate }}</mat-label>
+                <mat-select formControlName="state">
+                    @for (option of states; track option.id) {
+                        <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.controls.state.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.state.errors, 'field.status' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <td-subject-form [formArray]="subjectDomains" [required]="false" />
+        <mat-radio-group formControlName="replaceSubjects">
+            <mat-radio-button name="add" [value]="false">{{ 'entry.editHeaderDataMandatoryFields.add' | translate }}</mat-radio-button>
+            <mat-radio-button name="replace" [value]="true">{{ 'entry.editHeaderDataMandatoryFields.set' | translate }}</mat-radio-button>
+        </mat-radio-group>
+    </form>
+</div>

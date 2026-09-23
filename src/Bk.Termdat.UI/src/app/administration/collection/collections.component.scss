@@ -1,0 +1,117 @@
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.layout {
+    .controls {
+        margin-bottom: $ob-spacing-default;
+        align-items: stretch;
+    }
+
+    .controls-row {
+        display: flex;
+        align-items: baseline;
+        gap: $ob-spacing-sm;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .controls-row > mat-form-field {
+        flex: 1 1 20rem;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .table-controls {
+        display: flex;
+        align-items: center;
+        gap: $ob-spacing-sm;
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            .mat-column-name {
+                width: 40%;
+            }
+
+            tr.deleted {
+                background-color: $ob-error-light;
+            }
+
+            .mat-column-action {
+                width: 9.5%;
+            }
+
+            .mat-column-code {
+                width: 10em;
+            }
+
+            .person {
+                display: none;
+            }
+
+            @include ob-media-breakpoint-down('md') {
+                .mat-mdc-row .mat-mdc-cell {
+                    width: auto;
+                    display: inherit;
+                }
+            }
+
+            @include ob-media-breakpoint-down('xl') {
+                .mat-column-id {
+                    width: 7.5%;
+                }
+
+                .mat-column-name {
+                    width: 35%;
+                }
+
+                .mat-column-action {
+                    width: 11%;
+                }
+            }
+
+            @include ob-media-breakpoint-down('lg') {
+                .mat-column-activeApi,
+                .mat-column-classification,
+                .mat-column-conceptSystem,
+                .mat-column-entryCount {
+                    display: none;
+                }
+
+                .mat-column-name {
+                    width: 45%;
+                }
+
+                .mat-column-action {
+                    width: 15%;
+                }
+            }
+
+            @media (max-width: 1500px) {
+                .mat-column-action {
+                    white-space: normal;
+                    word-break: normal;
+                }
+
+                .person,
+                .date {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $ob-spacing-sm;
+
+        .delete-button:not([disabled]) {
+            color: $ob-error;
+        }
+    }
+}

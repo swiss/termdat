@@ -1,0 +1,11 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.administration.mailbox' | translate }}</h1>
+    </div>
+    <form [formGroup]="form">
+        <mat-form-field class="span-6">
+            <mat-label>{{ 'administration.mailbox.description' | translate }}</mat-label>
+            <input value="email" matInput type="text" name="email" formControlName="email" />
+        </mat-form-field>
+    </form>
+</div>

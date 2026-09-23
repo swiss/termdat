@@ -1,0 +1,152 @@
+<section
+    [ngClass]="{
+        obsolete: languageDetail.isObsolete,
+        rare: languageDetail.isRare,
+        avoid: languageDetail.shouldAvoid,
+    }"
+>
+    @if (languageDetail.terminus) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.terminus' | translate }}</span>
+            <span class="value span-8">
+                <strong>{{ languageDetail.terminus }}</strong>
+            </span>
+        </div>
+    }
+    @if (languageDetail.terminusSource) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.terminusSource' | translate }}</span>
+            <span class="span-8">
+                <em class="terminus-source-container" [innerHtml]="languageDetail.terminusSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.name) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.name' | translate }}</span>
+            <span class="value span-8">
+                <strong>{{ languageDetail.name }}</strong>
+            </span>
+        </div>
+    }
+    @if (languageDetail.nameSource) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.nameSource' | translate }}</span>
+            <span class="span-8">
+                <em class="name-source-container" [innerHtml]="languageDetail.nameSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.abbreviation) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.abbreviation' | translate }}</span>
+            <span class="value span-8">
+                <strong>{{ languageDetail.abbreviation }}</strong>
+            </span>
+        </div>
+    }
+    @if (languageDetail.abbreviationSource) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.abbreviationSource' | translate }}</span>
+            <span class="span-8">
+                <em class="abbreviation-source-container" [innerHtml]="languageDetail.abbreviationSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.phraseology) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.phraseology' | translate }}</span>
+            <span class="value phraseology span-8">{{ languageDetail.phraseology }}</span>
+        </div>
+    }
+    @if (languageDetail.phraseologySource) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.phraseologySource' | translate }}</span>
+            <span class="span-8">
+                <em class="phraseology-source-container" [innerHtml]="languageDetail.phraseologySource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.definition && displayDefinition) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.definition' | translate }}</span>
+            <span class="span-8">{{ languageDetail.definition }}</span>
+        </div>
+    }
+    @if (languageDetail.definitionSource && displayDefinition) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.definitionSource' | translate }}</span>
+            <span class="span-8">
+                <em class="definition-source-container" [innerHtml]="languageDetail.definitionSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.note && displayContextOrDefinition) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.note' | translate }}</span>
+            <span class="span-8">
+                @for (noteToken of noteTokens; track $index) {
+                    @if (noteToken.isCode) {
+                        <span [matTooltip]="noteToken.tooltip">
+                            {{ noteToken.text }}
+                        </span>
+                    } @else {
+                        <span>
+                            {{ noteToken.text }}
+                        </span>
+                    }
+                }
+            </span>
+        </div>
+    }
+    @if (languageDetail.noteSource && displayContextOrDefinition) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.noteSource' | translate }}</span>
+            <span class="span-8">
+                <em class="note-source-container" [innerHtml]="languageDetail.noteSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.context && displayContext) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.context' | translate }}</span>
+            <span class="span-8">{{ languageDetail.context }}</span>
+        </div>
+    }
+    @if (languageDetail.contextSource && displayContext) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.contextSource' | translate }}</span>
+            <span class="span-8">
+                <em class="context-source-container" [innerHtml]="languageDetail.contextSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.country && displayComplete) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.country' | translate }}</span>
+            <span class="span-8">{{ languageDetail.country }}</span>
+        </div>
+    }
+    @if (languageDetail.metadata && displayComplete) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.metadata' | translate }}</span>
+            <span class="span-8">{{ languageDetail.metadata }}</span>
+        </div>
+    }
+    @if (languageDetail.metadataSource && displayComplete) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.metadataSource' | translate }}</span>
+            <span class="span-8">
+                <em class="metadata-source-container" [innerHtml]="languageDetail.metadataSource | hyperlink"></em>
+            </span>
+        </div>
+    }
+    @if (languageDetail.references && languageDetail.references.length > 0 && displayDefinition) {
+        <div class="grid">
+            <span class="title span-4">{{ 'field.reference' | translate }}</span>
+            <span class="span-8">
+                <td-reference-list [references]="languageDetail.references" />
+            </span>
+        </div>
+    }
+</section>

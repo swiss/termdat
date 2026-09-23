@@ -1,0 +1,37 @@
+@use '@oblique/oblique/styles/scss/core/variables' as *;
+
+.deleted {
+    background-color: antiquewhite;
+}
+
+.inactive {
+    background-color: pink;
+}
+
+:host::ng-deep {
+    .mat-mdc-text-field-wrapper:not(.multi-line) {
+        height: 40px !important;
+
+        .mat-mdc-chip-set {
+            margin: 0 0 $ob-spacing-xs;
+        }
+    }
+
+    .mat-mdc-chip-row {
+        margin: -$ob-spacing-sm 0 0 !important;
+        height: $ob-spacing-lg;
+    }
+
+    .mat-mdc-chip-set {
+        flex: 1;
+        margin: $ob-spacing-sm 0 0;
+
+        > * {
+            gap: $ob-spacing-md $ob-spacing-xs;
+        }
+
+        .mat-mdc-chip-input {
+            margin-top: -$ob-spacing-sm;
+        }
+    }
+}

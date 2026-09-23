@@ -1,0 +1,16 @@
+@use '@oblique/oblique/styles/scss/core/variables' as *;
+
+:host {
+    .dialog-title-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $ob-spacing-sm;
+    }
+
+    [mat-dialog-content] {
+        p {
+            margin-left: 12px;
+        }
+    }
+}

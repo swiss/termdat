@@ -1,0 +1,45 @@
+@use 'src/styles/variables.scss' as *;
+@use 'src/styles/default-table.scss' as *;
+@use 'src/styles/mixins.scss' as *;
+
+.layout {
+    .default-table {
+        > table {
+            table-layout: fixed;
+
+            .mat-column-id,
+            .mat-column-entryCount {
+                width: 7.5%;
+            }
+
+            .mat-column-code {
+                width: 10%;
+            }
+
+            .mat-column-subject,
+            .mat-column-domain,
+            .mat-column-name {
+                width: 25%;
+            }
+
+            @include ob-media-breakpoint-down('md') {
+                .mat-mdc-row .mat-mdc-cell {
+                    width: auto;
+                    display: inherit;
+                }
+            }
+
+            @include ob-media-breakpoint-up(md) {
+                td.mat-mdc-cell {
+                    vertical-align: top;
+                    padding: $ob-spacing-default $ob-spacing-sm;
+                    height: auto;
+                }
+            }
+
+            tr:hover {
+                background-color: inherit;
+            }
+        }
+    }
+}

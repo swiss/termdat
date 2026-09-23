@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+@include td-form-with-descriptions;
+
+.layout {
+    form {
+        max-width: 62em;
+    }
+}

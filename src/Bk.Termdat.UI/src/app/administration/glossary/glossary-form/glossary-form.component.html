@@ -1,0 +1,119 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ titleTranslateKey | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/administration/glossary">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="grid">
+            <!-- ID Sammlungscode wird automatisch nach dem Speichern vergeben -->
+            <mat-form-field class="span-7">
+                <mat-label>{{ (form.controls.id.value ? 'field.id' : 'common.willBeSetOnSave') | translate }}</mat-label>
+                <input matInput type="text" name="id" formControlName="id" />
+            </mat-form-field>
+        </div>
+
+        <!-- Sammlungscode (freies Textfeld, max. 10 Zeichen) (Pflichtfeld) -->
+        <mat-form-field>
+            <mat-label>{{ 'field.code' | translate }}</mat-label>
+            <input matInput type="text" name="code" formControlName="code" />
+            @for (error of form.controls.code.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <div class="form-languages">
+            <h2>{{ 'administration.field.name' | translate }}</h2>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.descriptionDe' | translate }}</mat-label>
+                <textarea formControlName="descriptionDe" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.descriptionDe.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.descriptionFr' | translate }}</mat-label>
+                <textarea formControlName="descriptionFr" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.descriptionFr.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.descriptionIt' | translate }}</mat-label>
+                <textarea formControlName="descriptionIt" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.descriptionIt.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.descriptionRm' | translate }}</mat-label>
+                <textarea formControlName="descriptionRm" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.descriptionRm.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.name.descriptionEn' | translate }}</mat-label>
+                <textarea formControlName="descriptionEn" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.descriptionEn.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="source">
+            <mat-form-field>
+                <mat-label>{{ 'administration.field.description' | translate }}</mat-label>
+                <textarea formControlName="description" matInput cdkTextareaAutosize></textarea>
+                @for (error of form.controls.description.errors | keyvalue; track error.key) {
+                    <mat-error>
+                        {{ 'i18n.validation.' + error.key | translate: error.value }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <!-- Readonly audit information (only shown when editing) -->
+        @if (form.controls.created.value) {
+            <div class="grid audit-grid">
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.created' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="created" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.createdBy' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="createdBy" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.modified' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="modified" />
+                </mat-form-field>
+                <mat-form-field class="span-6">
+                    <mat-label>{{ 'field.modifiedBy' | translate }}</mat-label>
+                    <input matInput type="text" formControlName="modifiedBy" />
+                </mat-form-field>
+            </div>
+        }
+    </form>
+</div>

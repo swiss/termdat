@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <UserSecretsId>a6905f86-c27d-4f3a-91ea-f356ab584654</UserSecretsId>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <!--
+          DEV NOTE (Ralph, 03.06.2025):
+          The <SatelliteResourceLanguages> property limits which culture-specific resource assemblies
+          are included in the build and publish output.
+          Here, we include only 'de' (German), 'fr' (French), 'it' (Italian), 'en' (English),
+          and 'rm' (Romansh) to avoid the following error:
+
+          NETSDK1152: Found multiple publish output files with the same relative path
+
+          This error can occur when libraries like ICU4N generate conflicting satellite assemblies
+          for similar cultures (e.g., 'pa' and 'pa-Guru'), which are flattened into the same
+          output directory.
+
+          We may be able to remove this restriction in the future, once a newer version of
+          Lucene.NET (>4.8.0-beta00017) resolves the underlying issue. Until then, this
+          constraint is necessary to ensure a successful publish.
+        -->
+        <SatelliteResourceLanguages>de;fr;it;en;rm</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Bk.Termdat.Business\Bk.Termdat.Business.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Common.Api\Bk.Termdat.Common.Api.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Common\Bk.Termdat.Common.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.CrossCutting\Bk.Termdat.CrossCutting.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Infrastructure.DataSource\Bk.Termdat.Infrastructure.DataSource.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Infrastructure.Search\Bk.Termdat.Infrastructure.Search.csproj" />
+    </ItemGroup>
+
+</Project>

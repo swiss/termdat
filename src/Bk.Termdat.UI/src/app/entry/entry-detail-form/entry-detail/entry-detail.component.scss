@@ -1,0 +1,29 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    font-size: $ob-font-size-sm;
+
+    @include td-fieldset-with-legend;
+
+    fieldset {
+        margin-bottom: $ob-spacing-default;
+        padding: 0;
+
+        legend {
+            margin-left: $ob-spacing-default;
+        }
+
+        .section {
+            padding: $ob-spacing-sm $ob-spacing-default;
+
+            &:not(:first-of-type) {
+                border-top: 1px solid $ob-gray;
+            }
+
+            &:last-of-type {
+                padding-bottom: $ob-spacing-default;
+            }
+        }
+    }
+}

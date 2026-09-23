@@ -1,0 +1,113 @@
+<div class="layout file-import">
+    <div class="header two-column-grid">
+        <h1>{{ 'navigation.import.fileimport' | translate }}</h1>
+    </div>
+
+    <form [formGroup]="form" id="importForm">
+        <td-file-import-upload (importedFile)="importFile($event)" [maxFileSize]="52428800" [supportedFileTypes]="['.tbx', '.xlsx']" />
+
+        @if (!noFileSelected) {
+            <div class="file-import-fields">
+                <p>{{ 'file.import.chosenFile' | translate }} {{ importedFile!.name }}, {{ importedFile!.size | fileSize }}</p>
+            </div>
+        }
+
+        <div class="two-column-grid file-import-fields">
+            <td-autocomplete formControlName="office" [options]="offices">
+                <mat-label>{{ 'field.office' | translate }} *</mat-label>
+                @if (form.controls.office.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.office.errors, 'field.office' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-autocomplete>
+
+            <td-autocomplete formControlName="collection" [options]="collections">
+                <mat-label>{{ 'field.collection' | translate }} *</mat-label>
+                @if (form.controls.collection.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.collection.errors, 'field.collection' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-autocomplete>
+        </div>
+
+        <div class="two-column-grid">
+            <mat-form-field>
+                <mat-label>{{ 'field.reliability' | translate }}</mat-label>
+                <mat-select formControlName="reliability">
+                    @for (option of reliabilities; track option.id) {
+                        <mat-option [value]="option.id">{{ option.id + 1 }} - {{ option.name }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.controls.reliability.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.reliability.errors, 'field.reliability' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>{{ 'field.status' | translate }}</mat-label>
+                <mat-select formControlName="status">
+                    @for (option of states; track option.id) {
+                        <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.controls.status.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.status.errors, 'field.status' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <td-subject-form [formArray]="subjectDomainsForm" [entrySubjects]="[]" [entryDomains]="[]" />
+
+        <div class="two-column-grid">
+            <div></div>
+            <td-chiplist-autocomplete formControlName="glossaries" [chips]="glossaryChips">
+                <mat-label>{{ 'field.glossaries' | translate }}</mat-label>
+                @if (form.controls.glossaries.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.glossaries.errors, 'field.glossaries' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-chiplist-autocomplete>
+        </div>
+
+        <div class="two-column-grid">
+            <mat-form-field>
+                <mat-label>{{ 'field.comment' | translate }}</mat-label>
+                <textarea formControlName="comment" matInput cdkTextareaAutosize></textarea>
+                @if (form.controls.comment.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.comment.errors, 'field.comment' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </mat-form-field>
+
+            <td-chiplist-autocomplete-input formControlName="adminInfos" [chips]="adminInfoChips">
+                <mat-label>{{ 'field.adminInfos' | translate }}</mat-label>
+                @if (form.controls.adminInfos.invalid) {
+                    <mat-error>
+                        {{ errorService.getControlError(form.controls.adminInfos.errors, 'field.adminInfos' | translate, 'entry.error') }}
+                    </mat-error>
+                }
+            </td-chiplist-autocomplete-input>
+        </div>
+
+        <div class="import-actions">
+            <button type="button" mat-button obButton="secondary" (click)="cancel()">{{ 'common.cancel' | translate }}</button>
+            <button type="button" mat-button obButton="primary" (click)="import()" class="last-button" [disabled]="!form.valid && noFileSelected">
+                {{ 'file.import' | translate }}
+            </button>
+        </div>
+    </form>
+
+    @if (displayErrors && errorList) {
+        <div class="import-error">
+            <td-file-import-error [errorList]="errorList" />
+        </div>
+    }
+</div>

@@ -1,0 +1,15 @@
+﻿<div class="buttons-bar">
+    <button type="button" mat-button obButton="primary" (click)="createEntryTemplate()">{{ 'entry.template.create' | translate }}</button>
+    <button type="button" mat-button obButton="primary" (click)="save()" [disabled]="form.pristine">{{ 'common.save' | translate }}</button>
+    @if (entry) {
+        <button mat-button obButton="primary" type="button" tdFocusRemover (click)="close()">
+            {{ 'common.close' | translate }}
+        </button>
+    }
+</div>
+<div class="entry-update">
+    <h3>{{ 'entry.edit' | translate }}</h3>
+    @if (entry) {
+        <td-entry-form [form]="form" [formEntry]="entry" />
+    }
+</div>

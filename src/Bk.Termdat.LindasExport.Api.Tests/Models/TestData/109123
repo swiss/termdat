@@ -1,0 +1,77 @@
+<https://register.ld.admin.ch/termdat/PFS17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyCollection> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/identifier> "PFS17"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Schweizerische parlamentarische Terminologie"@de .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Swiss parliamentary terminology"@en .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Terminologie parlementaire suisse"@fr .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Terminologia parlamentare svizzera"@it .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/dateModified> "2024-05-13T08:30:59.0000000"^^<xsd:dateTime> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/administrative-note/AdminInfoCodeA> .
+<https://register.ld.admin.ch/termdat/administrative-note/AdminInfoCodeA> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/AdministrativeNote> .
+<https://register.ld.admin.ch/termdat/109123> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/ValidatedEntry> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/terminology-office/A-Office> .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyOffice> .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://schema.org/identifier> "A-Office"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://schema.org/name> "A-DE"@de .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://schema.org/name> "A-FR"@fr .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://schema.org/name> "A-IT"@it .
+<https://register.ld.admin.ch/termdat/terminology-office/A-Office> <http://schema.org/name> "A-EN"@en .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/glossary/B-Glossary> .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Glossary> .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://schema.org/identifier> "B-Glossary"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://schema.org/name> "B-Glossary-DE"@de .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://schema.org/name> "B-Glossary-FR"@fr .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://schema.org/name> "B-Glossary-IT"@it .
+<https://register.ld.admin.ch/termdat/glossary/B-Glossary> <http://schema.org/name> "B-Glossary-EN"@en .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/glossary/C-Glossary> .
+<https://register.ld.admin.ch/termdat/glossary/C-Glossary> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/glossary/C-Glossary> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Glossary> .
+<https://register.ld.admin.ch/termdat/glossary/C-Glossary> <http://schema.org/identifier> "C-Glossary"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/glossary/C-Glossary> <http://schema.org/name> "C-Glossary-EN"@en .
+<https://register.ld.admin.ch/termdat/109123> <https://schema.ld.admin.ch/reliabilityCode> <https://register.ld.admin.ch/termdat/reliability-code/2> .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/identifier> "2"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Sprachlich/formal \u00FCberpr\u00FCft"@de .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Fiche contr\u00F4l\u00E9e linguistiquement"@fr .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Scheda corretta (controllo linguistico / formale)"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Linguistic/formal check completed"@en .
+<https://register.ld.admin.ch/termdat/109123> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/109123> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/identifier> "109123"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/URL> "https://www.termdat.bk.admin.ch/entry/109123"^^<xsd:anyURI> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/PFS17> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109123> <http://www.lexinfo.net/ontology/3.0/lexinfo#hypernym> <https://register.ld.admin.ch/termdat/109122> .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Abbreviation> .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/109123/abbreviation> .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/name> "Motion"@de .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/citation> "Parlamentsgesetz, Tit. vor Art. 120 (SR 171.10, Stand 2016-03)"@de .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/alternateName> "Mo."@de .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/description> "Parlamentarischer Vorstoss, der den Bundesrat beauftragt, der Bundesversammlung einen Entwurf zu einem Erlass vorzulegen oder eine entsprechende Massnahme zu treffen."@de .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/name> "Mo."@de .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/citation> "BR, Ber. in Erf\u00FCllung der Mo. Gutzwiller (11.3562), Konzipierung und Umsetzung von F\u00F6rdermassnahmen f\u00FCr die Nutzung der tiefen Geothermie in der Schweiz, 2017-03-03, S. 21, Ziff. 2.3 (Internet, 2017-05-02)"@de .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/description> "Parlamentarischer Vorstoss, der den Bundesrat beauftragt, der Bundesversammlung einen Entwurf zu einem Erlass vorzulegen oder eine entsprechende Massnahme zu treffen."@de .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/name> "motion"@fr .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/citation> "LF Parlement, tit. avant art. 120 (RS 171.10, \u00E9tat 2016-03)"@fr .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/alternateName> "mo."@fr .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/description> "Intervention parlementaire par laquelle le Conseil f\u00E9d\u00E9ral est charg\u00E9 de proposer \u00E0 l'Assembl\u00E9e f\u00E9d\u00E9rale un projet d'acte ou de prendre une mesure correspondante."@fr .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/name> "mo."@fr .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/citation> "Ass. f\u00E9d., Interventions parlementaires (Internet, 2021-05-20)"@fr .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/description> "Intervention parlementaire par laquelle le Conseil f\u00E9d\u00E9ral est charg\u00E9 de proposer \u00E0 l'Assembl\u00E9e f\u00E9d\u00E9rale un projet d'acte ou de prendre une mesure correspondante."@fr .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/name> "mozione"@it .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/citation> "LF Parlamento, tit. prec. art. 120 (RS 171.10, stato 2016-03)"@it .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/alternateName> "Mo."@it .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/description> "Intervento parlamentare che incarica il Consiglio federale di presentare all'Assemblea federale un disegno d'atto legislativo o di prendere i relativi provvedimenti."@it .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/name> "Mo."@it .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/citation> "CaF, Istr. Redazione dei testi ufficiali in italiano, 2003-09-16, p. 18, n. 5.2.2 (Internet, 2017-05-02)"@it .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/description> "Intervento parlamentare che incarica il Consiglio federale di presentare all'Assemblea federale un disegno d'atto legislativo o di prendere i relativi provvedimenti."@it .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/name> "motion"@en .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/citation> "Parliament Act, tit. before art. 120 (SR 171.10, transl., status 2016-03)"@en .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/alternateName> "Mo."@en .
+<https://register.ld.admin.ch/termdat/109123> <http://schema.org/description> "Parliamentary procedural request instructing the Federal Council to submit a specific draft bill to the Federal Assembly or to take appropriate measures."@en .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/name> "Mo."@en .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/citation> "FCh, Terminology Section, 2016"@en .
+<https://register.ld.admin.ch/termdat/109123/abbreviation> <http://schema.org/description> "Parliamentary procedural request instructing the Federal Council to submit a specific draft bill to the Federal Assembly or to take appropriate measures."@en .

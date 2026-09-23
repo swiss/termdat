@@ -1,0 +1,60 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <h5>{{ 'profile.entryTemplates' | translate }}</h5>
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="default-table">
+        <table mat-table [dataSource]="dataSource" matSort class="ob-table ob-table-sm ob-table-collapse-md sort-table">
+            <!-- TemplateName Column -->
+            <ng-container matColumnDef="templateName">
+                <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header
+                    matTooltip="{{ 'entryTemplate.templateName' | translate }}"
+                    matTooltipPosition="above"
+                    scope="col"
+                >
+                    {{ 'entryTemplate.templateName' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'entryTemplate.templateName' | translate" class="no-break">{{ row.templateName }}</td>
+            </ng-container>
+
+            <!-- Action Column-->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{ 'entryTemplate.action' | translate }}" matTooltipPosition="above" scope="col">
+                    {{ 'entryTemplate.action' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row" [attr.data-title]="'administration.action' | translate" class="no-break">
+                    <button
+                        obButton="tertiary"
+                        mat-icon-button
+                        [matTooltip]="'common.update' | translate"
+                        [matTooltipPosition]="'below'"
+                        (click)="update(row.id)"
+                    >
+                        <mat-icon svgIcon="pencil" class="ob-icon header-icon" />
+                        <span class="ob-screen-reader-only">{{ 'common.update' | translate }}</span>
+                    </button>
+                    @if (!row.deleted) {
+                        <button
+                            obButton="tertiary"
+                            mat-icon-button
+                            [matTooltip]="'common.delete' | translate"
+                            [matTooltipPosition]="'below'"
+                            (click)="delete(row)"
+                        >
+                            <mat-icon svgIcon="delete" class="ob-icon header-icon" />
+                            <span class="ob-screen-reader-only">{{ 'common.delete' | translate }}</span>
+                        </button>
+                    }
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
+</mat-expansion-panel>

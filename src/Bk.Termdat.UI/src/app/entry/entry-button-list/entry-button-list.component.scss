@@ -1,0 +1,9 @@
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+
+button {
+    margin-left: 00.5em;
+
+    @include ob-media-breakpoint-down(md) {
+        margin-left: 0.2em;
+    }
+}

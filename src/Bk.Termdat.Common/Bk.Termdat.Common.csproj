@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\BackendTexts.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>BackendTexts.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\TechnicalTexts.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>TechnicalTexts.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\BackendTexts.en.resx">
+            <DependentUpon>BackendTexts.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BackendTexts.fr.resx">
+            <DependentUpon>BackendTexts.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BackendTexts.it.resx">
+            <DependentUpon>BackendTexts.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BackendTexts.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>BackendTexts.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\BackendTexts.rm.resx">
+            <DependentUpon>BackendTexts.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\TechnicalTexts.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>TechnicalTexts.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+</Project>

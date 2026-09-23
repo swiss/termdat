@@ -1,0 +1,25 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    @include td-details-with-heading;
+}
+
+details.entry-language {
+    .template-container {
+        display: flex;
+
+        .template-component {
+            margin-top: 2px;
+            margin-left: $ob-spacing-sm;
+        }
+    }
+}
+
+.entry-language-heading {
+    h6 {
+        span {
+            margin-right: $ob-spacing-sm;
+        }
+    }
+}

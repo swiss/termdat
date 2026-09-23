@@ -1,0 +1,47 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ titleTranslateKey | translate }}</h1>
+        <div class="buttons">
+            <button type="submit" mat-button (click)="save()" obButton="primary" form="mainForm">
+                <mat-icon svgIcon="checkmark" class="ob-icon" />
+                {{ 'common.save' | translate }}
+            </button>
+            <button type="button" mat-button obButton="secondary" routerLink="/administration/adminInfo">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form" id="mainForm" obUnsavedChanges>
+        <div class="grid">
+            <!-- ID wird automatisch nach dem Speichern vergeben -->
+            <mat-form-field class="span-7">
+                <mat-label>{{ (form.controls.id.value ? 'field.id' : 'common.willBeSetOnSave') | translate }}</mat-label>
+                <input matInput type="text" name="id" formControlName="id" />
+            </mat-form-field>
+        </div>
+
+        <!-- Verwaltungsangabe Code (Pflichtfeld, unique) -->
+        <mat-form-field>
+            <mat-label>{{ 'field.code' | translate }}</mat-label>
+            <input matInput type="text" name="code" formControlName="code" required />
+            @for (error of form.controls.code.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Beschreibung (fakultativ) -->
+        <mat-form-field>
+            <mat-label>{{ 'administration.field.description' | translate }}</mat-label>
+            <input matInput type="text" name="description" formControlName="description" />
+            @for (error of form.controls.description.errors | keyvalue; track error.key) {
+                <mat-error>
+                    {{ 'i18n.validation.' + error.key | translate: error.value }}
+                </mat-error>
+            }
+        </mat-form-field>
+    </form>
+</div>

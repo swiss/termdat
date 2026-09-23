@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <UserSecretsId>3f868d47-331e-43c6-a851-e409769441be</UserSecretsId>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="10.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Bk.Termdat.Business.Public.Api\Bk.Termdat.Business.Public.Api.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Common.Api\Bk.Termdat.Common.Api.csproj" />
+        <ProjectReference Include="..\Bk.Termdat.Infrastructure.DataSource\Bk.Termdat.Infrastructure.DataSource.csproj" />
+    </ItemGroup>
+
+</Project>

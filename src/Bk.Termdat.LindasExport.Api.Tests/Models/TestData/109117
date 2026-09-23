@@ -1,0 +1,70 @@
+<https://register.ld.admin.ch/termdat/PFS17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyCollection> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/identifier> "PFS17"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Schweizerische parlamentarische Terminologie"@de .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Swiss parliamentary terminology"@en .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Terminologie parlementaire suisse"@fr .
+<https://register.ld.admin.ch/termdat/PFS17> <http://schema.org/name> "Terminologia parlamentare svizzera"@it .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/dateModified> "2023-12-31T23:59:59.0000000"^^<xsd:dateTime> .
+<https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/InProgressEntry> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/terminology-office/B-Office> .
+<https://register.ld.admin.ch/termdat/terminology-office/B-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/terminology-office/B-Office> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyOffice> .
+<https://register.ld.admin.ch/termdat/terminology-office/B-Office> <http://schema.org/identifier> "B-Office"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/terminology-office/B-Office> <http://schema.org/name> "B-DE"@de .
+<https://register.ld.admin.ch/termdat/terminology-office/B-Office> <http://schema.org/name> "B-FR"@fr .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termDomain> <https://register.ld.admin.ch/termdat/domain/42> .
+<https://register.ld.admin.ch/termdat/domain/42> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TermDomain> .
+<https://register.ld.admin.ch/termdat/domain/42> <http://schema.org/identifier> "42"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/domain/42> <http://schema.org/name> "42-DE"@de .
+<https://register.ld.admin.ch/termdat/domain/42> <http://schema.org/name> "42-FR"@fr .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termDomain> <https://register.ld.admin.ch/termdat/sub-domain/11> .
+<https://register.ld.admin.ch/termdat/sub-domain/11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TermSubDomain> .
+<https://register.ld.admin.ch/termdat/domain/42> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/sub-domain/11> .
+<https://register.ld.admin.ch/termdat/sub-domain/11> <http://schema.org/isPartOf> <https://register.ld.admin.ch/termdat/domain/42> .
+<https://register.ld.admin.ch/termdat/sub-domain/11> <http://schema.org/identifier> "11"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/sub-domain/11> <http://schema.org/name> "11-DE"@de .
+<https://register.ld.admin.ch/termdat/sub-domain/11> <http://schema.org/name> "11-FR"@fr .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termDomain> <https://register.ld.admin.ch/termdat/sub-domain/22> .
+<https://register.ld.admin.ch/termdat/sub-domain/22> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TermSubDomain> .
+<https://register.ld.admin.ch/termdat/domain/42> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/sub-domain/22> .
+<https://register.ld.admin.ch/termdat/sub-domain/22> <http://schema.org/isPartOf> <https://register.ld.admin.ch/termdat/domain/42> .
+<https://register.ld.admin.ch/termdat/sub-domain/22> <http://schema.org/identifier> "22"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/sub-domain/22> <http://schema.org/name> "22-EN"@en .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termDomain> <https://register.ld.admin.ch/termdat/domain/666> .
+<https://register.ld.admin.ch/termdat/domain/666> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TermDomain> .
+<https://register.ld.admin.ch/termdat/domain/666> <http://schema.org/identifier> "666"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/domain/666> <http://schema.org/name> "666-DE"@de .
+<https://register.ld.admin.ch/termdat/domain/666> <http://schema.org/name> "666-FR"@fr .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/reliabilityCode> <https://register.ld.admin.ch/termdat/reliability-code/0> .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/identifier> "0"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Erster Entwurf"@de .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Premi\u00E8re \u00E9bauche"@fr .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Prima stesura"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "First draft"@en .
+<https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/identifier> "109117"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/URL> "https://www.termdat.bk.admin.ch/entry/109117"^^<xsd:anyURI> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/PFS17> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <https://register.ld.admin.ch/termdat/109116> .
+<https://register.ld.admin.ch/termdat/109117> <http://www.lexinfo.net/ontology/3.0/lexinfo#antonym> <https://register.ld.admin.ch/termdat/109119> .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/name> "unbedingte Immunit\u00E4t"@de .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/citation> "Die Bundesversammlung, 1984, S. 30"@de .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/description> "Privileg der eidgen\u00F6ssischen Parlamentarier, nach welchem sie f\u00FCr die in der Bundesversammlung und in den Kommissionen abgegebenen Voten nicht verantwortlich gemacht werden k\u00F6nnen."@de .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/descriptionCitation> "Privileg der eidgen\u00F6ssischen Parlamentarier, test-citation-1-de"@de .
+<https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://version.link/Deprecated> .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termNote> "test-note-1-de"@de .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/termNoteCitation> "test-note-citation-1-de"@de .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/linguisticContext> "test-context-1-de"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/109117> <https://schema.ld.admin.ch/applicableCountry> "test-country-1-de"@de .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/name> "irresponsabilit\u00E9 absolue"@fr .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/citation> "L'Assembl\u00E9e f\u00E9d\u00E9rale, 1984, p. 28"@fr .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/description> "Privil\u00E8ge parlementaire selon lequel un d\u00E9put\u00E9 f\u00E9d\u00E9ral ne peut \u00EAtre tenu responsable pour les opinions qu'il \u00E9met au sein de l'Assembl\u00E9e f\u00E9d\u00E9rale ou de ses commissions."@fr .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/name> "irresponsabilit\u00E0 assoluta"@it .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/citation> "L'Assemblea federale, 1984, p. 28"@it .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/description> "Privilegio parlamentare secondo il quale i deputati federali non possono essere chiamati a rispondere dei pareri da loro espressi in seno all'Assemblea federale o alle sue commissioni."@it .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/name> "absolute immunity"@en .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/citation> "The Swiss Federal Assembly, 1984, p. 30"@en .
+<https://register.ld.admin.ch/termdat/109117> <http://schema.org/description> "Parliamentary privilege which says that no representative of the Swiss Federal Assembly is liable to criminal or civil sanctions for any opinion he expresses during council sessions."@en .

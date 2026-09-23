@@ -1,0 +1,53 @@
+name: Update THIRD_PARTY_LICENSES
+
+on:
+  push:
+    branches:
+      - main #only run on main branch (avoids pipeline being triggered, when tags are pushed)
+    tags-ignore:
+      - "**"
+
+permissions:
+  contents: write # needed to push the updated file
+
+jobs:
+  update-third-party-licenses:
+    if: github.ref == 'refs/heads/main' && github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # required for pushing changes
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Install dependencies
+        run: dotnet restore src/Bk.Termdat.slnx
+
+      - name: Install dotnet tool
+        run: dotnet tool install --global nuget-license
+
+      - name: Generate THIRD_PARTY_LICENSES.md
+        run: nuget-license --input src/Bk.Termdat.slnx --output Markdown --file-output THIRD_PARTY_LICENSES.md
+
+      - name: Commit and push THIRD_PARTY_LICENSES.md
+        run: |
+          if git diff --quiet -- THIRD_PARTY_LICENSES.md; then
+            echo "No changes to THIRD_PARTY_LICENSES.md"
+            exit 0
+          fi
+
+          echo DEBUG github.ref ${{ github.ref }}
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add THIRD_PARTY_LICENSES.md
+          git commit -m "chore: update THIRD_PARTY_LICENSES.md"
+
+          git push origin HEAD:refs/heads/main

@@ -1,0 +1,262 @@
+import {Injectable} from '@angular/core';
+import {TemplateDataContainer} from './TemplateDataContainer';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class NoteTemplatesDataService {
+    getTemplateDataContainer(): TemplateDataContainer {
+        return {
+            de: [
+                {
+                    label: 'STA',
+                    options: [
+                        'STA: vorläufig',
+                        'STA: Entwurf',
+                        'STA: Vernehmlassungsverfahren',
+                        'STA: Referendum',
+                        'STA: angenommen',
+                        'STA: verworfen',
+                        'STA: aufgehoben',
+                        'STA: ungültig',
+                        'STA: zurückgezogen',
+                        'STA: sistiert',
+                        'STA: Zustandegekommen',
+                    ],
+                },
+                {
+                    label: 'GRM',
+                    options: ['GRM: m.', 'GRM: f.', 'GRM: n.', 'GRM: Pl.'],
+                },
+                {
+                    label: 'USG',
+                    options: [
+                        'USG: häufiger im Plural',
+                        'USG: üblich',
+                        'USG: übliche Kurzform',
+                        'USG: übliche Übersetzung',
+                        'USG: selten',
+                        'USG: bevorzugt',
+                        'USG: Vorschlag',
+                        'USG: offiziell',
+                        'USG: inoffiziell',
+                        'USG: genormt',
+                        'USG: vereinheitlicht',
+                        'USG: zu vermeiden',
+                        'USG: veraltet',
+                        'USG: altes Recht',
+                        'USG: nicht verwechseln mit',
+                    ],
+                },
+                {
+                    label: 'EXP',
+                    options: ['EXP: "X" ist die Abkürzung des [französischen / englischen / italienischen usw.] Namens [Terminus] "Y"'],
+                },
+                {
+                    label: 'Codes',
+                    options: ['DOM: ; REG: ; STA: ; GRM: ; USG: ; LIN: ; EXP: ; HIS: ; SYS:'],
+                },
+            ],
+            fr: [
+                {
+                    label: 'STA',
+                    options: [
+                        'STA: provisoire',
+                        'STA: projet',
+                        'STA: procédure de consultation',
+                        'STA: référendum',
+                        'STA: accepté',
+                        'STA: rejeté',
+                        'STA: suspendu',
+                        'STA: abrogé',
+                        'STA: déclaré nul',
+                        'STA: retiré',
+                        'STA: aboutissement',
+                    ],
+                },
+                {
+                    label: 'GRM',
+                    options: ['GRM: n. m.', 'GRM: n. f.', 'GRM: pl.'],
+                },
+                {
+                    label: 'USG',
+                    options: [
+                        'USG: souvent au pluriel',
+                        'USG: courant',
+                        'USG: forme abrégée courante',
+                        'USG: traduction courante',
+                        'USG: rare',
+                        'USG: privilégié',
+                        'USG: proposition',
+                        'USG: officiel',
+                        'USG: non officiel',
+                        'USG: normalisé',
+                        'USG: uniformisé',
+                        'USG: à éviter',
+                        'USG: désuet',
+                        'USG: ancien droit',
+                        'USG: ne pas confondre avec',
+                    ],
+                },
+                {
+                    label: 'EXP',
+                    options: ['EXP: "X" est l\'abréviation de l\'anglais [de l\'allemand / de l\'italien, etc.] "Y"'],
+                },
+                {
+                    label: 'Codes',
+                    options: ['DOM: ; REG: ; STA: ; GRM: ; USG: ; LIN: ; EXP: ; HIS: ; SYS:'],
+                },
+            ],
+            it: [
+                {
+                    label: 'STA',
+                    options: [
+                        'STA: provvisorio',
+                        'STA: disegno',
+                        'STA: procedura di consultazione',
+                        'STA: referendum',
+                        'STA: accettato',
+                        'STA: respinto',
+                        'STA: sospeso',
+                        'STA: abrogato',
+                        'STA: dichiarato nullo',
+                        'STA: ritirato',
+                        'STA: riuscita formale',
+                    ],
+                },
+                {
+                    label: 'GRM',
+                    options: ['GRM: sost. m.', 'GRM: sost. f.', 'GRM: pl.'],
+                },
+                {
+                    label: 'USG',
+                    options: [
+                        'USG: più frequente al plurale',
+                        'USG: corrente',
+                        'USG: forma ridotta corrente',
+                        'USG: traduzione corrente',
+                        'USG: raro',
+                        'USG: preferito',
+                        'USG: proposta',
+                        'USG: ufficiale',
+                        'USG: non ufficiale',
+                        'USG: normalizzato',
+                        'USG: uniformato',
+                        'USG: da evitare',
+                        'USG: disusato',
+                        'USG: diritto previgente',
+                        'USG: non confondere con',
+                    ],
+                },
+                {
+                    label: 'EXP',
+                    options: ['EXP: "X" è l\'abbreviazione del francese [dell\'inglese / del tedesco, ecc.] "Y"'],
+                },
+                {
+                    label: 'Codici',
+                    options: ['DOM: ; REG: ; STA: ; GRM: ; USG: ; LIN: ; EXP: ; HIS: ; SYS:'],
+                },
+            ],
+            en: [
+                {
+                    label: 'STA',
+                    options: [
+                        'STA: provisional',
+                        'STA: draft',
+                        'STA: consultation procedure',
+                        'STA: referendum',
+                        'STA: accepted',
+                        'STA: rejected',
+                        'STA: suspended',
+                        'STA: repealed',
+                        'STA: declared invalid',
+                        'STA: revoked',
+                        'STA: current',
+                    ],
+                },
+                {
+                    label: 'GRM',
+                    options: ['GRM: pl.'],
+                },
+                {
+                    label: 'USG',
+                    options: [
+                        'USG: usually in the plural form',
+                        'USG: usual',
+                        'USG: usual short form',
+                        'USG: usual translation',
+                        'USG: rare',
+                        'USG: preferred',
+                        'USG: suggestion',
+                        'USG: official',
+                        'USG: unofficial',
+                        'USG: standardised',
+                        'USG: unified',
+                        'USG: to avoid',
+                        'USG: obsolete',
+                        'USG: previous law',
+                        'USG: not to be confused with',
+                    ],
+                },
+                {
+                    label: 'EXP',
+                    options: ['EXP: "X" is the abbreviation of the French [German / Italian, etc.] "Y"'],
+                },
+                {
+                    label: 'Codes',
+                    options: ['DOM: ; REG: ; STA: ; GRM: ; USG: ; LIN: ; EXP: ; HIS: ; SYS:'],
+                },
+            ],
+            rm: [
+                {
+                    label: 'STA',
+                    options: [
+                        'STA: provisoric',
+                        'STA: sboz',
+                        'STA: procedura da consultaziun',
+                        'STA: referendum',
+                        'STA: acceptà',
+                        'STA: refusà',
+                        'STA: sistì',
+                        'STA: abolì',
+                        'STA: declerà per nunvalaivel',
+                        'STA: retratg',
+                        'STA: reussida',
+                    ],
+                },
+                {
+                    label: 'GRM',
+                    options: ['GRM: subst. masc.', 'GRM: subst. fem.', 'GRM: pl.'],
+                },
+                {
+                    label: 'USG',
+                    options: [
+                        'USG: pli savens en il plural',
+                        'USG: usità',
+                        'USG: furma curta usitada',
+                        'USG: translaziun usitada',
+                        'USG: rar',
+                        'USG: preferì',
+                        'USG: proposta',
+                        'USG: uffizial',
+                        'USG: inuffizial',
+                        'USG: normalisà',
+                        'USG: unifurmà',
+                        "USG: d'evitar",
+                        'USG: antiquà',
+                        'USG: dretg anteriur',
+                        'USG: betg confunder cun',
+                    ],
+                },
+                {
+                    label: 'EXP',
+                    options: ['EXP: "X" è l\'abreviaziun dal num [term] franzos [tudestg, talian, englais, etc.] "Y"'],
+                },
+                {
+                    label: 'Codes',
+                    options: ['DOM: ; REG: ; STA: ; GRM: ; USG: ; LIN: ; EXP: ; HIS: ; SYS:'],
+                },
+            ],
+        };
+    }
+}

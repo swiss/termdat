@@ -1,0 +1,45 @@
+<button
+    mat-icon-button
+    obButton="secondary"
+    matTooltip="{{ 'entry.sourceTemplates' | translate }}"
+    matTooltipPosition="above"
+    [matMenuTriggerFor]="templates"
+    class="template-button"
+>
+    <span class="ob-screen-reader-only">{{ 'entry.sourceTemplates' | translate }}</span>
+    <mat-icon [svgIcon]="'list_paragraph'" class="ob-icon" />
+</button>
+<mat-menu #templates="matMenu">
+    <h6>{{ 'entry.sourceTemplates' | translate }}</h6>
+    <button mat-menu-item disabled>{{ 'entry.sourceTemplates.federalLaw' | translate }}</button>
+    <button mat-menu-item class="sub-item" (click)="selectTemplate(templateTypes.FederalLawSr)" (keydown.enter)="selectTemplate(templateTypes.FederalLawSr)">
+        {{ 'entry.sourceTemplates.federalLawSR' | translate }}
+    </button>
+    <button mat-menu-item class="sub-item" (click)="selectTemplate(templateTypes.FederalLawAs)" (keydown.enter)="selectTemplate(templateTypes.FederalLawAs)">
+        {{ 'entry.sourceTemplates.federalLawAS' | translate }}
+    </button>
+    <button mat-menu-item class="sub-item" (click)="selectTemplate(templateTypes.FederalLawBbl)" (keydown.enter)="selectTemplate(templateTypes.FederalLawBbl)">
+        {{ 'entry.sourceTemplates.federalLawBBl' | translate }}
+    </button>
+    <button mat-menu-item (click)="selectTemplate(templateTypes.FederalCourt)" (keydown.enter)="selectTemplate(templateTypes.FederalCourt)">
+        {{ 'entry.sourceTemplates.federalCourt' | translate }}
+    </button>
+    <button mat-menu-item (click)="selectTemplate(templateTypes.FederalCouncilMessage)" (keydown.enter)="selectTemplate(templateTypes.FederalCouncilMessage)">
+        {{ 'entry.sourceTemplates.federalCouncilMessage' | translate }}
+    </button>
+    <button mat-menu-item (click)="selectTemplate(templateTypes.Internet)" (keydown.enter)="selectTemplate(templateTypes.Internet)">
+        {{ 'entry.sourceTemplates.internet' | translate }}
+    </button>
+    @if (sourceTemplatesByUser().length > 0) {
+        <button mat-menu-item [matMenuTriggerFor]="sourceTemplatesByUserMenu">
+            {{ 'entry.sourceTemplatesByUser' | translate }}
+        </button>
+    }
+</mat-menu>
+<mat-menu #sourceTemplatesByUserMenu="matMenu" class="own-sub-item">
+    @for (sourceTemplate of sourceTemplatesByUser(); track sourceTemplate) {
+        <button mat-menu-item (click)="selectTemplateByUser(sourceTemplate)" (keydown.enter)="selectTemplateByUser(sourceTemplate)">
+            {{ sourceTemplate }}
+        </button>
+    }
+</mat-menu>

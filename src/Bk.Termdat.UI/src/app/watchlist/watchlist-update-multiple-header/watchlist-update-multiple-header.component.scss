@@ -1,0 +1,10 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+@include td-form-with-descriptions;
+    form {
+            max-width: 1292px !important;
+    }
+.two-column-grid {
+    gap: $ob-spacing-default;
+}

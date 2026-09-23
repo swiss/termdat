@@ -1,0 +1,60 @@
+@use 'src/styles/mixins.scss' as *;
+@use 'src/styles/variables.scss' as *;
+
+.grid,
+.two-column-grid {
+    gap: $ob-spacing-default;
+}
+
+:host {
+    @include td-details-with-heading;
+}
+
+.mat-expansion-panel {
+    .mat-expansion-panel-header {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            margin-bottom: 0;
+        }
+    }
+
+    &.invalid {
+        .mat-expansion-panel-header-title,
+        .error {
+            color: $ob-error;
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5 {
+                color: $ob-error;
+            }
+        }
+    }
+
+    h5.mat-badge {
+        padding-right: $ob-spacing-xl + $ob-spacing-sm;
+
+        & > .mat-badge-content {
+            top: 40%;
+        }
+    }
+}
+
+.language-actions {
+    text-align: right;
+    margin-top: $ob-spacing-default;
+}
+
+.expand-margins {
+    margin-top: $ob-spacing-default;
+    margin-bottom: $ob-spacing-default;
+}
+
+.invisible-errors {
+    margin-bottom: $ob-spacing-default;
+}

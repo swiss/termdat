@@ -1,0 +1,44 @@
+﻿import {SearchQueryFields} from 'api/SearchQueryFields';
+import {Status} from 'api/Status';
+import {CommentStatus} from './CommentStatus';
+import {Reliability} from './Reliability';
+
+export interface SearchQuery {
+    entryIds?: string;
+    offices?: number[];
+    officesPriority: boolean;
+    lenochClassifications?: number[];
+    lenochClassificationsPriority: boolean;
+    subjectDomains: string[];
+    subjectDomainsPriority: boolean;
+    collections?: number[];
+    collectionsPriority: boolean;
+    relatedCollections?: number[];
+    glossaries?: number[];
+    status?: Status[];
+    statusPriority: boolean;
+    adminInfos?: number[];
+    adminInfosPriority: boolean;
+    commentStatus?: CommentStatus[];
+    createdBy?: string;
+    createdByUser?: boolean;
+    createdByPriority: boolean;
+    modifiedBy?: string;
+    modifiedByUser?: boolean;
+    modifiedByPriority: boolean;
+    modifiedFrom?: Date;
+    modifiedTo?: Date;
+    modifiedPeriodPriority: boolean;
+    collectionsExclude?: boolean;
+    glossariesExclude?: boolean;
+    adminInfosExclude?: boolean;
+    createdByExclude?: boolean;
+    modifiedByExclude?: boolean;
+    modifiedPeriodExclude?: boolean;
+    reliability?: Reliability[];
+    reliabilityPriority: boolean;
+    deleted?: boolean;
+    deletedPriority?: boolean;
+    hasMissingSource?: boolean;
+    fields?: SearchQueryFields;
+}

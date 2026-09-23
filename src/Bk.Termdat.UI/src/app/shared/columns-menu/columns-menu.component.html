@@ -1,0 +1,37 @@
+<button type="button" mat-button obButton="tertiary" [matMenuTriggerFor]="columnsMenu" [matTooltip]="menuLabel | translate" matTooltipPosition="above">
+    <mat-icon svgIcon="list" class="ob-icon" />
+    {{ menuLabel | translate }}
+</button>
+
+<mat-menu #columnsMenu="matMenu" panelClass="td-columns-menu-panel">
+    <div mat-menu-item role="menuitemcheckbox" (click)="setAllColumnsVisible(!allColumnsVisible)" (keydown.enter)="setAllColumnsVisible(!allColumnsVisible)">
+        <mat-checkbox
+            id="toggle-all-columns"
+            [checked]="allColumnsVisible"
+            (change)="setAllColumnsVisible(!allColumnsVisible)"
+            (click)="$event.stopPropagation()"
+            (keydown.enter)="$event.stopPropagation()"
+        >
+            {{ 'common.selectAllOrNone' | translate }}
+        </mat-checkbox>
+    </div>
+
+    @for (column of toggleableColumns; track column.key) {
+        <div
+            mat-menu-item
+            role="menuitemcheckbox"
+            (click)="setColumnVisible(column.key, !isColumnVisible(column.key))"
+            (keydown.enter)="setColumnVisible(column.key, !isColumnVisible(column.key))"
+        >
+            <mat-checkbox
+                [id]="column.key"
+                [checked]="isColumnVisible(column.key)"
+                (change)="setColumnVisible(column.key, !isColumnVisible(column.key))"
+                (click)="$event.stopPropagation()"
+                (keydown.enter)="$event.stopPropagation()"
+            >
+                {{ column.label | translate }}
+            </mat-checkbox>
+        </div>
+    }
+</mat-menu>

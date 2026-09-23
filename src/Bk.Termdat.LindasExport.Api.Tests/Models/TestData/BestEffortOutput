@@ -1,0 +1,33 @@
+<https://register.ld.admin.ch/termdat/Collection-Code> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/Collection-Code> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyCollection> .
+<https://register.ld.admin.ch/termdat/Collection-Code> <http://schema.org/identifier> "Collection-Code"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/dateModified> "0001-01-01T00:00:00.0000000"^^<xsd:dateTime> .
+<https://register.ld.admin.ch/termdat/666> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/InProgressEntry> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/terminology-office/Office-Code> .
+<https://register.ld.admin.ch/termdat/terminology-office/Office-Code> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTermSet> .
+<https://register.ld.admin.ch/termdat/terminology-office/Office-Code> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/TerminologyOffice> .
+<https://register.ld.admin.ch/termdat/terminology-office/Office-Code> <http://schema.org/identifier> "Office-Code"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666> <https://schema.ld.admin.ch/reliabilityCode> <https://register.ld.admin.ch/termdat/reliability-code/Reliability-Code> .
+<https://register.ld.admin.ch/termdat/reliability-code/Reliability-Code> <http://schema.org/identifier> "Reliability-Code"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/666> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/identifier> "666"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/URL> "https://www.termdat.bk.admin.ch/entry/666"^^<xsd:anyURI> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/inDefinedTermSet> <https://register.ld.admin.ch/termdat/Collection-Code> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Abbreviation> .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/position> "1"^^<http://www.w3.org/2001/XMLSchema#string> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/hasPart> <https://register.ld.admin.ch/termdat/666/abbreviation> .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/alternateName> "S1 Abbreviation only DE"@de .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/description> "S1 definition DE"@de .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/name> "S1 Abbreviation only DE"@de .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/citation> "S1 Abbreviation only citation DE"@de .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/description> "S1 definition DE"@de .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/name> "S1 Term FR"@fr .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/citation> "S1 Term citation FR"@fr .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/alternateName> "S1 Abbreviation FR"@fr .
+<https://register.ld.admin.ch/termdat/666> <http://schema.org/description> "S1 definition FR"@fr .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/name> "S1 Abbreviation FR"@fr .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/citation> "S1 Abbreviation citation FR"@fr .
+<https://register.ld.admin.ch/termdat/666/abbreviation> <http://schema.org/description> "S1 definition FR"@fr .

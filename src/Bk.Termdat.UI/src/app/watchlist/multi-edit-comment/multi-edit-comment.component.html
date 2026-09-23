@@ -1,0 +1,41 @@
+<div class="layout">
+    <div class="header two-column-grid">
+        <h1>{{ 'watchlist.multiEditComment' | translate }}</h1>
+        <div class="buttons">
+            <button type="button" mat-button obButton="secondary" routerLink="/watchlist">
+                <mat-icon svgIcon="xmark" class="ob-icon" />
+                {{ 'common.cancel' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="form">
+        <div class="header">
+            <h4>{{ titleTranslateKey | translate }}</h4>
+        </div>
+        <div class="one-column">
+            <mat-form-field id="comment">
+                <mat-label>{{ 'watchlist.multiEditComment.comment' | translate }}</mat-label>
+                <input
+                    formControlName="comment"
+                    type="text"
+                    name="comment"
+                    matInput
+                    #commentControl
+                    placeholder="{{ 'watchlist.multiEditComment.comment' | translate }}"
+                />
+            </mat-form-field>
+        </div>
+        <div class="button-area">
+            <button mat-button obButton="secondary" type="button" (click)="add()">
+                {{ 'watchlist.multiEditComment.add' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="button" (click)="set()">
+                {{ 'watchlist.multiEditComment.set' | translate }}
+            </button>
+            <button mat-button obButton="secondary" type="button" (click)="remove()">
+                {{ 'watchlist.multiEditComment.remove' | translate }}
+            </button>
+        </div>
+    </form>
+</div>

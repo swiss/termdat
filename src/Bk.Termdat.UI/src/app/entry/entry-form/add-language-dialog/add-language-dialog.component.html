@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ 'entry.addLanguage' | translate }}</h1>
+<div mat-dialog-content class="add-language">
+    <div class="checkbox-list">
+        @for (control of checkboxes; track $index) {
+            <mat-checkbox [formControl]="control" class="checkbox">
+                {{ languages[$index].name }}
+            </mat-checkbox>
+        }
+    </div>
+    @if (form.invalid && form.touched) {
+        <div class="add-language-error">{{ 'entry.addLanguage.errorMinLanguages' | translate }}</div>
+    }
+</div>
+<div mat-dialog-actions class="dialog-buttons-right">
+    <button mat-dialog-close mat-button obButton="secondary">
+        {{ 'common.cancel' | translate }}
+    </button>
+    <button (click)="confirmDialog()" mat-button obButton="primary">
+        {{ 'common.add' | translate }}
+    </button>
+</div>

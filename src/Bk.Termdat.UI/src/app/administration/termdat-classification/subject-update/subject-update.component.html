@@ -1,0 +1,9 @@
+@if (subject$ | async; as subject) {
+    <td-classification-subject-form
+        titleTranslateKey="navigation.administration.termdatClassification.subject.update"
+        [subject]="subject"
+        [disabledDomainForm]="true"
+        (saved)="save($event)"
+        (canceled)="back()"
+    />
+}

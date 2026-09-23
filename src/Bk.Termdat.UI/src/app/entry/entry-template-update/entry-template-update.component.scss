@@ -1,0 +1,33 @@
+@use 'src/styles/variables.scss' as *;
+@use '@oblique/oblique/styles/scss/core/mixins/layout' as *;
+
+.entry-template-update {
+    margin: $ob-spacing-default;
+}
+
+:host::ng-deep {
+    .ob-alert.ob-angular {
+        margin-bottom: 0;
+    }
+
+    .ob-alert-icon {
+        padding: 12px !important;
+    }
+}
+
+.notification {
+    margin: $ob-spacing-sm $ob-spacing-sm 0;
+
+    .ob-alert {
+        height: 3.6em;
+        font-weight: bold;
+
+        &.ob-angular {
+            margin-bottom: 0;
+        }
+
+        @include ob-media-breakpoint-down(md) {
+            height: auto;
+        }
+    }
+}

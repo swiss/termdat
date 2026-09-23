@@ -1,0 +1,14 @@
+<div class="buttons-bar">
+    <button type="button" mat-button obButton="primary" (click)="createEntryTemplate()">{{ 'entry.template.create' | translate }}</button>
+    <button type="button" mat-button obButton="primary" (click)="applyEntryTemplate()">{{ 'entry.template.apply' | translate }}</button>
+    <button type="button" mat-button obButton="primary" (click)="save()" [disabled]="form.pristine">{{ 'common.save' | translate }}</button>
+    <button mat-button obButton="primary" type="button" tdFocusRemover (click)="back()">
+        {{ 'common.close' | translate }}
+    </button>
+</div>
+<div class="entry-create">
+    <h3>{{ 'entry.create' | translate }}</h3>
+    @if (entryDefault) {
+        <td-entry-form [form]="form" [formEntry]="entryDefault" />
+    }
+</div>

@@ -1,0 +1,245 @@
+﻿<!--suppress AngularForBlockNonIterableVar -->
+<form [formGroup]="form">
+    <mat-accordion [multi]="true">
+        @if (this.form.controls.head) {
+            <mat-expansion-panel
+                [expanded]="true"
+                [ngClass]="{
+                    invalid:
+                        (headForm.invalid &&
+                            !!(
+                                (this.headForm.controls.status.touched && this.headForm.controls.status.errors) ||
+                                (this.headForm.controls.reliability.touched && this.headForm.controls.reliability.errors) ||
+                                (this.headForm.controls.office.touched && this.headForm.controls.office.errors) ||
+                                (this.headForm.controls.collection.touched && this.headForm.controls.collection.errors)
+                            )) ||
+                        (pictureForm.invalid && pictureForm.touched),
+                }"
+            >
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5
+                            class="legend"
+                            matBadge="!"
+                            matBadgeColor="warn"
+                            [matBadgeHidden]="
+                                !(
+                                    (headForm.invalid &&
+                                        !!(
+                                            (this.headForm.controls.status.touched && this.headForm.controls.status.errors) ||
+                                            (this.headForm.controls.reliability.touched && this.headForm.controls.reliability.errors) ||
+                                            (this.headForm.controls.office.touched && this.headForm.controls.office.errors) ||
+                                            (this.headForm.controls.collection.touched && this.headForm.controls.collection.errors)
+                                        )) ||
+                                    (pictureForm.invalid && pictureForm.touched)
+                                )
+                            "
+                        >
+                            {{ 'entry.headData' | translate }}
+                        </h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div formGroupName="head">
+                    <div class="grid">
+                        <mat-form-field class="span-4">
+                            <mat-label>{{ 'field.entryId' | translate }}</mat-label>
+                            <input type="number" matInput formControlName="id" />
+                        </mat-form-field>
+                        <mat-form-field class="span-4">
+                            <mat-label>{{ 'field.identification' | translate }}</mat-label>
+                            <input type="number" matInput formControlName="identification" />
+                            @if (headForm.controls.identification.invalid) {
+                                <mat-error>
+                                    {{
+                                        errorService.getControlError(headForm.controls.identification.errors, 'field.identification' | translate, 'entry.error')
+                                    }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                        <td-autocomplete
+                            class="span-4"
+                            formControlName="conceptSystemPosition"
+                            [options]="conceptSystemPositions"
+                            [isDisabled]="headForm.controls.conceptSystemPosition.disabled"
+                        >
+                            <mat-label>{{ 'field.conceptSystemPosition' | translate }}</mat-label>
+                            @if (headForm.controls.conceptSystemPosition.invalid) {
+                                <mat-error>
+                                    {{
+                                        errorService.getControlError(
+                                            headForm.controls.conceptSystemPosition.errors,
+                                            'field.conceptSystemPosition' | translate,
+                                            'entry.error'
+                                        )
+                                    }}
+                                </mat-error>
+                            }
+                        </td-autocomplete>
+                    </div>
+                    <div class="two-column-grid">
+                        <td-autocomplete formControlName="office" [options]="offices">
+                            <mat-label>{{ 'field.office' | translate }}*</mat-label>
+                            @if (headForm.controls.office.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.office.errors, 'field.office' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </td-autocomplete>
+                        <td-autocomplete formControlName="collection" [options]="collections" [isDisabled]="!canEditCollection">
+                            <mat-label>{{ 'field.collection' | translate }}*</mat-label>
+                            @if (headForm.controls.collection.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.collection.errors, 'field.collection' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </td-autocomplete>
+                    </div>
+                    <div class="two-column-grid">
+                        <mat-form-field>
+                            <mat-label>{{ 'field.reliability' | translate }}*</mat-label>
+                            <mat-select formControlName="reliability">
+                                @for (option of reliabilities; track option.id) {
+                                    <mat-option [value]="option.id">{{ option.id + 1 }} - {{ option.name }}</mat-option>
+                                }
+                            </mat-select>
+                            @if (headForm.controls.reliability.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.reliability.errors, 'field.reliability' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>{{ 'field.status' | translate }}*</mat-label>
+                            <mat-select formControlName="status">
+                                @for (option of states; track option.id) {
+                                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                                }
+                            </mat-select>
+                            @if (headForm.controls.status.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.status.errors, 'field.status' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                    <td-subject-form [formArray]="subjectDomainsForm" [entrySubjects]="_formEntry?.subjects ?? []" [entryDomains]="_formEntry?.domains ?? []" />
+                    <div class="two-column-grid">
+                        <td-chiplist-autocomplete formControlName="relatedCollections" [chips]="relatedCollectionChips">
+                            <mat-label>{{ 'field.relatedCollections' | translate }}</mat-label>
+                            @if (headForm.controls.relatedCollections.invalid) {
+                                <mat-error>
+                                    {{
+                                        errorService.getControlError(
+                                            headForm.controls.relatedCollections.errors,
+                                            'field.relatedCollections' | translate,
+                                            'entry.error'
+                                        )
+                                    }}
+                                </mat-error>
+                            }
+                        </td-chiplist-autocomplete>
+                        <td-chiplist-autocomplete formControlName="glossaries" [chips]="glossaryChips">
+                            <mat-label>{{ 'field.glossaries' | translate }}</mat-label>
+                            @if (headForm.controls.glossaries.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.glossaries.errors, 'field.glossaries' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </td-chiplist-autocomplete>
+                    </div>
+                    <div class="two-column-grid">
+                        <mat-form-field>
+                            <mat-label>{{ 'field.comment' | translate }}</mat-label>
+                            <textarea formControlName="comment" matInput cdkTextareaAutosize></textarea>
+                            @if (headForm.controls.comment.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.comment.errors, 'field.comment' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </mat-form-field>
+                        <td-chiplist-autocomplete-input formControlName="adminInfos" [chips]="adminInfoChips">
+                            <mat-label>{{ 'field.adminInfos' | translate }}</mat-label>
+                            @if (headForm.controls.adminInfos.invalid) {
+                                <mat-error>
+                                    {{ errorService.getControlError(headForm.controls.adminInfos.errors, 'field.adminInfos' | translate, 'entry.error') }}
+                                </mat-error>
+                            }
+                        </td-chiplist-autocomplete-input>
+                    </div>
+                    <div class="expand-margins">
+                        <!-- Upload and Picture Data -->
+                        @if (_formEntry && _formEntry.id) {
+                            <td-entry-form-picture [picture]="_formEntry.picture" [form]="pictureForm" (pictureChanged)="pictureChanged($event)" />
+                        }
+                    </div>
+                    <div class="expand-margins">
+                        <td-references-form [references]="_formEntry?.references ?? []" [formArray]="referencesForm" />
+                    </div>
+                    <div class="expand-margins">
+                        <td-external-links-form [externalLinks]="_formEntry?.externalLinks ?? []" [formArray]="externalLinksForm" />
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        }
+
+        @if (this.form.controls.languages) {
+            <ng-container formArrayName="languages">
+                @for (formLanguage of $any(this.form.controls.languages).controls; track formLanguage.controls.languageId.value; let i = $index) {
+                    <mat-expansion-panel
+                        [formGroupName]="i"
+                        [ngClass]="{invalid: formLanguage.touched && (formLanguage.invalid || form.controls.languages.errors?.language)}"
+                        [expanded]="true"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h5
+                                    class="legend"
+                                    matBadge="!"
+                                    matBadgeColor="warn"
+                                    [matBadgeHidden]="!(formLanguage.touched && (formLanguage.invalid || form.controls.languages.errors?.language))"
+                                >
+                                    <span>{{ $any(languageMap[formLanguage.controls.languageId.value])?.name }}</span>
+                                </h5>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="entry-language-list" formArrayName="entries">
+                            @if (formLanguage.touched && form.controls.languages.errors?.language) {
+                                <div class="error">
+                                    {{ 'entry.error.languages' | translate }}
+                                </div>
+                            }
+                            @for (
+                                entryForm of formLanguage.controls.entries.controls;
+                                track entryForm.controls.id.value ?? entryForm.controls.trackingId.value;
+                                let j = $index;
+                                let isFirst = $first;
+                                let isLast = $last
+                            ) {
+                                <td-entry-form-synonym
+                                    [form]="entryForm"
+                                    [isFirst]="isFirst"
+                                    [isLast]="isLast"
+                                    title="{{ 'entry.synonym' | translate }} {{ j + 1 }}"
+                                    [language]="sourceTemplateLanguageMap[formLanguage.controls.languageId.value]"
+                                    (synonymSorted)="sortEntryLanguage(i, j, $event)"
+                                    (synonymDeleted)="deleteEntryLanguage(i, j)"
+                                />
+                            }
+                        </div>
+                        <mat-action-row>
+                            <button type="button" mat-button obButton="secondary" (click)="createEntryLanguage(i)" class="create-button">
+                                <mat-icon svgIcon="plus" class="ob-icon" />&nbsp;{{ 'entry.addTerminus' | translate }}
+                            </button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                }
+            </ng-container>
+        }
+
+        <div class="language-actions">
+            <button type="button" mat-button obButton="secondary" (click)="openAddLanguageDialog()" class="create-button">
+                <mat-icon svgIcon="plus" class="ob-icon" />&nbsp;{{ 'entry.addLanguage' | translate }}
+            </button>
+        </div>
+    </mat-accordion>
+</form>

@@ -1,0 +1,20 @@
+<div>
+    <div class="buttons-bar">
+        <button type="button" mat-button obButton="primary" (click)="save()" [disabled]="form.pristine">
+            {{ 'common.save' | translate }}
+        </button>
+        <button mat-button obButton="primary" type="button" tdFocusRemover (click)="back()">
+            {{ 'common.close' | translate }}
+        </button>
+    </div>
+</div>
+
+<div class="notification">
+    <ob-alert type="warning">{{ 'entry.template.hint' | translate }}</ob-alert>
+</div>
+
+<div class="entry-template">
+    @if (entry) {
+        <td-entry-form [form]="form" [formEntry]="entry" />
+    }
+</div>

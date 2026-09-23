@@ -1,0 +1,7 @@
+@use 'src/styles/variables.scss' as *;
+
+:host {
+    .subject-form {
+        margin: $ob-spacing-xs $ob-spacing-sm $ob-spacing-default;
+    }
+}
