@@ -14,89 +14,126 @@ namespace Bk.Termdat.LindasExport.Api.Tests.Services;
 [TestFixture]
 internal class TermdatGraphServiceTests
 {
+    private const string Target = "TestTarget";
+    private readonly ILogger<TermdatGraphService> logger = NullLogger<TermdatGraphService>.Instance;
+    private readonly IAsyncStorageProvider storageProvider = Substitute.For<IAsyncStorageProvider>();
+    private readonly IOptions<TermdatGraphOptions> graphOptions = Substitute.For<IOptions<TermdatGraphOptions>>();
+    private readonly IOptions<LindasExportOptions> exportOptions = Substitute.For<IOptions<LindasExportOptions>>();
+    private readonly ISparqlClientFactory sparqlClientFactory = Substitute.For<ISparqlClientFactory>();
+    private readonly ILindasOperationExecutor operationExecutor = Substitute.For<ILindasOperationExecutor>();
+    private readonly IChunkDelay chunkDelay = Substitute.For<IChunkDelay>();
+    private ITermdatGraphService graphService = null!;
+    private static readonly CancellationToken ct = CancellationToken.None;
+
     [SetUp]
     public void SetUp()
     {
-        _termdatGraphOptions.Value.Returns(new TermdatGraphOptions { ChunkSize = 1_000 });
-        _lindasExportOptions.Value.Returns(new LindasExportOptions { AddCubeLinkData = false });
-
-        _sparqlClientFactory.GetStorageProviders().Returns(new Dictionary<string, IAsyncStorageProvider>
+        graphOptions.Value.Returns(new TermdatGraphOptions { ChunkSize = 1_000 });
+        exportOptions.Value.Returns(new LindasExportOptions
         {
-            ["TestTarget"] = _asyncStorageProvider
+            AddCubeLinkData = false,
+            RetryBaseDelayMinutes = 0,
+            MinimumChunkDelayMs = 0,
+            MaximumChunkDelayMs = 0,
+            ExportTime = default,
+            MaximumAttempts = 0
         });
+        sparqlClientFactory.GetStorageProviders().Returns(
+            new Dictionary<string, IAsyncStorageProvider> { [Target] = storageProvider });
+        operationExecutor
+            .Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Func<Task>>(), Arg.Any<CancellationToken>())
+            .Returns(call => call.ArgAt<Func<Task>>(2)());
 
-        _graphService = new TermdatGraphService(_logger, _lindasExportOptions, _termdatGraphOptions, _sparqlClientFactory);
+        graphService = new TermdatGraphService(
+            logger, exportOptions, graphOptions, sparqlClientFactory, operationExecutor, chunkDelay);
     }
 
     [TearDown]
     public void TearDown()
     {
-        _sparqlClientFactory.ClearSubstitute();
-        _asyncStorageProvider.ClearSubstitute();
+        sparqlClientFactory.ClearSubstitute();
+        storageProvider.ClearSubstitute();
+        operationExecutor.ClearSubstitute();
+        chunkDelay.ClearSubstitute();
     }
 
     [OneTimeTearDown]
     public void Cleanup()
     {
-        _asyncStorageProvider.Dispose();
+        storageProvider.Dispose();
     }
 
-    private readonly ILogger<TermdatGraphService> _logger = NullLogger<TermdatGraphService>.Instance;
-    private readonly IAsyncStorageProvider _asyncStorageProvider = Substitute.For<IAsyncStorageProvider>();
-    private readonly IOptions<TermdatGraphOptions> _termdatGraphOptions = Substitute.For<IOptions<TermdatGraphOptions>>();
-    private readonly IOptions<LindasExportOptions> _lindasExportOptions = Substitute.For<IOptions<LindasExportOptions>>();
-    private readonly ISparqlClientFactory _sparqlClientFactory = Substitute.For<ISparqlClientFactory>();
-    private ITermdatGraphService _graphService = null!;
-    private static readonly CancellationToken ct = CancellationToken.None;
+    [Test]
+    public void Targets_ShouldReturnConfiguredTargets()
+    {
+        Assert.That(graphService.Targets, Is.EqualTo(new[] { Target }));
+    }
 
     [Test]
-    public void DeleteGraph_ShouldCallDeleteGraphOnStorageProvider()
+    public async Task DeleteGraph_ShouldCallTargetStorageProvider()
     {
-        _graphService.DeleteGraph(ct);
+        await graphService.DeleteGraph(Target, ct);
 
-        _asyncStorageProvider.Received(1).DeleteGraphAsync(Uris.TermdatGraph, ct);
+        await storageProvider.Received(1).DeleteGraphAsync(Uris.TermdatGraph, ct);
     }
 
     [Test]
     public void AddCollection_ForNullCollection_ShouldThrowArgumentNullException()
     {
-        Assert.That(() => _graphService.AddCollection(null!, ct), Throws.InstanceOf<ArgumentNullException>());
+        Assert.That(
+            () => graphService.AddCollection(Target, null!, ct),
+            Throws.InstanceOf<ArgumentNullException>());
     }
 
     [Test]
-    public void AddDataSet_ShouldCallUpdateGraphOnStorageProvider()
+    public async Task AddDataSet_ShouldCallTargetStorageProvider()
     {
-        _asyncStorageProvider.When(x => x.UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct))
+        storageProvider
+            .When(x => x.UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct))
             .Do(x => Assert.That(x.ArgAt<IEnumerable<Triple>>(1).Count(), Is.EqualTo(26)));
 
-        _graphService.AddDataSet(ct);
+        await graphService.AddDataSet(Target, ct);
 
-        _asyncStorageProvider.Received(1)
+        await storageProvider.Received(1)
             .UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct);
     }
 
     [Test]
     public async Task AddDataSet_WithEnabledCubeLinkData_ShouldAddAdditionalData()
     {
-        _lindasExportOptions.Value.Returns(new LindasExportOptions { AddCubeLinkData = true });
-        var sut = new TermdatGraphService(_logger, _lindasExportOptions, _termdatGraphOptions, _sparqlClientFactory);
-        _asyncStorageProvider.When(x => x.UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct))
+        exportOptions.Value.Returns(new LindasExportOptions
+        {
+            AddCubeLinkData = true,
+            RetryBaseDelayMinutes = 0,
+            MinimumChunkDelayMs = 0,
+            MaximumChunkDelayMs = 0,
+            ExportTime = default,
+            MaximumAttempts = 0
+        });
+        var sut = new TermdatGraphService(
+            logger, exportOptions, graphOptions, sparqlClientFactory, operationExecutor, chunkDelay);
+        storageProvider
+            .When(x => x.UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct))
             .Do(x => Assert.That(x.ArgAt<IEnumerable<Triple>>(1).Count(), Is.EqualTo(113)));
 
-        await sut.AddDataSet(ct);
+        await sut.AddDataSet(Target, ct);
 
-        await _asyncStorageProvider.Received(1)
+        await storageProvider.Received(1)
             .UpdateGraphAsync(Arg.Any<string>(), Arg.Any<IEnumerable<Triple>>(), [], ct);
     }
 
     [Test]
-    public void AddCollection_ForValidCollection_ShouldCallUpdateGraphOnStorageProvider()
+    public async Task AddCollection_ShouldUploadAndDelayEachChunk()
     {
         var collection = new Collection { Code = "A" };
 
-        _graphService.AddCollection(collection, ct);
+        await graphService.AddCollection(Target, collection, ct);
 
-        _asyncStorageProvider.Received(1).UpdateGraphAsync(Arg.Is(Uris.TermdatGraph), Arg.Any<IEnumerable<Triple>>(),
-            Arg.Any<IEnumerable<Triple>>(), ct);
+        await storageProvider.Received(1).UpdateGraphAsync(
+            Uris.TermdatGraph,
+            Arg.Any<IEnumerable<Triple>>(),
+            Arg.Any<IEnumerable<Triple>>(),
+            ct);
+        await chunkDelay.Received(1).Wait(ct);
     }
 }

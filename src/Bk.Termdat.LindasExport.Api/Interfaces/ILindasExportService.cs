@@ -1,6 +1,8 @@
+using Bk.Termdat.LindasExport.Api.Models;
+
 namespace Bk.Termdat.LindasExport.Api.Interfaces;
 
 public interface ILindasExportService
 {
-    Task ExportCollections(CancellationToken ct);
+    Task<LindasExportResult> ExportCollections(CancellationToken ct);
 }
