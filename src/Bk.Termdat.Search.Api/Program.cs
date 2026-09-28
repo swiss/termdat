@@ -1,7 +1,6 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Bk.Monitoring.Extensions;
 using Bk.Termdat.Business.Resource.Validators;
 using Bk.Termdat.Common.Api;
 using Bk.Termdat.Common.Api.Middleware;
@@ -10,9 +9,6 @@ using Bk.Termdat.CrossCutting.Configuration;
 using Bk.Termdat.Infrastructure.DataSource;
 using Bk.Termdat.Infrastructure.Service.RabbitMq;
 using Bk.Termdat.Search.Api;
-using Bk.Utils.Converter;
-using Bk.Utils.Extensions;
-using Bk.Utils.Rhos.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +18,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Swiss.FCh.Monitoring.Extensions;
+using Swiss.FCh.Utils.Converter;
+using Swiss.FCh.Utils.Extensions;
+using Swiss.FCh.Utils.Rhos.Extensions;
 
 try
 {
@@ -110,7 +110,7 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
-    app.MapBkHealthChecks();
+    app.MapFChHealthChecks();
 
     Log.Information("Starting web host: Bk.Termdat.Search.Api");
     app.Run();

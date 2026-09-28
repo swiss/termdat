@@ -1,7 +1,7 @@
-using Bk.Sparql.Extensions;
 using Bk.Termdat.LindasExport.Api.Constants;
 using Bk.Termdat.LindasExport.Api.Extensions;
 using VDS.RDF;
+using Swiss.FCh.Sparql.Extensions;
 
 namespace Bk.Termdat.LindasExport.Api.Models;
 

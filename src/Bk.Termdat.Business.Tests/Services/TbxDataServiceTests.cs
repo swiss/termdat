@@ -11,12 +11,12 @@ using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Configuration;
-using Bk.Utils.Models;
-using Bk.Utils.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
+using Swiss.FCh.Utils.Models;
+using Swiss.FCh.Utils.Services;
 using Reliability = Bk.Termdat.Business.Resource.Models.Reliability;
 using Status = Bk.Termdat.Business.Resource.Models.Status;
 

@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Bk.Monitoring.Extensions;
 using Bk.Termdat.Business.Public.Api.Mapping;
 using Bk.Termdat.Common.Api.Middleware;
 using Bk.Termdat.Common.Api.ModelBinder;
@@ -11,9 +10,6 @@ using Bk.Termdat.CrossCutting.Configuration;
 using Bk.Termdat.Infrastructure.DataSource;
 using Bk.Termdat.Infrastructure.Service;
 using Bk.Termdat.Public.Api;
-using Bk.Utils.Converter;
-using Bk.Utils.Extensions;
-using Bk.Utils.Rhos.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +20,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
+using Swiss.FCh.Monitoring.Extensions;
+using Swiss.FCh.Utils.Converter;
+using Swiss.FCh.Utils.Extensions;
+using Swiss.FCh.Utils.Rhos.Extensions;
 
 try
 {
@@ -121,7 +121,7 @@ try
     app.UseRouting();
 
     app.MapControllers();
-    app.MapBkHealthChecks("/v2/systemstatus");
+    app.MapFChHealthChecks("/v2/systemstatus");
 
     Log.Information("Starting web host: Bk.Termdat.Public.Api");
     app.Run();
