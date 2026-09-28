@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Bk.DocumentService.Client;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
@@ -15,6 +14,7 @@ using Bogus;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
 using NUnit.Framework;
+using Swiss.FCh.DocumentService.Client;
 
 namespace Bk.Termdat.Business.Tests.Services;
 

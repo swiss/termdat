@@ -6,8 +6,8 @@ using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Configuration;
-using Bk.Utils.Services;
 using Microsoft.Extensions.Options;
+using Swiss.FCh.Utils.Services;
 
 namespace Bk.Termdat.Business.Tests.Services;
 

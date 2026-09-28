@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using Bk.Sparql.Extensions;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.Common.Resources;
 using Bk.Termdat.CrossCutting.Configuration;
 using Bk.Termdat.CrossCutting.Exceptions;
-using Bk.Utils.Models;
-using Bk.Utils.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swiss.FCh.Sparql.Extensions;
+using Swiss.FCh.Utils.Models;
+using Swiss.FCh.Utils.Services;
 
 namespace Bk.Termdat.Business.Services;
 

@@ -1,13 +1,13 @@
 using System;
 using System.IO;
 using Bk.Termdat.Infrastructure.Service.RabbitMq;
-using Bk.Utils.Rhos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using Serilog;
+using Swiss.FCh.Utils.Rhos;
 
 namespace Bk.Termdat.Common.Api;
 

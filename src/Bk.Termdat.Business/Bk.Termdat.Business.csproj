@@ -6,10 +6,10 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="16.1.1" />
-        <PackageReference Include="Bk.DocumentService.Client" Version="1.8.0" />
-        <PackageReference Include="Bk.Monitoring" Version="2.5.0" />
-        <PackageReference Include="Bk.Sparql" Version="6.2.1" />
-        <PackageReference Include="Bk.Utils" Version="1.9.0" />
+        <PackageReference Include="Swiss.FCh.DocumentService.Client" Version="1.9.0" />
+        <PackageReference Include="Swiss.FCh.Monitoring" Version="2.5.4" />
+        <PackageReference Include="Swiss.FCh.Sparql" Version="6.2.4" />
+        <PackageReference Include="Swiss.FCh.Utils" Version="3.0.1" />
         <PackageReference Include="FluentValidation" Version="12.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.11" />
         <PackageReference Include="SkiaSharp" Version="4.148.0" />

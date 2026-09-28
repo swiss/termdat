@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Bk.DocumentService.Client;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
@@ -13,6 +12,7 @@ using Bk.Termdat.Business.Resource.Models.Export;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.Common.Resources;
 using Bk.Termdat.CrossCutting.Exceptions;
+using Swiss.FCh.DocumentService.Client;
 
 namespace Bk.Termdat.Business.Services;
 

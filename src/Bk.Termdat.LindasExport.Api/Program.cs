@@ -1,16 +1,16 @@
 using System.Net;
-using Bk.Monitoring.Extensions;
-using Bk.Sparql.Extensions;
 using Bk.Termdat.CrossCutting.Configuration;
 using Bk.Termdat.Infrastructure.DataSource;
 using Bk.Termdat.LindasExport.Api;
 using Bk.Termdat.LindasExport.Api.Configuration;
-using Bk.Utils.Extensions;
-using Bk.Utils.Rhos.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
+using Swiss.FCh.Monitoring.Extensions;
+using Swiss.FCh.Sparql.Extensions;
+using Swiss.FCh.Utils.Extensions;
+using Swiss.FCh.Utils.Rhos.Extensions;
 
 try
 {
@@ -105,7 +105,7 @@ try
     app.UseRouting();
 
     app.MapControllers();
-    app.MapBkHealthChecks();
+    app.MapFChHealthChecks();
 
     Log.Information("Starting web host: Bk.Termdat.LindasExport.Api");
     app.Run();
