@@ -13,6 +13,10 @@ internal static class ServiceCollectionExtension
     {
         services.AddTransient<ITermdatGraphService, TermdatGraphService>();
         services.AddTransient<ISparqlClientFactory, SparqlClientFactory>();
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IExportScheduler, ExportScheduler>();
+        services.AddSingleton<ILindasOperationExecutor, LindasOperationExecutor>();
+        services.AddSingleton<IChunkDelay, ChunkDelay>();
 
         services.AddScoped<ILindasMapper, LindasMapper>();
 

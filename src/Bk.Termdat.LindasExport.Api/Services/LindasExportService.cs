@@ -1,5 +1,6 @@
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.LindasExport.Api.Interfaces;
+using Bk.Termdat.LindasExport.Api.Models;
 
 namespace Bk.Termdat.LindasExport.Api.Services;
 
@@ -18,28 +19,55 @@ public class LindasExportService : ILindasExportService
         this.lindasMapper = lindasMapper;
     }
 
-    public async Task ExportCollections(CancellationToken ct)
+    public async Task<LindasExportResult> ExportCollections(CancellationToken ct)
     {
-        await termdatGraphService.DeleteGraph(ct);
-
-        await termdatGraphService.AddDataSet(ct);
-
+        var successfulTargets = new List<string>();
+        var failedTargets = new List<string>();
         var collectionIds = (await collectionRepository.GetIdsForLindasExport()).ToList();
 
+        foreach (var target in termdatGraphService.Targets)
+        {
+            try
+            {
+                await ExportTarget(target, collectionIds, ct);
+                successfulTargets.Add(target);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                failedTargets.Add(target);
+                logger.LogError(ex, "LINDAS export failed for target {TargetName}", target);
+            }
+        }
+
+        return new LindasExportResult(successfulTargets, failedTargets);
+    }
+
+    private async Task ExportTarget(string target, IReadOnlyCollection<int> collectionIds, CancellationToken ct)
+    {
+        await termdatGraphService.DeleteGraph(target, ct);
+        await termdatGraphService.AddDataSet(target, ct);
+
         var current = 1;
-        var total = collectionIds.Count;
         foreach (var id in collectionIds)
         {
             ct.ThrowIfCancellationRequested();
 
-            logger.LogInformation("Exporting collection {Current}/{Total} - CollectionId={CollectionId}", current++, total, id);
+            logger.LogInformation(
+                "Exporting collection {Current}/{Total} to {TargetName} - CollectionId={CollectionId}",
+                current++, collectionIds.Count, target, id);
 
             var collection = await collectionRepository.GetByIdForLindasExport(id);
-            if (collection is not null)
+            if (collection is null)
             {
-                var sparqlCollection = lindasMapper.Map(collection);
-                await termdatGraphService.AddCollection(sparqlCollection, ct);
+                continue;
             }
+
+            var sparqlCollection = lindasMapper.Map(collection);
+            await termdatGraphService.AddCollection(target, sparqlCollection, ct);
         }
     }
 }

@@ -14,76 +14,77 @@ namespace Bk.Termdat.LindasExport.Api.Services;
 
 public class TermdatGraphService : ITermdatGraphService
 {
-    private readonly LindasExportOptions _lindasExportOptions;
-    private readonly ILogger<TermdatGraphService> _logger;
-    private readonly IReadOnlyDictionary<string, IAsyncStorageProvider> _storageProviders;
-    private readonly TermdatGraphOptions _termdatGraphOptions;
+    private readonly LindasExportOptions lindasExportOptions;
+    private readonly ILogger<TermdatGraphService> logger;
+    private readonly IReadOnlyDictionary<string, IAsyncStorageProvider> storageProviders;
+    private readonly TermdatGraphOptions termdatGraphOptions;
+    private readonly ILindasOperationExecutor lindasOperationExecutor;
+    private readonly IChunkDelay chunkDelay;
 
-    public TermdatGraphService(ILogger<TermdatGraphService> logger, IOptions<LindasExportOptions> lindasExportOptions,
-        IOptions<TermdatGraphOptions> termdatGraphOptions, ISparqlClientFactory sparqlClientFactory)
+    public TermdatGraphService(
+        ILogger<TermdatGraphService> logger,
+        IOptions<LindasExportOptions> lindasExportOptions,
+        IOptions<TermdatGraphOptions> termdatGraphOptions,
+        ISparqlClientFactory sparqlClientFactory,
+        ILindasOperationExecutor lindasOperationExecutor,
+        IChunkDelay chunkDelay)
     {
-        _logger = logger;
-        _termdatGraphOptions = termdatGraphOptions.Value;
-        _lindasExportOptions = lindasExportOptions.Value;
-        _storageProviders = sparqlClientFactory.GetStorageProviders();
+        this.logger = logger;
+        this.termdatGraphOptions = termdatGraphOptions.Value;
+        this.lindasExportOptions = lindasExportOptions.Value;
+        storageProviders = sparqlClientFactory.GetStorageProviders();
+        this.lindasOperationExecutor = lindasOperationExecutor;
+        this.chunkDelay = chunkDelay;
     }
 
-    public async Task DeleteGraph(CancellationToken ct)
+    public IReadOnlyCollection<string> Targets => storageProviders.Keys.OrderBy(k => k).ToArray();
+
+    public Task DeleteGraph(string target, CancellationToken ct)
     {
-        foreach (var target in _storageProviders.Keys.OrderBy(k => k))
-        {
-            try
-            {
-                var storageProvider = _storageProviders[target];
-                await storageProvider.DeleteGraphAsync(Uris.TermdatGraph, ct);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while deleting graph on target {TargetName}", target);
-            }
-        }
+        logger.LogInformation("Deleting graph on target {TargetName}", target);
+        var storageProvider = storageProviders[target];
+        return lindasOperationExecutor.Execute(
+            target,
+            "DeleteGraph",
+            () => storageProvider.DeleteGraphAsync(Uris.TermdatGraph, ct),
+            ct);
     }
 
-    public async Task AddCollection(Collection collection, CancellationToken ct)
+    public async Task AddCollection(string target, Collection collection, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(collection);
 
         var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
-        var triples = collection.GetTriples(graph, _lindasExportOptions.AddCubeLinkData);
+        var triples = collection.GetTriples(graph, lindasExportOptions.AddCubeLinkData);
 
-        var chunks = triples.Chunk(_termdatGraphOptions.ChunkSize);
+        var chunks = triples.Chunk(termdatGraphOptions.ChunkSize);
         var current = 0;
         foreach (var chunk in chunks)
         {
             current++;
-            foreach (var target in _storageProviders.Keys.OrderBy(k => k))
-            {
-                try
-                {
-                    _logger.LogInformation(
-                        "Updating graph for collection Code={CollectionCode} on target {TargetName}. Chunk: {Current}",
-                        collection.Code, target, current);
 
-                    var storageProvider = _storageProviders[target];
-                    await storageProvider.UpdateGraphAsync(Uris.TermdatGraph, chunk, [], ct);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error updating graph on target {TargetName}. Chunk: {Current}", target,
-                        current);
-                }
-            }
+            logger.LogInformation(
+                "Updating graph for collection Code={CollectionCode} on target {TargetName}. Chunk: {Current}",
+                collection.Code, target, current);
+
+            var storageProvider = storageProviders[target];
+            await lindasOperationExecutor.Execute(
+                target,
+                $"AddCollection:{collection.Code}:Chunk:{current}",
+                () => storageProvider.UpdateGraphAsync(Uris.TermdatGraph, chunk, [], ct),
+                ct);
+            await chunkDelay.Wait(ct);
         }
     }
 
-    public async Task AddDataSet(CancellationToken ct)
+    public async Task AddDataSet(string target, CancellationToken ct)
     {
         var graph = new Graph();
         var triples = DataSet.GetTriples(graph).ToList();
         graph.Assert(triples);
 
-        if (_lindasExportOptions.AddCubeLinkData)
+        if (lindasExportOptions.AddCubeLinkData)
         {
             var fileProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
             await using var cubeLinkStream = fileProvider
@@ -102,18 +103,12 @@ public class TermdatGraphService : ITermdatGraphService
                 graph.CreateUriNode(UriFactory.Create(Uris.ObservationSet))));
         }
 
-        foreach (var target in _storageProviders.Keys.OrderBy(k => k))
-        {
-            try
-            {
-                _logger.LogInformation("Updating graph data set on target {TargetName}", target);
-                var storageProvider = _storageProviders[target];
-                await storageProvider.UpdateGraphAsync(Uris.TermdatGraph, triples, [], ct);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating graph on target {TargetName}", target);
-            }
-        }
+        logger.LogInformation("Updating graph data set on target {TargetName}", target);
+        var storageProvider = storageProviders[target];
+        await lindasOperationExecutor.Execute(
+            target,
+            "AddDataSet",
+            () => storageProvider.UpdateGraphAsync(Uris.TermdatGraph, triples, [], ct),
+            ct);
     }
 }
