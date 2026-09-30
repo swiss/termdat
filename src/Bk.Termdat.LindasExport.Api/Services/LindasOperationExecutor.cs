@@ -31,7 +31,7 @@ public class LindasOperationExecutor : ILindasOperationExecutor
                 await action();
                 return;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
             {
                 throw;
             }
@@ -45,6 +45,12 @@ public class LindasOperationExecutor : ILindasOperationExecutor
                     target, operation, attempt, options.MaximumAttempts, delay);
 
                 await Task.Delay(delay, timeProvider, ct);
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw new HttpRequestException(
+                    $"LINDAS operation {operation} on target {target} timed out after {attempt} attempts.",
+                    ex);
             }
         }
     }

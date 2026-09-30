@@ -37,6 +37,39 @@ internal class LindasOperationExecutorTests
     }
 
     [Test]
+    public async Task Execute_WhenOperationTimesOut_ShouldRetry()
+    {
+        var executor = CreateExecutor(new ImmediateTimeProvider());
+        var calls = 0;
+
+        await executor.Execute("target", "operation", () =>
+        {
+            calls++;
+            return calls == 1
+                ? Task.FromException(new TaskCanceledException())
+                : Task.CompletedTask;
+        }, CancellationToken.None);
+
+        Assert.That(calls, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void Execute_WhenTimeoutAttemptsExhausted_ShouldThrowNonCancellationFailure()
+    {
+        var executor = CreateExecutor(new ImmediateTimeProvider());
+        var calls = 0;
+
+        Assert.ThrowsAsync<HttpRequestException>(() =>
+            executor.Execute("target", "operation", () =>
+            {
+                calls++;
+                return Task.FromException(new TaskCanceledException());
+            }, CancellationToken.None));
+
+        Assert.That(calls, Is.EqualTo(5));
+    }
+
+    [Test]
     public void Execute_WhenAttemptsExhausted_ShouldThrow()
     {
         var executor = CreateExecutor(new ImmediateTimeProvider());
@@ -72,6 +105,24 @@ internal class LindasOperationExecutorTests
             }, cancellation.Token));
 
         Assert.That(calls, Is.Zero);
+    }
+
+    [Test]
+    public void Execute_WhenCallerCancelsDuringOperation_ShouldNotRetry()
+    {
+        var executor = CreateExecutor(new ImmediateTimeProvider());
+        using var cancellation = new CancellationTokenSource();
+        var calls = 0;
+
+        Assert.ThrowsAsync<TaskCanceledException>(() =>
+            executor.Execute("target", "operation", () =>
+            {
+                calls++;
+                cancellation.Cancel();
+                return Task.FromCanceled(cancellation.Token);
+            }, cancellation.Token));
+
+        Assert.That(calls, Is.EqualTo(1));
     }
 
     private static LindasOperationExecutor CreateExecutor(TimeProvider timeProvider)
