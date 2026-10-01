@@ -47,7 +47,7 @@
             <h5>{{ 'field.conceptSystemPositions' | translate }}</h5>
 
             <ng-container formArrayName="positions">
-                @for (positionForm of $any(positions.controls); track $index) {
+                @for (positionForm of $any(positions.controls); track positionForm) {
                     <div class="position-entry" [formGroup]="positionForm">
                         <mat-form-field>
                             <input
