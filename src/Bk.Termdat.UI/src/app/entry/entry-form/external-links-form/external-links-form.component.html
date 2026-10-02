@@ -3,7 +3,7 @@
         <h6>{{ 'field.externalLinks' | translate }}</h6>
     </summary>
     <div class="external-links-form">
-        @for (form of $any(formArray).controls; track $index) {
+        @for (form of $any(formArray).controls; track form) {
             <td-external-link-entry
                 [externalLink]="_externalLinks[$index]"
                 [form]="form"

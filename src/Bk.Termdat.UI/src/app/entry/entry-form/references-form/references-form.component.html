@@ -3,7 +3,7 @@
         <h6>{{ 'field.references' | translate }}</h6>
     </summary>
     <div class="references-form">
-        @for (form of $any(formArray).controls; track $index) {
+        @for (form of $any(formArray).controls; track form) {
             <td-reference-entry
                 [entryReference]="_references[$index]"
                 [form]="form"

@@ -1,6 +1,6 @@
 <div class="subject-form">
     <h6>{{ 'field.subjectDomains' | translate }}{{ required ? ' *' : '' }}</h6>
-    @for (control of formArray.controls; track $index) {
+    @for (control of formArray.controls; track control) {
         <div>
             @if (subjects) {
                 <td-subject-entry
