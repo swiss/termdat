@@ -41,6 +41,7 @@
 <https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Erster Entwurf"@de .
 <https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Premi\u00E8re \u00E9bauche"@fr .
 <https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Prima stesura"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "Emprim sboz"@rm .
 <https://register.ld.admin.ch/termdat/reliability-code/0> <http://schema.org/name> "First draft"@en .
 <https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
 <https://register.ld.admin.ch/termdat/109117> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .

@@ -17,6 +17,7 @@
 <https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Fachlich \u00FCberpr\u00FCft"@de .
 <https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Fiche contr\u00F4l\u00E9e par les experts"@fr .
 <https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Scheda convalidata da esperti"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Fischa controllada d'expertas ed experts"@rm .
 <https://register.ld.admin.ch/termdat/reliability-code/3> <http://schema.org/name> "Checked by specialist"@en .
 <https://register.ld.admin.ch/termdat/388009> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
 <https://register.ld.admin.ch/termdat/388009> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Name> .
