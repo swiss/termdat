@@ -17,6 +17,7 @@ internal class LanguageExtensionTests
     [TestCase(Language.De, "de")]
     [TestCase(Language.Fr, "fr")]
     [TestCase(Language.It, "it")]
+    [TestCase(Language.Rm, "rm")]
     [TestCase(Language.En, "en")]
     public void ToLowerCaseStringValue_ForLanguages_ShouldMap(Language language, string expected)
     {
@@ -28,6 +29,7 @@ internal class LanguageExtensionTests
     [TestCase("DE", Language.De)]
     [TestCase("FR", Language.Fr)]
     [TestCase("IT", Language.It)]
+    [TestCase("RM", Language.Rm)]
     [TestCase("EN", Language.En)]
     public void ToSparqlLanguage_WhenCalled_ReturnsLanguage(string language, Language expectedLanguage)
     {
@@ -44,5 +46,19 @@ internal class LanguageExtensionTests
         var languageModel = new Business.Domain.Models.Language { IsoCode = language };
 
         Assert.That(() => languageModel.ToSparqlLanguage(), Throws.Exception.InstanceOf<ArgumentOutOfRangeException>());
+    }
+
+    [Test]
+    public void FilterSupportedLanguages_WhenCalled_KeepsOnlySupportedLanguages()
+    {
+        var translations = new[] { "DE", "FR", "IT", "RM", "EN", "XY" }
+            .Select(isoCode => new Business.Domain.Models.OfficeTranslation
+            {
+                Language = new Business.Domain.Models.Language { IsoCode = isoCode }
+            });
+
+        var result = translations.FilterSupportedLanguages().Select(translation => translation.Language.IsoCode);
+
+        Assert.That(result, Is.EqualTo(new[] { "DE", "FR", "IT", "RM", "EN" }));
     }
 }

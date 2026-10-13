@@ -35,6 +35,7 @@
 <https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Sprachlich/formal \u00FCberpr\u00FCft"@de .
 <https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Fiche contr\u00F4l\u00E9e linguistiquement"@fr .
 <https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Scheda corretta (controllo linguistico / formale)"@it .
+<https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Fischa controllada linguisticamain/formalmain"@rm .
 <https://register.ld.admin.ch/termdat/reliability-code/2> <http://schema.org/name> "Linguistic/formal check completed"@en .
 <https://register.ld.admin.ch/termdat/109123> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/DefinedTerm> .
 <https://register.ld.admin.ch/termdat/109123> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.ld.admin.ch/Term> .

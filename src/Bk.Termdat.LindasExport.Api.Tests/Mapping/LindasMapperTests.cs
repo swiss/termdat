@@ -221,7 +221,7 @@ internal class LindasMapperTests
             // Reliability
             Assert.That(sparqlEntry.Reliability, Is.Not.Null);
             Assert.That(sparqlEntry.Reliability.Code, Is.EqualTo(((int)entry.Reliability).ToString()));
-            Assert.That(sparqlEntry.Reliability.Names, Has.Count.EqualTo(4));
+            Assert.That(sparqlEntry.Reliability.Names, Has.Count.EqualTo(5));
 
             // Glossaries
             Assert.That(sparqlEntry.Glossaries, Is.Not.Null);
