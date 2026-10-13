@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services.Interfaces;
+using Bk.Termdat.CrossCutting;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -64,6 +66,7 @@ public class SearchController : ControllerBase
         }
     }
 
+    [Authorize(Policy = Policy.RequireAdminPolicy)]
     [HttpPost("duplicate-check")]
     public async Task<ActionResult> GetDuplicateEntryIds([FromBody] DuplicateCheckRequest request)
     {
@@ -76,6 +79,7 @@ public class SearchController : ControllerBase
         return Ok(duplicateCheckResponse);
     }
 
+    [Authorize(Policy = Policy.RequireAdminPolicy)]
     [HttpPost("duplicate-check/xlsx")]
     public async Task<ActionResult> ExportDuplicateCheckXlsx([FromBody] DuplicateCheckRequest request)
     {
