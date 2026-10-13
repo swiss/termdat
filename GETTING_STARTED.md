@@ -223,9 +223,16 @@ The client secret matches the `bk-termdat` client defined in the KeyCloak realm 
 dotnet user-secrets init --project src\Bk.Termdat.LindasExport.Api
 dotnet user-secrets set "pgsql:Username" "postgres" --project src\Bk.Termdat.LindasExport.Api
 dotnet user-secrets set "pgsql:Password" "postgres" --project src\Bk.Termdat.LindasExport.Api
+dotnet user-secrets set "SparqlTargets:Targets:LindasNext:Username" "your_lindas_username" --project src\Bk.Termdat.LindasExport.Api
+dotnet user-secrets set "SparqlTargets:Targets:LindasNext:Password" "your_lindas_password" --project src\Bk.Termdat.LindasExport.Api
+dotnet user-secrets set "SparqlTargets:Targets:LindasNext:GraphStoreProtocolEndPoint" "your_lindas_graph_store_end_point" --project src\Bk.Termdat.LindasExport.Api
+dotnet user-secrets set "SparqlTargets:Targets:LindasNext:HealthEndPoint" "your_lindas_health_end_point" --project src\Bk.Termdat.LindasExport.Api
+dotnet user-secrets set "SparqlTargets:Targets:LindasNext:Proxy:Address" "your_proxy_address" --project src\Bk.Termdat.LindasExport.Api
 ```
 
-Note: some values in the `appsettings.Development.json` files (e.g. Document Service, MyAccount, LINDAS endpoints and proxy) point to internal systems and will not resolve outside the BIT network. Features relying on them will not work locally.
+- The `SparqlTargets` credentials, endpoints and proxy address point to internal systems and will not resolve outside the BIT network. Without them the RDF export to LINDAS will not work locally.
+
+Note: some values in the `appsettings.Development.json` files (e.g. Document Service, MyAccount) point to internal systems and will not resolve outside the BIT network. Features relying on them will not work locally.
 
 ## Entity Framework
 To manipulate and initially create the local database you can use the EF Core tools.<br>
