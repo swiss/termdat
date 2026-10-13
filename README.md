@@ -1,4 +1,4 @@
-# Termdat
+# TERMDAT
 
 ## Introduction
 
