@@ -7,7 +7,6 @@ import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatIcon} from '@angular/material/icon';
 import {MatInput} from '@angular/material/input';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ObAlertComponent, ObButtonDirective, ObTranslateParamsPipe} from '@oblique/oblique';
 import {PictureDetail} from 'api/PictureDetail';
@@ -52,7 +51,7 @@ export class EntryFormPictureComponent implements OnInit, OnDestroy {
     error: PictureUploadError | undefined;
     PictureUploadError = PictureUploadError;
     displaySize: number;
-    pictureData: SafeUrl | undefined;
+    pictureData: string | undefined;
     timestamp: number;
 
     _picture?: PictureDetail;
@@ -71,7 +70,6 @@ export class EntryFormPictureComponent implements OnInit, OnDestroy {
     constructor(
         public readonly errorService: ErrorService,
         private readonly formBuilder: UntypedFormBuilder,
-        private readonly sanitizer: DomSanitizer,
         private readonly translateService: TranslateService,
         @Inject(CONSOLE) private readonly console: Console
     ) {
@@ -190,7 +188,7 @@ export class EntryFormPictureComponent implements OnInit, OnDestroy {
 
             this.pictureChanged.emit({
                 file,
-                data: this.sanitizer.bypassSecurityTrustUrl(data),
+                data,
             } as PictureChange);
         };
 

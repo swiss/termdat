@@ -6,7 +6,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {DomSanitizer} from '@angular/platform-browser';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ObAlertModule, ObTranslateParamsModule} from '@oblique/oblique';
 import {PictureDetail} from 'api/PictureDetail';
@@ -24,10 +23,6 @@ describe('EntryFormPictureComponent', () => {
 
     const translateServiceMock = {
         instant: jest.fn().mockImplementation(v => v),
-    };
-    const domSanitizerMock = {
-        sanitize: jest.fn(v => v),
-        bypassSecurityTrustUrl: jest.fn(v => v),
     };
     const consoleMock = {
         error: jest.fn(),
@@ -59,7 +54,6 @@ describe('EntryFormPictureComponent', () => {
             ],
             providers: [
                 {provide: TranslateService, useValue: translateServiceMock},
-                {provide: DomSanitizer, useValue: domSanitizerMock},
                 {provide: CONSOLE, useValue: consoleMock},
                 {provide: ErrorService, useValue: errorServiceMock},
             ],
@@ -207,9 +201,8 @@ describe('EntryFormPictureComponent', () => {
             expect(component.loading).toBeFalsy();
             expect(component.timestamp).toBeGreaterThanOrEqual(oldTimestamp);
             expect(value).not.toBeNull();
-            expect(value!.data).toBeDefined();
+            expect(value!.data).toMatch(/^data:image\//);
             expect(value!.file).toEqual(file);
-            expect(domSanitizerMock.bypassSecurityTrustUrl).toHaveBeenCalledTimes(1);
 
             done();
         });
@@ -229,9 +222,8 @@ describe('EntryFormPictureComponent', () => {
             expect(component.loading).toBeFalsy();
             expect(component.timestamp).toBeGreaterThanOrEqual(oldTimestamp);
             expect(value).not.toBeNull();
-            expect(value!.data).toBeDefined();
+            expect(value!.data).toMatch(/^data:image\//);
             expect(value!.file).toEqual(file);
-            expect(domSanitizerMock.bypassSecurityTrustUrl).toHaveBeenCalledTimes(1);
 
             done();
         });

@@ -1,13 +1,10 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Pipe({name: 'hyperlink'})
 export class HyperlinkPipe implements PipeTransform {
     private static readonly HYPERLINK_REGEX = /\[([^\]]+)]\(([^)]+)\)/;
 
-    constructor(private readonly sanitizer: DomSanitizer) {}
-
-    transform(sourceText: string): SafeHtml {
+    transform(sourceText: string): string {
         let matchedLink: RegExpExecArray | null;
 
         while ((matchedLink = HyperlinkPipe.HYPERLINK_REGEX.exec(sourceText))) {
@@ -15,6 +12,6 @@ export class HyperlinkPipe implements PipeTransform {
             sourceText = sourceText.replace(matchedLink[0].toString(), htmlLink);
         }
 
-        return this.sanitizer.bypassSecurityTrustHtml(sourceText);
+        return sourceText;
     }
 }

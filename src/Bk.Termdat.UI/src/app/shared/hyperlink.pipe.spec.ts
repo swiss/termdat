@@ -1,13 +1,8 @@
-import {DomSanitizer} from '@angular/platform-browser';
 import {HyperlinkPipe} from './hyperlink.pipe';
 
 describe('HyperlinkPipe', () => {
-    const domSanitizerMock = {
-        bypassSecurityTrustHtml: jest.fn(v => v),
-    } as unknown as DomSanitizer;
-
     it('should create an instance', () => {
-        const pipe = new HyperlinkPipe(domSanitizerMock);
+        const pipe = new HyperlinkPipe();
         expect(pipe).toBeTruthy();
     });
 
@@ -42,7 +37,7 @@ describe('HyperlinkPipe', () => {
         [null as unknown as string, null],
         [undefined as unknown as string, undefined],
     ])('should transform', (link: string, expected: string | null | undefined) => {
-        const pipe = new HyperlinkPipe(domSanitizerMock);
+        const pipe = new HyperlinkPipe();
 
         expect(pipe.transform(link)).toEqual(expected);
     });
