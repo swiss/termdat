@@ -34,6 +34,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpGet("details")]
+    [Authorize(Policy = Policy.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var subjects = await subjectService.GetAllDetails();

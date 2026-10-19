@@ -5,6 +5,7 @@ using Bk.Termdat.Gateway.Transforms;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
@@ -147,8 +148,8 @@ try
     {
         // Validates if a return URL is safe to use for redirects.
         // This helps mitigate attacks where users could be redirected to malicious external sites
-        // (e.g., /auth/login?returnUrl=https://evil.com).
-        var isValidReturnUrl = Uri.IsWellFormedUriString(returnUrl, UriKind.Relative);
+        // (e.g., /auth/login?returnUrl=https://evil.com or the protocol-relative returnUrl=//evil.com).
+        var isValidReturnUrl = RedirectHttpResult.IsLocalUrl(returnUrl);
 
         // Redirect to intended destination if already authenticated
         if (context.User.Identity?.IsAuthenticated is true)
@@ -178,7 +179,7 @@ try
         // Then sign out from the OIDC provider with proper redirect
         var authProps = new AuthenticationProperties
         {
-            RedirectUri = Uri.IsWellFormedUriString(returnUrl, UriKind.Relative) ? returnUrl : "/"
+            RedirectUri = RedirectHttpResult.IsLocalUrl(returnUrl) ? returnUrl : "/"
         };
 
         await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, authProps);

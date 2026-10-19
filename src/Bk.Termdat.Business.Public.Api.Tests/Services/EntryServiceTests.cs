@@ -188,11 +188,43 @@ public class EntryServiceTests
         Assert.That(mappedEntries, Is.Empty);
     }
 
+    [TestCase(true, Status.Validated)]
+    [TestCase(false, Status.InProgress)]
+    public async Task GetByIds_DeletedOrNotValidatedEntries_ReturnsNoEntries(bool deleted, Status status)
+    {
+        var entries = GenerateEntries();
+        entries.ForEach(e =>
+        {
+            e.Collection.ActiveApi = true;
+            e.Deleted = deleted;
+            e.Status = status;
+        });
+        List<Entry> mappedEntries = null;
+        mapperMock.WhenForAnyArgs(x => x.Map<IEnumerable<EntryDetail>>(null, null))
+            .Do(x => mappedEntries = ((x[0] as IEnumerable<Entry>) ?? Array.Empty<Entry>()).ToList());
+        var entryIds = fixture.CreateMany<int>().ToArray();
+
+        entryRepositoryMock.GetByIdsForApiDetail(entryIds).Returns(entries);
+
+        var languageIdIn = fixture.Create<int>();
+        var languageIdOut = fixture.Create<int>();
+        var inLanguageIsoCode = fixture.Create<string>();
+        var outLanguageIsoCode = fixture.Create<string>();
+        languageValidationServiceMock.ValidateLanguageIsoCode(inLanguageIsoCode).Returns(languageIdIn);
+        languageValidationServiceMock.ValidateLanguageIsoCode(outLanguageIsoCode).Returns(languageIdOut);
+
+        await entryService.GetByIds(entryIds, inLanguageIsoCode, outLanguageIsoCode);
+
+        Assert.That(mappedEntries, Is.Not.Null);
+        Assert.That(mappedEntries, Is.Empty);
+    }
+
     private static List<Entry> GenerateEntries()
     {
         return Enumerable.Range(1, 3).Select(id => new Entry
         {
             Id = id,
+            Status = Status.Validated,
             Collection = new Collection(),
             Translations = Enumerable.Range(1, 3).Select(lid => new EntryLanguage
             {

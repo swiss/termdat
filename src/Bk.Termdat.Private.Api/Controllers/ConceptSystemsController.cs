@@ -26,6 +26,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpGet("details")]
+    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await conceptSystemService.GetAllDetails();
