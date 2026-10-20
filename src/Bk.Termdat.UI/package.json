@@ -43,7 +43,7 @@
     "@angular-eslint/schematics": "^21.4.0",
     "@angular-eslint/template-parser": "^21.4.0",
     "@angular/build": "^21.2.13",
-    "@angular/cli": "^21.2.13",
+    "@angular/cli": "^21.2.27",
     "@angular/compiler-cli": "^21.2.15",
     "@schematics/angular": "^21.2.13",
     "@types/jest": "^30.0.0",
