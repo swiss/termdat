@@ -218,7 +218,7 @@ public class SearchServiceTests
     [TestCase(false, false, false, false, false, false, false, false, false, true, false)]
     [TestCase(false, false, false, false, false, false, false, false, false, false, true)]
     [TestCase(true, true, true, true, true, true, true, true, true, true, true)]
-    public async Task SearchForSummaryReturnsHitsFromSearchFieldsResults(
+    public async Task Search_SummaryWithSelectedSearchFields_ReturnsHitsOfSelectedFields(
         bool terminus,
         bool name,
         bool abbreviation,
@@ -386,14 +386,8 @@ public class SearchServiceTests
         {
             Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("country") && kvp.Value.StartsWith("Country")))));
         }
-        if (comment)
-        {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("comment") && kvp.Value.StartsWith("Comment")))));
-        }
-        else
-        {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("comment") && kvp.Value.StartsWith("Comment")))));
-        }
+        // The entry comment is internal and must never be returned as a hit, even if the comment field was searched
+        Assert.That(result.All(r => r.Hits.All(h => !h.ContainsKey("comment"))));
     }
 
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Public.Api.Mapping;
 using Bk.Termdat.Business.Public.Api.Resource.Models;
 using Bk.Termdat.Business.Repositories;
@@ -52,9 +53,12 @@ public class EntryService : IEntryService
         logger.LogDebug("Found {Count} entries from the provided {Length} entry id's", entries.Count, entryIds.Length);
 
         entries = entries
-            .Where(e => publicApiOptions.DefaultOfficeIds.Contains(e.OfficeId) && e.Collection.ActiveApi).ToList();
+            .Where(e => !e.Deleted
+                        && e.Status is Status.Validated
+                        && publicApiOptions.DefaultOfficeIds.Contains(e.OfficeId)
+                        && e.Collection.ActiveApi).ToList();
         logger.LogDebug(
-            "After filtering based on OfficeId=[{Ids}] and Collection.ActiveApi=true, we have {Count} entries from the provided {Length} entry id's left",
+            "After filtering based on Deleted=false, Status=Validated, OfficeId=[{Ids}] and Collection.ActiveApi=true, we have {Count} entries from the provided {Length} entry id's left",
             string.Join(',', publicApiOptions.DefaultOfficeIds), entries.Count, entryIds.Length);
 
         foreach (var entry in entries)

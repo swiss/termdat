@@ -54,9 +54,4 @@ public class FieldSelection
     /// Search in country field. Default = false
     /// </summary>
     public bool Country { get; set; }
-
-    /// <summary>
-    /// Search in comment field (defined in the entry header). Default = false
-    /// </summary>
-    public bool Comment { get; set; }
 }

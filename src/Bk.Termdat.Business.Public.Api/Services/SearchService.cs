@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bk.Termdat.Business.Clients;
-using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Public.Api.Mapping;
 using Bk.Termdat.Business.Public.Api.Resource.Models;
 using Bk.Termdat.Business.Repositories;
@@ -128,7 +127,7 @@ public class SearchService : ISearchService
             var languageDetails = entryDetail.LanguageDetails;
 
             var hits = new List<KeyValuePair<string, string>>();
-            ExtractHits(searchFields, hits, languageDetails, entries, entryDetail);
+            ExtractHits(searchFields, hits, languageDetails);
 
             entryDetail.Hits = hits
                 .Where(h => !string.IsNullOrWhiteSpace(h.Value))
@@ -140,8 +139,7 @@ public class SearchService : ISearchService
         return entryDetails;
     }
 
-    private static void ExtractHits(PrivateApiResourceModels.SearchFields searchFields, List<KeyValuePair<string, string>> hits, IList<EntryLanguageDetail> languageDetails, List<Entry> entries,
-        EntryDetail entryDetail)
+    private static void ExtractHits(PrivateApiResourceModels.SearchFields searchFields, List<KeyValuePair<string, string>> hits, IList<EntryLanguageDetail> languageDetails)
     {
         if (searchFields.Terminus)
         {
@@ -199,18 +197,6 @@ public class SearchService : ISearchService
         {
             hits.AddRange(languageDetails.Select(ld => CreateKeyValuePair(nameof(ld.Country), ld.Country)));
         }
-
-        if (!searchFields.Comment)
-        {
-            return;
-        }
-
-        var entry = entries.SingleOrDefault(e => e.Id == entryDetail.Id);
-        if (entry == null)
-        {
-            return;
-        }
-        hits.Add(CreateKeyValuePair(nameof(entry.Comment), entry.Comment));
     }
 
     private static KeyValuePair<string, string> CreateKeyValuePair(string name, string value)

@@ -84,7 +84,8 @@ public class PublicApiMappingProfile : Profile
             .ForMember(dest => dest.Source, opt => opt.MapFrom(src => src.Source))
             .ForMember(dest => dest.Metadata, opt => opt.MapFrom(src => src.Metadata))
             .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-            .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment));
+            // The entry comment is internal and must not be searchable through the public API
+            .ForMember(dest => dest.Comment, opt => opt.Ignore());
     }
 
     private void CreateEntryMapping()

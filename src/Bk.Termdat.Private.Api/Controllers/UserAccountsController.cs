@@ -36,7 +36,7 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpPut("")]
-    [Authorize]
+    [Authorize(Policy = Policy.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromBody] UserAccountModification dto)
     {
         await userAccountService.Update(dto);
