@@ -11,13 +11,13 @@ using NUnit.Framework;
 namespace Bk.Termdat.Public.Api.Tests.Controllers;
 
 [TestFixture]
-public class EntryControllerTests
+internal class EntryControllerTests
 {
     private readonly IEntryService entryService = Substitute.For<IEntryService>();
     private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
     private readonly Fixture fixture = new();
 
-    private EntryController entryController = null!;
+    private EntryController entryController;
 
     [SetUp]
     public void Setup()

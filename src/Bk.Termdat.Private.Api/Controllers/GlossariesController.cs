@@ -33,7 +33,7 @@ public class GlossariesController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await glossaryService.GetAllDetails();
@@ -41,7 +41,7 @@ public class GlossariesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await glossaryService.GetDetail(id);
@@ -49,7 +49,7 @@ public class GlossariesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] GlossaryUpdate glossaryUpdate)
     {
         if (glossaryUpdate is null)
@@ -67,7 +67,7 @@ public class GlossariesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] GlossaryCreate glossaryCreate)
     {
         if (glossaryCreate is null)
@@ -81,7 +81,7 @@ public class GlossariesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await glossaryService.Delete(id);

@@ -53,7 +53,7 @@ public static class DatabaseHelper
         context.SaveChanges();
     }
 
-    private static IEnumerable<EntryTemplate> GetEntryTemplates()
+    private static List<EntryTemplate> GetEntryTemplates()
     {
         return new List<EntryTemplate>
         {
@@ -93,7 +93,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<SourceTemplate> GetSourceTemplates()
+    private static List<SourceTemplate> GetSourceTemplates()
     {
         return new List<SourceTemplate>
         {
@@ -142,7 +142,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<Subject> GetSubjects()
+    private static List<Subject> GetSubjects()
     {
         return new List<Subject>
         {
@@ -247,7 +247,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<AdminInfo> GetAdminInfos()
+    private static List<AdminInfo> GetAdminInfos()
     {
         return new List<AdminInfo>
         {
@@ -258,7 +258,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<LenochClassificationSubjectDomainMapping> GetLenochClassificationSubjectDomainMappings()
+    private static List<LenochClassificationSubjectDomainMapping> GetLenochClassificationSubjectDomainMappings()
     {
         return new List<LenochClassificationSubjectDomainMapping>
         {
@@ -271,7 +271,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<Picture> GetPictures()
+    private static List<Picture> GetPictures()
     {
         return new List<Picture>
         {
@@ -338,7 +338,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Language> GetLanguages()
+    private static List<Language> GetLanguages()
     {
         return new List<Language>
         {
@@ -421,7 +421,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Office> GetOffices()
+    private static List<Office> GetOffices()
     {
         return new List<Office>()
         {
@@ -472,7 +472,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Entry> GetEntries()
+    private static List<Entry> GetEntries()
     {
         return new List<Entry>
         {
@@ -813,7 +813,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<LenochClassification> GetLenochClassifications()
+    private static List<LenochClassification> GetLenochClassifications()
     {
         return new List<LenochClassification>
         {
@@ -886,7 +886,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Collection> GetCollections()
+    private static List<Collection> GetCollections()
     {
         return new List<Collection>
         {
@@ -967,7 +967,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<ConceptSystem> GetConceptSystems()
+    private static List<ConceptSystem> GetConceptSystems()
     {
         return new List<ConceptSystem>
         {
@@ -1004,7 +1004,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<ConceptSystemPosition> GetConceptSystemPositions()
+    private static List<ConceptSystemPosition> GetConceptSystemPositions()
     {
         return new List<ConceptSystemPosition>
         {
@@ -1049,7 +1049,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<UserAccount> GetUserAccounts()
+    private static List<UserAccount> GetUserAccounts()
     {
         return new List<UserAccount>
         {
@@ -1092,7 +1092,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Classification> GetClassifications()
+    private static List<Classification> GetClassifications()
     {
         return new List<Classification>
         {
@@ -1239,7 +1239,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IList<Glossary> GetGlossaries()
+    private static List<Glossary> GetGlossaries()
     {
         return new List<Glossary>
         {
@@ -1312,7 +1312,7 @@ public static class DatabaseHelper
         };
     }
 
-    private static IEnumerable<EntryReference> GetEntryReferences()
+    private static List<EntryReference> GetEntryReferences()
     {
         return new List<EntryReference>
         {
@@ -1367,7 +1367,7 @@ public static class DatabaseHelper
         ];
     }
 
-    private static IList<Statistic> GetStatistics()
+    private static List<Statistic> GetStatistics()
     {
         return new List<Statistic>
         {

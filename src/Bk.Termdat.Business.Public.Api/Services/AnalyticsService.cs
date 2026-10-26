@@ -16,11 +16,12 @@ public class AnalyticsService : IAnalyticsService
 
     public AnalyticsService(ILogger<AnalyticsService> logger, IOptions<AnalyticsOptions> analyticsOptions, IHttpClientFactory httpClientFactory)
     {
+        ArgumentNullException.ThrowIfNull(analyticsOptions);
+
         this.logger = logger;
         this.httpClientFactory = httpClientFactory;
         this.analyticsOptions = analyticsOptions.Value;
     }
-
     public async Task TrackEvent(string category, string action, string? name = null)
     {
         if (!analyticsOptions.Enabled)
@@ -30,7 +31,7 @@ public class AnalyticsService : IAnalyticsService
 
         try
         {
-            var client = httpClientFactory.CreateClient();
+            using var client = httpClientFactory.CreateClient();
 
             var parameters = HttpUtility.ParseQueryString(string.Empty);
             parameters["idsite"] = analyticsOptions.SiteId;
@@ -47,7 +48,7 @@ public class AnalyticsService : IAnalyticsService
             using var response = await client.GetAsync($"{analyticsOptions.Url}?{parameters}");
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception($"Failed to track analytics event. HttpError:{response.StatusCode}");
+                throw new HttpRequestException($"Failed to track analytics event. HttpError:{response.StatusCode}");
             }
         }
         catch (Exception e)

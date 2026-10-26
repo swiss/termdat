@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services.Interfaces;
@@ -17,6 +18,8 @@ public class PopulateModifiedAndCreatedAction : IMappingAction<SearchQuery, Sear
 
     public void Process(SearchQuery source, SearchFilterParameter destination, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         if (!authorizationService.IsWriter())
         {
             return;

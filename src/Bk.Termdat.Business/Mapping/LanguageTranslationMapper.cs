@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bk.Termdat.Business.Domain.Models;
@@ -18,6 +19,9 @@ public class LanguageTranslationMapper : ILanguageTranslationMapper
     }
     public LanguageTranslation Map(int languageId, ILanguageModification languageModification, Language language)
     {
+        ArgumentNullException.ThrowIfNull(language);
+        ArgumentNullException.ThrowIfNull(languageModification);
+
         var translation = new LanguageTranslation
         {
             LanguageId = languageId > 0 ? languageId : language.Id
@@ -26,27 +30,27 @@ public class LanguageTranslationMapper : ILanguageTranslationMapper
         if (IsoCode.De.IsEqualTo(language.IsoCode))
         {
             translation.Name = languageModification.DescriptionDe;
-            translation.IsoCode = IsoCode.De.ToString().ToUpper();
+            translation.IsoCode = IsoCode.De.ToString().ToUpperInvariant();
         }
         else if (IsoCode.Fr.IsEqualTo(language.IsoCode))
         {
             translation.Name = languageModification.DescriptionFr;
-            translation.IsoCode = IsoCode.Fr.ToString().ToUpper();
+            translation.IsoCode = IsoCode.Fr.ToString().ToUpperInvariant();
         }
         else if (IsoCode.It.IsEqualTo(language.IsoCode))
         {
             translation.Name = languageModification.DescriptionIt;
-            translation.IsoCode = IsoCode.It.ToString().ToUpper();
+            translation.IsoCode = IsoCode.It.ToString().ToUpperInvariant();
         }
         else if (IsoCode.Rm.IsEqualTo(language.IsoCode))
         {
             translation.Name = languageModification.DescriptionRm;
-            translation.IsoCode = IsoCode.Rm.ToString().ToUpper();
+            translation.IsoCode = IsoCode.Rm.ToString().ToUpperInvariant();
         }
         else if (IsoCode.En.IsEqualTo(language.IsoCode))
         {
             translation.Name = languageModification.DescriptionEn;
-            translation.IsoCode = IsoCode.En.ToString().ToUpper();
+            translation.IsoCode = IsoCode.En.ToString().ToUpperInvariant();
         }
         else
         {

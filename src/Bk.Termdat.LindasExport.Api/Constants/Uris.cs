@@ -1,5 +1,7 @@
 namespace Bk.Termdat.LindasExport.Api.Constants;
 
+#pragma warning disable S1075 // URIs are standard RDF vocabulary identifiers
+#pragma warning disable S5332 // HTTP URIs are required RDF vocabulary identifiers
 public static class Uris
 {
     public const string Type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -92,3 +94,5 @@ public static class Uris
     public const string AccessUrl = "https://register.ld.admin.ch/sparql/";
     public const string Void = "https://register.ld.admin.ch/.well-known/void";
 }
+#pragma warning restore S5332
+#pragma warning restore S1075

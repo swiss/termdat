@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Domain.Projections;
@@ -22,14 +23,19 @@ public class SearchIndexEntryEventConsumer
 
     public Task Consume(SearchIndexEntryAddEvent context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         var indexEntries = context.IndexEntries as IndexEntry[] ?? context.IndexEntries.ToArray();
 
-        if (!indexEntries.Any())
+        if (indexEntries.Length == 0)
         {
             return Task.CompletedTask;
         }
 
-        logger.LogInformation("Received message to add entry with id='{EntryId}'", indexEntries[0].EntryId);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Received message to add entry with id='{EntryId}'", indexEntries[0].EntryId);
+        }
 
         searchRepository.AddEntries(indexEntries);
 
@@ -38,14 +44,19 @@ public class SearchIndexEntryEventConsumer
 
     public Task Consume(SearchIndexEntryUpdateEvent context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         var indexEntries = context.IndexEntries as IndexEntry[] ?? context.IndexEntries.ToArray();
 
-        if (!indexEntries.Any())
+        if (indexEntries.Length == 0)
         {
             return Task.CompletedTask;
         }
 
-        logger.LogInformation("Received message to update entry with id='{EntryId}'", indexEntries[0].EntryId);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Received message to update entry with id='{EntryId}'", indexEntries[0].EntryId);
+        }
 
         searchRepository.UpdateEntries(indexEntries);
 
@@ -54,14 +65,19 @@ public class SearchIndexEntryEventConsumer
 
     public async Task Consume(SearchIndexEntryUpdateByEntryIdsEvent context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         var entryIds = context.EntryIds.ToList();
 
-        if (!entryIds.Any())
+        if (entryIds.Count == 0)
         {
             return;
         }
 
-        logger.LogInformation("Received message to update all entries of ids='[{EntryIds}]'", string.Join(',', entryIds));
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Received message to update all entries of ids='[{EntryIds}]'", string.Join(',', entryIds));
+        }
 
         var indexEntries = await entryRepository.GetByIdsForIndex(entryIds);
 
@@ -70,14 +86,19 @@ public class SearchIndexEntryEventConsumer
 
     public Task Consume(SearchIndexEntryDeleteEvent context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         var entryIds = context.EntryIds as int[] ?? context.EntryIds.ToArray();
 
-        if (!entryIds.Any())
+        if (entryIds.Length == 0)
         {
             return Task.CompletedTask;
         }
 
-        logger.LogInformation("Received message to delete entries with ids='[{EntryIds}]'", string.Join(',', entryIds));
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Received message to delete entries with ids='[{EntryIds}]'", string.Join(',', entryIds));
+        }
 
         searchRepository.DeleteEntries(entryIds);
 

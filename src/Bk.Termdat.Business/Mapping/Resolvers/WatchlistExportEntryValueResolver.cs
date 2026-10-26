@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using Bk.Termdat.Business.Domain.Models;
@@ -16,6 +17,8 @@ public class WatchlistExportEntryValueResolver : IValueResolver<Entry, object, s
 
     public string Resolve(Entry source, object destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         var currentLang = cultureService.GetCurrentIsoCode();
         var entryLanguage = source.Translations.OrderBy(t => t.Sequence).FirstOrDefault(t => t.Language.IsoCode == currentLang);
         if (entryLanguage is null)

@@ -1,12 +1,15 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bk.Termdat.Infrastructure.DataSource.Configuration;
 
-public class NewsItemConfiguration : EntityConfiguration<NewsItem>
+public class NewsItemConfiguration : EntityChangeTrackingConfiguration<NewsItem>
 {
-    protected override void ConfigureEntity(EntityTypeBuilder<NewsItem> builder)
+    protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<NewsItem> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(ni => ni.ValidFrom)
            .IsRequired();
 

@@ -13,7 +13,7 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class ConceptSystemPositionServiceTests
+internal class ConceptSystemPositionServiceTests
 {
     private ConceptSystemPositionService conceptSystemService;
     private IConceptSystemPositionRepository conceptSystemPositionRepositoryMock;

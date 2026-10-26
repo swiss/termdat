@@ -30,7 +30,7 @@ public class TestableTbxDataService : TbxDataService
     {
     }
 
-    public string AdjustLinkStructureAccessor(string source)
+    public static string AdjustLinkStructureAccessor(string source)
     {
         return AdjustLinkStructure(source);
     }

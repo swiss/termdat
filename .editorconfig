@@ -159,14 +159,81 @@ dotnet_diagnostic.IDE0072.severity = none
 dotnet_diagnostic.IDE0080.severity = error
 dotnet_diagnostic.IDE0100.severity = error
 dotnet_diagnostic.IDE0110.severity = suggestion
+
+dotnet_diagnostic.CA1031.severity = none # CA1031: we don't know what exception
+dotnet_diagnostic.CA1055.severity = none # CA1055: URI return values should not be strings
+dotnet_diagnostic.CA1056.severity = none # CA1056: URI properties should not be strings
+dotnet_diagnostic.CA1304.severity = none # CA1304: produces false positives (as we set the current ui culture in GetText() and GetDescription()
+dotnet_diagnostic.CA1308.severity = none #normalizing to lower case in this case is fine (issues with locale will not occure)
+# CA1515 flags public types as candidates for internal, but test builder classes are
+# intentionally public for cross ProjectReference reuse between test projects.
+dotnet_diagnostic.CA1515.severity = suggestion
+dotnet_diagnostic.CS1591.severity = none
+dotnet_diagnostic.CA1848.severity = none # CA1848: Loger message delegates
+dotnet_diagnostic.CA1861.severity = none # CA1861: Avoid constant arrays as arguments
+dotnet_diagnostic.CA1863.severity = none # CA1863: no need to cache these templates in our case
+dotnet_diagnostic.CA2007.severity = none # CA2007: Do not directly await a Task (enforce ConfigureAwait())
+dotnet_diagnostic.CA2227.severity = none # CA2227: Collections can not be readonly (needed by EF)
+dotnet_diagnostic.CA2234.severity = none # CA2234: Pass system uri objects instead of strings
+
 csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:warning
 dotnet_code_quality_unused_parameters = all:suggestion
 dotnet_remove_unnecessary_suppression_exclusions = all:warning
 
+#Sonar Rules
+dotnet_diagnostic.S1186.severity = none #Creates false positives in EF migrations
+dotnet_diagnostic.S3267.severity = none #Lots of false positives
+dotnet_diagnostic.S3925.severity = none #Required constructor for exceptions is obsolete
+dotnet_diagnostic.S6608.severity = none #Linq First() over ElementAt(0) is fine in this context
+
 # Other features
 file_header_template = unset
 dotnet_style_namespace_match_folder = true:suggestion
+
+[src/**/Migrations/**.cs]
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1861.severity = none
+
+[src/**/Repositories/**.cs]
+# StringComparison and CultureInfo can not be interpreted by EF Core
+dotnet_diagnostic.CA1304.severity = none
+dotnet_diagnostic.CA1305.severity = none
+dotnet_diagnostic.CA1307.severity = none
+dotnet_diagnostic.CA1309.severity = none
+dotnet_diagnostic.CA1311.severity = none
+dotnet_diagnostic.CA1862.severity = none
+
+# Prevent NotSupportedExceptions when using EF Core
+dotnet_diagnostic.CA1860.severity = none
+dotnet_diagnostic.S3358.severity = none
+
+[src/**/Domain/Models/**.cs]
+dotnet_diagnostic.CA1819.severity = none # we allow array types in EF models
+
+[src/**/Domain/Projections/**.cs]
+dotnet_diagnostic.CA1819.severity = none # we allow array types in EF models
+
+[src/**/Resource/Models/**.cs]
+dotnet_diagnostic.CA1819.severity = none # we allow array types in EF models
+
+[src/**/Application/Models/**.cs]
+dotnet_diagnostic.CA1819.severity = none # compatibility with EF models
+
+[src/**/Configuration/**.cs]
+dotnet_diagnostic.CA1819.severity = none
+
+[src/**/Configurations/**.cs]
+dotnet_diagnostic.CA1812.severity = none
+
+[src/*.Test*/**.cs]
+dotnet_diagnostic.CA1024.severity = none
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1707.severity = none #for our unit tests, we need method names with underscores
+dotnet_diagnostic.CA1852.severity = none
+dotnet_diagnostic.CA1873.severity = none
+
+dotnet_diagnostic.S6562.severity = none
 
 # name all constant fields using PascalCase
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion

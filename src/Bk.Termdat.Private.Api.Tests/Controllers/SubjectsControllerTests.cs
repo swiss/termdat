@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Private.Api.Tests.Controllers;
 
 [TestFixture]
-public class SubjectsControllerTests
+internal class SubjectsControllerTests
 {
     private SubjectsController subjectController;
 

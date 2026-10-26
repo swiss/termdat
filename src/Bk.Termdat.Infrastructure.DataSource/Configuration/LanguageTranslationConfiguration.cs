@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class LanguageTranslationConfiguration : EntityConfiguration<LanguageTran
 {
     protected override void ConfigureEntity(EntityTypeBuilder<LanguageTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(lt => lt.Name)
             .HasMaxLength(1000)
             .IsRequired();

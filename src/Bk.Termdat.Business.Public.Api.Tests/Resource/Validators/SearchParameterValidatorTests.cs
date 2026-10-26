@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Resource.Validators;
 
 [TestFixture]
-public class SearchParameterValidatorTests
+internal class SearchParameterValidatorTests
 {
     private SearchParameterValidator validator;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ public class LanguageDescriptionMapper : ILanguageDescriptionMapper
     public static void MapTranslationsToLanguageDescription<T>(ILanguageDescription dest, ICollection<T> translations)
         where T : IEntityNameTranslation
     {
+        ArgumentNullException.ThrowIfNull(dest);
+
         dest.DescriptionDe = translations.FirstOrDefault(t => IsoCode.De.IsEqualTo(t.Language.IsoCode))?.Name;
         dest.DescriptionFr = translations.FirstOrDefault(t => IsoCode.Fr.IsEqualTo(t.Language.IsoCode))?.Name;
         dest.DescriptionIt = translations.FirstOrDefault(t => IsoCode.It.IsEqualTo(t.Language.IsoCode))?.Name;
@@ -27,7 +30,7 @@ public class LanguageDescriptionMapper : ILanguageDescriptionMapper
         dest.DescriptionEn = translations.FirstOrDefault(t => IsoCode.En.IsEqualTo(t.Language.IsoCode))?.Name;
     }
 
-    public async Task<IEnumerable<T>> Map<T>(ILanguageDescription languageDescription) where T : IEntityNameTranslation, new()
+    public async Task<IEnumerable<T>> Map<T>(ILanguageDescription languageDescription) where T : class, IEntityNameTranslation, new()
     {
         var languages = (await languageRepository.GetAll()).ToList();
 

@@ -24,7 +24,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 [TestFixture]
 internal class EntryServiceTests
 {
-    private IEntryService service;
+    private EntryService service;
 
     private readonly IEntryValidationService entryValidationServiceMock = Substitute.For<IEntryValidationService>();
     private readonly IIdentityService identityServiceMock = Substitute.For<IIdentityService>();
@@ -702,7 +702,7 @@ internal class EntryServiceTests
         {
             new() { Id = 1 },
         });
-        var exception = new Exception("CATCH ME");
+        var exception = new ArgumentException("CATCH ME");
         searchQueueClientMock.When(x => x.QueueIndexUpdate(Arg.Any<IEnumerable<IndexEntry>>()))
             .Do(_ => throw exception);
 
@@ -712,7 +712,7 @@ internal class EntryServiceTests
         await unitOfWorkMock.Received(1).SaveChangesAsync();
         await entryRepositoryMock.Received(1).GetByIdsForIndex(Arg.Is<IEnumerable<int>>(arr => arr.SequenceEqual(ids)));
         await searchQueueClientMock.Received(1).QueueIndexUpdate(Arg.Is(indexEntries));
-        loggerMock.ReceivedWithAnyArgs(1).Log(LogLevel.Error, default, default, default, default);
+        loggerMock.Received(1).Log(LogLevel.Error, Arg.Any<EventId>(), Arg.Any<Arg.AnyType>(), Arg.Any<Exception>(), Arg.Any<Func<Arg.AnyType, Exception, string>>());
         await userAccountServiceMock.Received(1).UpdateLastAction(TestEmail);
     }
 
@@ -758,7 +758,7 @@ internal class EntryServiceTests
     public async Task Update_WithConcurrencyConflict_ThrowsConcurrencyException()
     {
         mapperMock.Map<DomainModel.Entry>(entryUpdate).Returns(new DomainModel.Entry { ConcurrencyToken = entry.ConcurrencyToken + 1 });
-        Assert.That(() => service.Update(entryUpdate), Throws.InstanceOf<ConcurrencyException>());
+        Assert.ThrowsAsync<ConcurrencyException>(async () => await service.Update(entryUpdate));
 
         await unitOfWorkMock.DidNotReceive().SaveChangesAsync();
     }
@@ -878,7 +878,7 @@ internal class EntryServiceTests
             new() { Id = 4, Deleted = true }
         });
 
-        var notDeletedRecords = service.DeleteMultiple(new[] { 2, 3, 4 });
+        var notDeletedRecords = service.DeleteMultiple([2, 3, 4]);
 
         Assert.That(notDeletedRecords.Result.Count, Is.EqualTo(1));
 
@@ -889,9 +889,8 @@ internal class EntryServiceTests
                 new() { Id = 4, Deleted = true, Locked = DateTime.UtcNow, LockedBy = "test2@termdat.ch" },
             });
 
-        notDeletedRecords = service.DeleteMultiple(new[] { 2, 3, 4 }, false);
-
-        Assert.That(notDeletedRecords.Result.Count, Is.EqualTo(2));
+        var notDeletedRecordsWithoutLockCheck = service.DeleteMultiple([2, 3, 4], false);
+        Assert.That(notDeletedRecordsWithoutLockCheck.Result.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -921,7 +920,7 @@ internal class EntryServiceTests
     {
         var ids = new[] { 1 };
         searchQueueClientMock.When(x => x.QueueIndexDelete(Arg.Is<IEnumerable<int>>(arr => arr.SequenceEqual(ids))))
-            .Do(_ => throw new Exception("CATCH ME"));
+            .Do(_ => throw new ArgumentException("CATCH ME"));
 
         entryRepositoryMock.GetByIds(Arg.Any<IEnumerable<int>>()).Returns(new List<DomainModel.Entry>
         {
@@ -932,7 +931,7 @@ internal class EntryServiceTests
 
         await unitOfWorkMock.Received(1).SaveChangesAsync();
         await searchQueueClientMock.Received(1).QueueIndexDelete(Arg.Is<IEnumerable<int>>(arr => arr.SequenceEqual(ids)));
-        loggerMock.ReceivedWithAnyArgs(1).Log(LogLevel.Error, default, default, default, default);
+        loggerMock.Received(1).Log(LogLevel.Error, Arg.Any<EventId>(), Arg.Any<Arg.AnyType>(), Arg.Any<Exception>(), Arg.Any<Func<Arg.AnyType, Exception, string>>());
     }
 
     [Test]
@@ -956,7 +955,7 @@ internal class EntryServiceTests
     [Test]
     public async Task DeleteMultiple_WithSoftForExceptionInSearchRepository_Catches()
     {
-        var exception = new Exception("CATCH ME");
+        var exception = new ArgumentException("CATCH ME");
         searchQueueClientMock.When(x => x.QueueIndexUpdate(Arg.Any<IEnumerable<IndexEntry>>()))
             .Do(_ => throw exception);
         var ids = new[] { 1 };
@@ -967,7 +966,7 @@ internal class EntryServiceTests
         await unitOfWorkMock.Received(1).SaveChangesAsync();
         await entryRepositoryMock.Received(1).GetByIdsForIndex(Arg.Is<IEnumerable<int>>(arr => arr.SequenceEqual(ids)));
         await searchQueueClientMock.Received(1).QueueIndexUpdate(Arg.Is(indexEntries));
-        loggerMock.ReceivedWithAnyArgs(1).Log(LogLevel.Error, default, default, default, default);
+        loggerMock.Received(1).Log(LogLevel.Error, Arg.Any<EventId>(), Arg.Any<Arg.AnyType>(), Arg.Any<Exception>(), Arg.Any<Func<Arg.AnyType, Exception, string>>());
         await userAccountServiceMock.Received(1).UpdateLastAction(TestEmail);
     }
 
@@ -1623,6 +1622,7 @@ internal class EntryServiceTests
 
     private static IMapper GetConfiguredMapper()
     {
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         return new MapperConfiguration(x =>
         {
             x.CreateMap<DomainModel.Entry, ResourceModel.EntryDetail>();
@@ -1632,6 +1632,6 @@ internal class EntryServiceTests
             x.CreateMap<DomainModel.LenochClassification, ResourceModel.LenochClassificationSummary>();
             x.CreateMap<DomainModel.Glossary, ResourceModel.GlossarySummary>();
             x.CreateMap<DomainModel.AdminInfo, ResourceModel.AdminInfoSummary>();
-        }, LoggerFactory.Create(_ => { })).CreateMapper();
+        }, loggerFactory).CreateMapper();
     }
 }

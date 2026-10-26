@@ -59,7 +59,7 @@ internal class StatisticRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
            .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new StatisticRepository(createContext);
 
         var newStatistic = new Statistic
@@ -130,15 +130,20 @@ internal class StatisticRepositoryTests
         };
 
         await statisticRepository.Create(newStatistic);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        var statisticCount = context.Statistics.Count();
+        var statisticCount = await context.Statistics.CountAsync();
 
         statisticRepository.Delete(newStatistic);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        Assert.That(context.Statistics.Count(), Is.EqualTo(statisticCount - 1));
-        Assert.That(context.Statistics, Is.Not.Contains(newStatistic));
+        var statisticCountNew = await context.Statistics.CountAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(statisticCountNew, Is.EqualTo(statisticCount - 1));
+            Assert.That(context.Statistics, Is.Not.Contains(newStatistic));
+        });
     }
 
     [Test]
@@ -175,18 +180,23 @@ internal class StatisticRepositoryTests
         };
 
         await statisticRepository.Create(anotherStatistic);
-        context.SaveChanges();
-
-        var statisticCount = context.Statistics.Count();
+        await context.SaveChangesAsync();
 
         var statisticArray = new Statistic[] { newStatistic, anotherStatistic };
 
-        statisticRepository.DeleteStatistics(statisticArray);
-        context.SaveChanges();
+        var statisticCount = await context.Statistics.CountAsync();
 
-        Assert.That(context.Statistics.Count(), Is.EqualTo(statisticCount - 2));
-        Assert.That(context.Statistics, Is.Not.Contains(newStatistic));
-        Assert.That(context.Statistics, Is.Not.Contains(anotherStatistic));
+        statisticRepository.DeleteStatistics(statisticArray);
+        await context.SaveChangesAsync();
+
+        var statisticCountNew = await context.Statistics.CountAsync();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(statisticCountNew, Is.EqualTo(statisticCount - 2));
+            Assert.That(context.Statistics, Is.Not.Contains(newStatistic));
+            Assert.That(context.Statistics, Is.Not.Contains(anotherStatistic));
+        });
     }
 
     [Test]
@@ -298,7 +308,7 @@ internal class StatisticRepositoryTests
 
         await statisticRepository.Create(oldSearch);
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         var statistics = await statisticRepository.GetObsoleteStatistics();
 

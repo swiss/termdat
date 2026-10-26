@@ -1,3 +1,4 @@
+using Bk.Termdat.Business.Resource.Models;
 using FluentValidation;
 
 namespace Bk.Termdat.Business.Resource.Validators;

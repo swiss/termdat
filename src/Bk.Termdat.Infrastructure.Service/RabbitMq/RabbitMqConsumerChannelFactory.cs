@@ -10,6 +10,8 @@ public class RabbitMqConsumerChannelFactory : IRabbitMqChannelFactory
 
     public RabbitMqConsumerChannelFactory(IConnectionFactory connectionFactory)
     {
+        ArgumentNullException.ThrowIfNull(connectionFactory);
+
         connection = connectionFactory.CreateConnectionAsync().Result;
 
         using var tempChannel = connection.CreateChannelAsync().Result;

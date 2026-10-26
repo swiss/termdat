@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -20,6 +21,8 @@ public class MessageQueueBackgroundService : BackgroundService
 
     public MessageQueueBackgroundService(IRabbitMqChannelFactory channelFactory, IServiceScopeFactory scopeFactory)
     {
+        ArgumentNullException.ThrowIfNull(channelFactory);
+
         queueName = channelFactory.GetQueueName();
         channel = channelFactory.CreateChannel().Result;
         this.scopeFactory = scopeFactory;
@@ -39,25 +42,25 @@ public class MessageQueueBackgroundService : BackgroundService
 
             if (routingKey == "search.index.add")
             {
-                var data = JsonSerializer.Deserialize<SearchIndexEntryAddEvent>(message)!;
+                var data = JsonSerializer.Deserialize<SearchIndexEntryAddEvent>(message);
                 await consumerService.Consume(data);
             }
 
             if (routingKey == "search.index.update")
             {
-                var data = JsonSerializer.Deserialize<SearchIndexEntryUpdateEvent>(message)!;
+                var data = JsonSerializer.Deserialize<SearchIndexEntryUpdateEvent>(message);
                 await consumerService.Consume(data);
             }
 
             if (routingKey == "search.index.update.byids")
             {
-                var data = JsonSerializer.Deserialize<SearchIndexEntryUpdateByEntryIdsEvent>(message)!;
+                var data = JsonSerializer.Deserialize<SearchIndexEntryUpdateByEntryIdsEvent>(message);
                 await consumerService.Consume(data);
             }
 
             if (routingKey == "search.index.delete")
             {
-                var data = JsonSerializer.Deserialize<SearchIndexEntryDeleteEvent>(message)!;
+                var data = JsonSerializer.Deserialize<SearchIndexEntryDeleteEvent>(message);
                 await consumerService.Consume(data);
             }
 

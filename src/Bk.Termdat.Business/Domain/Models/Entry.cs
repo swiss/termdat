@@ -8,8 +8,8 @@ public class Entry : EntityChangeTracking, IMultiLingualEntity<EntryLanguage>
     public Status Status { get; set; }
     public Reliability Reliability { get; set; }
     public int? Identification { get; set; }
-    public string Comment { get; set; }
-    public string AdminInfo { get; set; }
+    public string? Comment { get; set; }
+    public string? AdminInfo { get; set; }
 
     public bool Deleted { get; set; }
 
@@ -18,7 +18,7 @@ public class Entry : EntityChangeTracking, IMultiLingualEntity<EntryLanguage>
     public int? ConceptSystemPositionId { get; set; }
 
     public DateTime? Locked { get; set; }
-    public string LockedBy { get; set; }
+    public string? LockedBy { get; set; }
 
     public Collection Collection { get; set; }
     public Office Office { get; set; }

@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace Bk.Termdat.Private.Api.HostedServices;
 
+#pragma warning disable CA1711
 public class BackgroundTaskQueue : IBackgroundTaskQueue
 {
+#pragma warning restore CA1711
     private readonly Channel<Func<CancellationToken, IServiceProvider, Task>> queue;
 
     public BackgroundTaskQueue(int capacity)

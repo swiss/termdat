@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.LindasExport.Api.Constants;
 using Bk.Termdat.LindasExport.Api.Extensions;
 using VDS.RDF;
@@ -11,7 +12,9 @@ public class Reference
 
     public Triple GetTriple(IGraph graph, IUriNode subject)
     {
+        ArgumentNullException.ThrowIfNull(graph);
+
         var referencePredicate = graph.CreateUriNode(UriFactory.Create(Type.GetUri()));
-        return new Triple(subject, referencePredicate, graph.CreateUriNode(UriFactory.Create(string.Format(Uris.TermdatEntryUriFormat, Id))));
+        return new Triple(subject, referencePredicate, graph.CreateUriNode(UriFactory.Create(string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryUriFormat, Id))));
     }
 }

@@ -6,28 +6,28 @@ namespace Bk.Termdat.Business.Services;
 // This service should only be used for background jobs where no user context (HttpContext) is available.
 public class StaticIdentityService : IIdentityService
 {
-    public required string CurrentEmail { get; init; }
-    public required string CurrentLastName { get; init; }
-    public required string CurrentFirstName { get; init; }
-    public required string CurrentRole { get; init; }
+    public required string Email { get; init; }
+    public required string LastName { get; init; }
+    public required string FirstName { get; init; }
+    public required string Role { get; init; }
 
     public string GetCurrentEmail()
     {
-        return CurrentEmail;
+        return Email;
     }
 
     public string GetCurrentLastName()
     {
-        return CurrentLastName;
+        return LastName;
     }
 
     public string GetCurrentFirstName()
     {
-        return CurrentFirstName;
+        return FirstName;
     }
 
     public string GetCurrentRole()
     {
-        return CurrentRole;
+        return Role;
     }
 }

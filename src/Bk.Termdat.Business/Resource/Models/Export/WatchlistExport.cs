@@ -8,5 +8,5 @@ public class WatchlistExport
     public string TitleSuffix { get; set; }
     public string Date { get; set; }
     public int EntryCount { get; set; }
-    public List<WatchlistExportEntry> Entries { get; set; } = new();
+    public IList<WatchlistExportEntry> Entries { get; set; } = [];
 }

@@ -1,5 +1,4 @@
 using Bk.Termdat.Business.Services;
-using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Configuration;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -8,9 +7,9 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class EntryNotePatternServiceTest
+internal class EntryNotePatternServiceTest
 {
-    private IEntryNotePatternService service;
+    private EntryNotePatternService service;
     private readonly IOptions<EntryNotePatternOptions> entryNotePatternOptionsMock = Substitute.For<IOptions<EntryNotePatternOptions>>();
 
     [SetUp]

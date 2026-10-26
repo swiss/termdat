@@ -17,7 +17,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Mapping;
 
 [TestFixture]
-public class PublicApiMappingProfileTests
+internal class PublicApiMappingProfileTests
 {
     private IMapper mapper;
     private ITermdatUrlService termdatUrlServiceMock;
@@ -35,6 +35,7 @@ public class PublicApiMappingProfileTests
         termdatUrlServiceMock = Substitute.For<ITermdatUrlService>();
         backendTextHelperServiceMock = Substitute.For<IBackendTextHelperService>();
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var services = new ServiceCollection();
         services.AddScoped(_ => termdatUrlServiceMock);
         services.AddScoped(_ => backendTextHelperServiceMock);
@@ -48,7 +49,7 @@ public class PublicApiMappingProfileTests
         {
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new PublicApiMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
         mapper = config.CreateMapper();
     }
 
@@ -185,7 +186,9 @@ public class PublicApiMappingProfileTests
         backendTextHelperServiceMock.GetStatusText(entry.Status, languageCode).Returns(statusText);
         var reliabilityText = fixture.Create<string>();
         backendTextHelperServiceMock.GetReliabilityText(entry.Reliability, languageCode).Returns(reliabilityText);
-
+        Assert.That(entry.Translations, Is.Not.Null);
+        Assert.That(entry.Translations, Is.Not.Empty);
+        Assert.That(entry.Translations.All(t => t.Language != null), Is.True);
         var result = mapper.Map<EntryDetail>(entry, options =>
         {
             options.Items.Add(PublicApiMappingProfile.LanguageId, languageId);

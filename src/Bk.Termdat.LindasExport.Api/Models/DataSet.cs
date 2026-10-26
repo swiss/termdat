@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.LindasExport.Api.Constants;
 using VDS.RDF;
 
@@ -6,6 +7,12 @@ namespace Bk.Termdat.LindasExport.Api.Models;
 public static class DataSet
 {
     public static IEnumerable<Triple> GetTriples(IGraph graph)
+    {
+        ArgumentNullException.ThrowIfNull(graph);
+        return GetTriplesIterator(graph);
+    }
+
+    private static IEnumerable<Triple> GetTriplesIterator(IGraph graph)
     {
         var subject = graph.CreateUriNode(UriFactory.Create(Uris.DataSetUri));
 
@@ -87,7 +94,7 @@ public static class DataSet
         yield return new Triple(
             subject,
             graph.CreateUriNode(UriFactory.Create(Uris.DateModified)),
-            graph.CreateLiteralNode(DateTime.Now.ToString("yyyy-MM-dd"), UriFactory.Create(Uris.Date)));
+            graph.CreateLiteralNode(DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture), UriFactory.Create(Uris.Date)));
 
         yield return new Triple(
             subject,

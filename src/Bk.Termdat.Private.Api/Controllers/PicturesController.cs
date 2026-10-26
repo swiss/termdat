@@ -17,7 +17,7 @@ public class PicturesController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult> GetPicture([FromRoute] int id)
+    public async Task<ActionResult> GetPicture([FromHeader(Name = "If-None-Match")] string? ifNoneMatch, [FromRoute] int id)
     {
         var picture = await pictureService.GetPicture(id);
 
@@ -26,7 +26,7 @@ public class PicturesController : ControllerBase
             return NotFound();
         }
 
-        if (HttpContext.Request.Headers.Keys.Contains("If-None-Match") && picture.EntityTag == HttpContext.Request.Headers["If-None-Match"].ToString())
+        if (ifNoneMatch != null && picture.EntityTag == ifNoneMatch)
         {
             return new StatusCodeResult(304);
         }

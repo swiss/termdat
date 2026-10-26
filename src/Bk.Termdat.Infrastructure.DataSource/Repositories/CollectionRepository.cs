@@ -47,6 +47,8 @@ public class CollectionRepository : ICollectionRepository
 
     public async Task UpdateDeletedFlag(Collection collection, bool deleted, string modifiedBy)
     {
+        ArgumentNullException.ThrowIfNull(collection);
+
         var modified = DateTime.UtcNow;
         collection.Deleted = deleted;
         collection.Modified = modified;
@@ -158,6 +160,9 @@ public class CollectionRepository : ICollectionRepository
 
     public void Update(Collection existing, Collection update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         UpdateTranslationHelper.UpdateTranslations(existing.Translations, update.Translations, existing.Id, "Collection");

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +57,9 @@ public class ConceptSystemRepository : IConceptSystemRepository
 
     public void Update(ConceptSystem existing, ConceptSystem update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         existing.Collection = update.Collection;
 

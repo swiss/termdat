@@ -25,7 +25,7 @@ public class LindasExportService : ILindasExportService
         var failedTargets = new List<string>();
         var collectionIds = (await collectionRepository.GetIdsForLindasExport()).ToList();
 
-        foreach (var target in termdatGraphService.Targets)
+        foreach (var target in termdatGraphService.GetTargets())
         {
             try
             {
@@ -46,7 +46,7 @@ public class LindasExportService : ILindasExportService
         return new LindasExportResult(successfulTargets, failedTargets);
     }
 
-    private async Task ExportTarget(string target, IReadOnlyCollection<int> collectionIds, CancellationToken ct)
+    private async Task ExportTarget(string target, List<int> collectionIds, CancellationToken ct)
     {
         await termdatGraphService.DeleteGraph(target, ct);
         await termdatGraphService.AddDataSet(target, ct);
@@ -56,9 +56,12 @@ public class LindasExportService : ILindasExportService
         {
             ct.ThrowIfCancellationRequested();
 
-            logger.LogInformation(
-                "Exporting collection {Current}/{Total} to {TargetName} - CollectionId={CollectionId}",
-                current++, collectionIds.Count, target, id);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation(
+                    "Exporting collection {Current}/{Total} to {TargetName} - CollectionId={CollectionId}",
+                    current++, collectionIds.Count, target, id);
+            }
 
             var collection = await collectionRepository.GetByIdForLindasExport(id);
             if (collection is null)

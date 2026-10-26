@@ -13,7 +13,14 @@ public class Reliability
 
     public IEnumerable<Triple> GetTriples(IGraph graph, IUriNode subject)
     {
-        var reliabilityCodeSubject = graph.CreateUriNode(UriFactory.Create(string.Format(
+        ArgumentNullException.ThrowIfNull(graph);
+
+        return GetTriplesIterator(graph, subject);
+    }
+
+    private IEnumerable<Triple> GetTriplesIterator(IGraph graph, IUriNode subject)
+    {
+        var reliabilityCodeSubject = graph.CreateUriNode(UriFactory.Create(string.Format(CultureInfo.InvariantCulture,
             Uris.TermdatEntryAdditionUriFormat,
             Uris.TermdatReliabilityCodeUriAddition, Code)));
 
@@ -29,7 +36,7 @@ public class Reliability
             graph.CreateLiteralNode(Code));
 
         // Names
-        if (Names is not null && Names.Any())
+        if (Names is not null && Names.Count > 0)
         {
             var namePredicate = graph.CreateUriNode(UriFactory.Create(Uris.Name));
             foreach (var name in Names.Where(item => !string.IsNullOrWhiteSpace(item.Value)))

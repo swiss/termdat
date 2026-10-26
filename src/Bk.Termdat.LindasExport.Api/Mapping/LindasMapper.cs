@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.LindasExport.Api.Extensions;
 using Bk.Termdat.LindasExport.Api.Interfaces;
@@ -16,6 +17,8 @@ public class LindasMapper : ILindasMapper
 {
     public Collection Map(Business.Domain.Models.Collection collection)
     {
+        ArgumentNullException.ThrowIfNull(collection);
+
         var sparqlCollection = new Collection
         {
             Code = collection.Code,
@@ -54,7 +57,7 @@ public class LindasMapper : ILindasMapper
             },
             Reliability = new Reliability
             {
-                Code = ((int)entry.Reliability).ToString(),
+                Code = ((int)entry.Reliability).ToString(CultureInfo.InvariantCulture),
                 Names = Reliability.GetNamesByReliability(entry.Reliability),
             },
             Glossaries = entry.Glossaries.Select(glossary =>
@@ -81,7 +84,7 @@ public class LindasMapper : ILindasMapper
         return mapped;
     }
 
-    private static ICollection<Domain> MapSubjectsAndDomains(ICollection<Subject> subjects,
+    private static List<Domain> MapSubjectsAndDomains(ICollection<Subject> subjects,
         ICollection<Business.Domain.Models.Domain> domains)
     {
         var result = subjects.Select(subject =>

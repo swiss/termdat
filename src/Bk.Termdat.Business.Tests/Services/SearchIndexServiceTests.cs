@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class SearchIndexServiceTests
+internal class SearchIndexServiceTests
 {
     private SearchIndexService searchIndexService;
     private IOptions<SearchOptions> searchOptionsMock;

@@ -88,7 +88,7 @@ internal class LanguageRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new LanguageRepository(createContext);
 
         var newLanguage = new Language

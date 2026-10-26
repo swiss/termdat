@@ -22,7 +22,7 @@ internal class TermdatGraphServiceTests
     private readonly ISparqlClientFactory sparqlClientFactory = Substitute.For<ISparqlClientFactory>();
     private readonly ILindasOperationExecutor operationExecutor = Substitute.For<ILindasOperationExecutor>();
     private readonly IChunkDelay chunkDelay = Substitute.For<IChunkDelay>();
-    private ITermdatGraphService graphService = null!;
+    private TermdatGraphService graphService = null!;
     private static readonly CancellationToken ct = CancellationToken.None;
 
     [SetUp]
@@ -66,7 +66,7 @@ internal class TermdatGraphServiceTests
     [Test]
     public void Targets_ShouldReturnConfiguredTargets()
     {
-        Assert.That(graphService.Targets, Is.EqualTo(new[] { Target }));
+        Assert.That(graphService.GetTargets(), Is.EqualTo(new[] { Target }));
     }
 
     [Test]

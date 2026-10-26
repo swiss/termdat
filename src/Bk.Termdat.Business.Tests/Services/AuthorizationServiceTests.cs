@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class AuthorizationServiceTests
+internal class AuthorizationServiceTests
 {
     private AuthorizationService authorizationService;
 

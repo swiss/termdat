@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Private.Api.Tests.Controllers;
 
 [TestFixture]
-public class SourceTemplatesControllerTests
+internal class SourceTemplatesControllerTests
 {
     private SourceTemplatesController controller;
     private ISourceTemplateService sourceTemplateServiceMock;

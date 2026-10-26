@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class FileImportServiceTests
+internal class FileImportServiceTests
 {
     [SetUp]
     public void SetUp()
@@ -76,7 +76,7 @@ public class FileImportServiceTests
     public async Task IsFileValid_WithXlsxFile_ShouldDelegateToExcelDataService()
     {
         var sut = CreateService();
-        var workbook = new XLWorkbook();
+        using var workbook = new XLWorkbook();
         var expectedErrors = new List<KeyValuePair<string, string>>();
 
         formFileMock.FileName.Returns("test.xLSx");
@@ -170,7 +170,7 @@ public class FileImportServiceTests
     public async Task ImportDocument_WithXlsxDocument_ShouldDelegateToExcelDataService()
     {
         var sut = CreateService();
-        var workbook = new XLWorkbook();
+        using var workbook = new XLWorkbook();
         var adminInfos = new List<AdminInfoSummary>();
 
         await sut.ImportDocument(
@@ -197,7 +197,7 @@ public class FileImportServiceTests
     public void ImportDocument_WithInvalidDocumentTypeForTbx_ShouldThrowInvalidOperationException()
     {
         var sut = CreateService();
-        var workbook = new XLWorkbook();
+        using var workbook = new XLWorkbook();
 
         var exception = Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await sut.ImportDocument(

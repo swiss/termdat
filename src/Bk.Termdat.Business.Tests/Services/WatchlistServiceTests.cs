@@ -21,7 +21,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 [TestFixture]
 internal class WatchlistServiceTests
 {
-    private IWatchlistService watchlistService;
+    private WatchlistService watchlistService;
     private IEntryRepository entryRepositoryMock;
     private IAuthorizationService authorizationServiceMock;
     private IMapper mapperMock;

@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,6 +9,8 @@ public class LenochClassificationSubjectDomainMappingConfiguration : IEntityType
 {
     public void Configure(EntityTypeBuilder<LenochClassificationSubjectDomainMapping> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.HasKey(m => m.Id);
 
         // Ef Core Migrations were created with this singular 'mapping', but queries for the table are done using plural 'mappings', which results

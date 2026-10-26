@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Domain.Models;
@@ -27,6 +28,8 @@ public class UserAccountValidationService : IUserAccountValidationService
 
     public async Task<ICollection<Glossary>> ValidateGlossaries(IUserAccountModification userAccountModification)
     {
+        ArgumentNullException.ThrowIfNull(userAccountModification);
+
         if (userAccountModification.AuthorizedGlossaryIds == null || !userAccountModification.AuthorizedGlossaryIds.Any())
         {
             return Array.Empty<Glossary>();
@@ -41,8 +44,7 @@ public class UserAccountValidationService : IUserAccountValidationService
         {
             throw new BusinessValidationException(
                 nameof(userAccountModification.AuthorizedGlossaryIds),
-                string.Format(BackendTexts.EntryGlossariesNotFound,
-                    string.Join(",", requestedGlossaryIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryGlossariesNotFound, string.Join(",", requestedGlossaryIds)));
         }
 
         return requestedGlossaries;
@@ -50,6 +52,8 @@ public class UserAccountValidationService : IUserAccountValidationService
 
     public async Task<ICollection<Collection>> ValidateCollections(IUserAccountModification userAccountModification)
     {
+        ArgumentNullException.ThrowIfNull(userAccountModification);
+
         if (userAccountModification.AuthorizedCollectionIds == null || !userAccountModification.AuthorizedCollectionIds.Any())
         {
             return Array.Empty<Collection>();
@@ -64,8 +68,7 @@ public class UserAccountValidationService : IUserAccountValidationService
         {
             throw new BusinessValidationException(
                 nameof(userAccountModification.AuthorizedCollectionIds),
-                string.Format(BackendTexts.CollectionNotFound,
-                    string.Join(",", requestedCollectionIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, string.Join(",", requestedCollectionIds)));
         }
 
         return requestedCollections;

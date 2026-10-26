@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Bk.Termdat.CrossCutting.Configuration;
 using Microsoft.Extensions.Options;
@@ -12,11 +13,15 @@ public class HasFullAccessResolver : IValueResolver<DomainModels.UserAccount, Re
 
     public HasFullAccessResolver(IOptions<AuthorizationOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.options = options.Value;
     }
 
     public bool Resolve(DomainModels.UserAccount source, ResourceModels.UserAccountDetail destination, bool destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return source.Role == options.Admin || source.Role == options.SuperUser;
     }
 }

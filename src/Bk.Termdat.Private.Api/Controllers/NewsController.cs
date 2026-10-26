@@ -19,7 +19,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpGet("")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAll()
     {
         var result = await newsService.GetAll();
@@ -34,7 +34,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await newsService.GetDetails(id);
@@ -42,7 +42,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpPut("{id:int}/move-up")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> MoveUp([FromRoute] int id)
     {
         await newsService.MoveItemUp(id);
@@ -51,7 +51,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpPut("{id:int}/move-down")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> MoveDown([FromRoute] int id)
     {
         await newsService.MoveItemDown(id);
@@ -60,7 +60,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] NewsItemUpdate newsItemUpdate)
     {
         if (newsItemUpdate is null)
@@ -78,7 +78,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] NewsItemCreate newsItemCreate)
     {
         if (newsItemCreate is null)
@@ -92,7 +92,7 @@ public class NewsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await newsService.Delete(id);

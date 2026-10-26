@@ -19,6 +19,7 @@ using DomainModels = Bk.Termdat.Business.Domain.Models;
 
 namespace Bk.Termdat.Business.Tests.Mapping.Profiles;
 
+[TestFixture]
 internal class ExportMappingProfileTests
 {
     private IMapper mapper;
@@ -56,11 +57,12 @@ internal class ExportMappingProfileTests
         services.AddTransient<ExportWatchlistEntryLanguageItemAction>();
         var provider = services.BuildServiceProvider();
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var config = new MapperConfiguration(c =>
         {
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new ExportMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
         mapper = config.CreateMapper();
 
         referencedEntry1 = GenerateReferencedEntry(2);

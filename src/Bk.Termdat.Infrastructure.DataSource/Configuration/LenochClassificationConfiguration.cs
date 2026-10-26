@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class LenochClassificationConfiguration : EntityChangeTrackingConfigurati
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<LenochClassification> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(c => c.Code)
             .HasMaxLength(100)
             .IsRequired();

@@ -20,6 +20,8 @@ public static class LanguageExtension
 
     public static Language ToSparqlLanguage(this Business.Domain.Models.Language language)
     {
+        ArgumentNullException.ThrowIfNull(language);
+
         return language.IsoCode switch
         {
             "DE" => Language.De,

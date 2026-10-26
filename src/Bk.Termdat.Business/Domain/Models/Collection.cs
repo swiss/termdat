@@ -2,11 +2,13 @@ using System.Collections.Generic;
 
 namespace Bk.Termdat.Business.Domain.Models;
 
+#pragma warning disable CA1711 // Collection is a domain entity name.
 public class Collection : EntityChangeTracking, IMultiLingualEntity<CollectionTranslation>
 {
+#pragma warning restore CA1711
     public string Code { get; set; }
-    public string Description { get; set; }
-    public string Documentation { get; set; }
+    public string? Description { get; set; }
+    public string? Documentation { get; set; }
     public bool IsObsolete { get; set; }
     public bool Active { get; set; }
     public bool ActiveApi { get; set; }

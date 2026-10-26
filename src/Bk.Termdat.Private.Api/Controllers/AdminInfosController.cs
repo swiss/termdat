@@ -19,7 +19,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpGet("")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
     public async Task<ActionResult> GetAll()
     {
         var adminInfos = await adminInfoService.GetAll();
@@ -27,7 +27,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetails([FromRoute] int id)
     {
         var result = await adminInfoService.GetDetails(id);
@@ -35,7 +35,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await adminInfoService.GetAllDetails();
@@ -43,7 +43,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] AdminInfoCreate adminInfoCreate)
     {
         if (adminInfoCreate is null)
@@ -56,7 +56,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] AdminInfoUpdate adminInfoUpdate)
     {
         if (adminInfoUpdate is null || adminInfoUpdate.Id != id)
@@ -70,7 +70,7 @@ public class AdminInfosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await adminInfoService.Delete(id);

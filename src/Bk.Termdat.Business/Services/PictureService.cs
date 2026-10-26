@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -43,12 +44,8 @@ public class PictureService : IPictureService
 
     public Task<DomainModels.Picture> Create(ResourceModels.PictureDetail dto, IFormFile file)
     {
-        EnsurePictureDtoNotNull(dto);
-
-        if (file == null)
-        {
-            throw new ArgumentNullException(nameof(file));
-        }
+        ArgumentNullException.ThrowIfNull(dto);
+        ArgumentNullException.ThrowIfNull(file);
 
         return CreateInternal(dto, file);
     }
@@ -63,12 +60,12 @@ public class PictureService : IPictureService
 
     public async Task<DomainModels.Picture> Update(ResourceModels.PictureDetail dto, IFormFile file = null)
     {
-        EnsurePictureDtoNotNull(dto);
+        ArgumentNullException.ThrowIfNull(dto);
 
-        var existingPicture = await pictureRepository.GetByIdForUpdate(dto.EntryId!.Value);
+        var existingPicture = await pictureRepository.GetByIdForUpdate(dto.EntryId.Value);
         if (existingPicture == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, dto.EntryId!.Value));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, dto.EntryId.Value));
         }
 
         var pictureUpdate = await MapPicture(dto, file);
@@ -92,19 +89,11 @@ public class PictureService : IPictureService
         return pictureRepository.Delete(entryId);
     }
 
-    private static void EnsurePictureDtoNotNull(ResourceModels.PictureDetail dto)
-    {
-        if (dto == null)
-        {
-            throw new ArgumentNullException(nameof(dto));
-        }
-    }
-
     private async Task<DomainModels.Picture> MapPicture(ResourceModels.PictureDetail dto, IFormFile file)
     {
         var picture = new DomainModels.Picture
         {
-            EntryId = dto.EntryId!.Value,
+            EntryId = dto.EntryId.Value,
             Translations = await MapPictureTranslations(dto)
         };
 
@@ -117,12 +106,16 @@ public class PictureService : IPictureService
         {
             await using var ms = new MemoryStream();
             await file.CopyToAsync(ms);
-            var format = SKCodec.Create(file.OpenReadStream());
+            ms.Position = 0;
 
+            using var format = SKCodec.Create(ms);
+
+#pragma warning disable CA1508
             if (format is null)
             {
                 throw new BusinessValidationException(nameof(file), BackendTexts.PictureFileType);
             }
+#pragma warning restore CA1508
 
             if (format.EncodedFormat is SKEncodedImageFormat.Jpeg)
             {

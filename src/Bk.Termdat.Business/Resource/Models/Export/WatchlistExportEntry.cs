@@ -29,6 +29,6 @@ public class WatchlistExportEntry
     public int StatusId { get; set; }
     public string Status { get; set; }
     public string Reliability { get; set; }
-    public List<WatchlistExportTermdatClassification> TermdatClassifications { get; set; }
-    public List<WatchlistExportEntryLanguageItem> LanguageItems { get; set; } = new();
+    public IList<WatchlistExportTermdatClassification> TermdatClassifications { get; set; }
+    public IList<WatchlistExportEntryLanguageItem> LanguageItems { get; set; } = [];
 }

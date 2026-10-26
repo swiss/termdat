@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.LindasExport.Api.Configuration;
 using Bk.Termdat.LindasExport.Api.Services;
 using Microsoft.Extensions.Options;
@@ -11,35 +12,35 @@ internal class ExportSchedulerTests
     [TestCase("2026-01-15T02:00:00Z", "2026-01-16T01:00:00Z")]
     public void GetNextRun_ShouldUseNextEuropeZurichTime(string now, string expected)
     {
-        var scheduler = CreateScheduler(DateTimeOffset.Parse(now), new TimeOnly(2, 0));
+        var scheduler = CreateScheduler(DateTimeOffset.Parse(now, CultureInfo.InvariantCulture), new TimeOnly(2, 0));
 
         var result = scheduler.GetNextRun();
 
-        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse(expected)));
+        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse(expected, CultureInfo.InvariantCulture)));
     }
 
     [Test]
     public void GetNextRun_ForInvalidDstTime_ShouldUseFirstValidTime()
     {
         var scheduler = CreateScheduler(
-            DateTimeOffset.Parse("2026-03-29T00:00:00Z"),
+            DateTimeOffset.Parse("2026-03-29T00:00:00Z", CultureInfo.InvariantCulture),
             new TimeOnly(2, 30));
 
         var result = scheduler.GetNextRun();
 
-        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse("2026-03-29T01:00:00Z")));
+        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse("2026-03-29T01:00:00Z", CultureInfo.InvariantCulture)));
     }
 
     [Test]
     public void GetNextRun_ForAmbiguousDstTime_ShouldUseFirstOccurrence()
     {
         var scheduler = CreateScheduler(
-            DateTimeOffset.Parse("2026-10-25T00:00:00Z"),
+            DateTimeOffset.Parse("2026-10-25T00:00:00Z", CultureInfo.InvariantCulture),
             new TimeOnly(2, 30));
 
         var result = scheduler.GetNextRun();
 
-        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse("2026-10-25T00:30:00Z")));
+        Assert.That(result, Is.EqualTo(DateTimeOffset.Parse("2026-10-25T00:30:00Z", CultureInfo.InvariantCulture)));
     }
 
     private static ExportScheduler CreateScheduler(DateTimeOffset now, TimeOnly exportTime)

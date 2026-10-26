@@ -7,7 +7,7 @@ public class AdminInfo : EntityChangeTracking
 {
     public string Code { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public ICollection<Entry> Entries { get; set; }
 }

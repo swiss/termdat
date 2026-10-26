@@ -72,7 +72,7 @@ internal class SearchControllerTests
 
         searchQueryServiceMock
             .Recommend(recommendQuery.Phrase, recommendQuery.SourceLanguageIds)
-            .Throws(new Exception("boom"));
+            .Throws(new ArgumentException("boom"));
 
         var result = await searchController.Recommend(recommendQuery);
 

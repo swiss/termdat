@@ -17,6 +17,9 @@ public class EntryDetailReliabilityResolver : IValueResolver<Entry, EntryDetail,
 
     public CodeAndText Resolve(Entry source, EntryDetail destination, CodeAndText destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(context);
+
         if (context.Items.TryGetValue(PublicApiMappingProfile.LanguageIsoCode, out var isoCode))
         {
             return new CodeAndText

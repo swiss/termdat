@@ -17,6 +17,8 @@ public class SearchRefreshBackgroundService : BackgroundService
 
     public SearchRefreshBackgroundService(ILogger<SearchRefreshBackgroundService> logger, ISearchGateway searchGateway, IOptions<SearchOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.logger = logger;
         this.searchGateway = searchGateway;
         this.options = options.Value;

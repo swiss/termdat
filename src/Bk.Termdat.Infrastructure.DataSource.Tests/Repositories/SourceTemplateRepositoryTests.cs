@@ -51,7 +51,7 @@ internal class SourceTemplateRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new SourceTemplateRepository(createContext);
 
         var newSourceTemplate = new SourceTemplate()
@@ -65,7 +65,8 @@ internal class SourceTemplateRepositoryTests
             Created = DateTime.UtcNow.AddDays(-10),
             CreatedBy = "test@test.ch",
             Modified = DateTime.UtcNow.AddDays(-5),
-            ModifiedBy = "test@test.ch"
+            ModifiedBy = "test@test.ch",
+            User = new UserAccount()
         };
 
         await repository.Create(newSourceTemplate);
@@ -81,7 +82,7 @@ internal class SourceTemplateRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new SourceTemplateRepository(createContext);
 
         var oldSourceTemplate = new SourceTemplate()
@@ -95,7 +96,8 @@ internal class SourceTemplateRepositoryTests
             Created = DateTime.UtcNow.AddDays(-10),
             CreatedBy = "test@test.ch",
             Modified = DateTime.UtcNow.AddDays(-5),
-            ModifiedBy = "test@test.ch"
+            ModifiedBy = "test@test.ch",
+            User = new UserAccount()
         };
 
         var updateSourceTemplate = new SourceTemplate()
@@ -109,7 +111,8 @@ internal class SourceTemplateRepositoryTests
             Created = DateTime.UtcNow.AddDays(-10),
             CreatedBy = "test@test.ch",
             Modified = DateTime.UtcNow.AddDays(-5),
-            ModifiedBy = "test@test.ch"
+            ModifiedBy = "test@test.ch",
+            User = new UserAccount()
         };
 
         repository.Update(oldSourceTemplate, updateSourceTemplate);

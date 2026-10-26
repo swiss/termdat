@@ -1,3 +1,4 @@
+using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Resource.Validators;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
@@ -5,7 +6,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Resource.Validators;
 
 [TestFixture]
-public class DuplicateCheckRequestValidatorTests
+internal class DuplicateCheckRequestValidatorTests
 {
     private DuplicateCheckRequestValidator validator;
 

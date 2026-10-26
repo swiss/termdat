@@ -19,6 +19,8 @@ public class EntryUnlockBackgroundService : BackgroundService
 
     public EntryUnlockBackgroundService(IBackgroundServiceScheduler backgroundServiceScheduler, ILogger<EntryUnlockBackgroundService> logger, IServiceProvider services, IOptions<EntryUnlockOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.backgroundServiceScheduler = backgroundServiceScheduler;
         this.logger = logger;
         this.services = services;

@@ -55,20 +55,19 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryMultipleUpdateResult> UpdateMandatoryHeaderFields(EntryHeaderUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         var databaseEntries = await entryRepository.GetByIdsForUpdate(update.Ids);
         AssertPermission(databaseEntries);
         AssertNoDeletedEntries(databaseEntries);
 
-        if (!authorizationService.IsAdmin())
+        if (!authorizationService.IsAdmin() && update.CollectionId is int collectionId)
         {
-            if (update.CollectionId is int collectionId)
-            {
-                var authorizedCollectionIds = authorizationService.GetAuthorizedCollectionIds();
+            var authorizedCollectionIds = authorizationService.GetAuthorizedCollectionIds();
 
-                if (!authorizedCollectionIds.Contains(collectionId))
-                {
-                    throw new ForbiddenException(BackendTexts.Unauthorized);
-                }
+            if (!authorizedCollectionIds.Contains(collectionId))
+            {
+                throw new ForbiddenException(BackendTexts.Unauthorized);
             }
         }
 
@@ -122,6 +121,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryMultipleUpdateResult> UpdateGlossaries(EntryChipFieldUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         var databaseEntries = await entryRepository.GetByIdsForUpdate(update.Ids);
         AssertPermission(databaseEntries);
         AssertNoDeletedEntries(databaseEntries);
@@ -162,6 +163,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryMultipleUpdateResult> UpdateComment(EntryCommentUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         var databaseEntries = await entryRepository.GetByIdsForUpdate(update.Ids);
 
         AssertPermission(databaseEntries);
@@ -196,26 +199,28 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
         };
     }
 
-    public async Task<EntryMultipleUpdateResult> UpdateConceptSystemPosition(EntryConceptSystemPositionUpdate updateDto)
+    public async Task<EntryMultipleUpdateResult> UpdateConceptSystemPosition(EntryConceptSystemPositionUpdate update)
     {
-        if (updateDto.Action == MultiEditAction.Add)
+        ArgumentNullException.ThrowIfNull(update);
+
+        if (update.Action == MultiEditAction.Add)
         {
             throw new BusinessValidationException(nameof(Entry.ConceptSystemPositionId), "It is not possible to 'add' the position in the concept system during batch editing.");
         }
 
-        var databaseEntries = await entryRepository.GetByIdsForUpdate(updateDto.Ids);
+        var databaseEntries = await entryRepository.GetByIdsForUpdate(update.Ids);
 
         AssertPermission(databaseEntries);
         AssertNoDeletedEntries(databaseEntries);
 
         var lockInfo = databaseEntries.Where(x => x.Locked != null).Select(e => new EntryMultipleUpdateInfo { LockedEntryId = e.Id, LockedBy = e.LockedBy });
 
-        var dataWasChanged = (updateDto.Action == MultiEditAction.Remove && databaseEntries.Any(p => p.Locked is null && p.ConceptSystemPositionId.HasValue))
-            || (updateDto.Action == MultiEditAction.Set && databaseEntries.Any(p => p.Locked is null && p.ConceptSystemPositionId != updateDto.ConceptSystemPositionId));
+        var dataWasChanged = (update.Action == MultiEditAction.Remove && databaseEntries.Any(p => p.Locked is null && p.ConceptSystemPositionId.HasValue))
+            || (update.Action == MultiEditAction.Set && databaseEntries.Any(p => p.Locked is null && p.ConceptSystemPositionId != update.ConceptSystemPositionId));
 
         foreach (var databaseEntry in databaseEntries.Where(x => x.Locked is null))
         {
-            databaseEntry.ConceptSystemPositionId = updateDto.Action == MultiEditAction.Set ? updateDto.ConceptSystemPositionId : null;
+            databaseEntry.ConceptSystemPositionId = update.Action == MultiEditAction.Set ? update.ConceptSystemPositionId : null;
             databaseEntry.Modified = DateTime.UtcNow;
             databaseEntry.ModifiedBy = identityService.GetCurrentEmail();
         }
@@ -234,6 +239,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntrySourceUpdateResult> UpdateSource(EntrySourceUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         if (update.Action == MultiEditAction.Remove)
         {
             throw new BusinessValidationException(nameof(update.Action), "It is not possible to 'remove' sources during batch editing.");
@@ -317,6 +324,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryContentMoveResult> MoveContent(EntryContentMove update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         if (string.IsNullOrWhiteSpace(update.SourceField))
         {
             throw new BusinessValidationException(nameof(update.SourceField), "Empty source field is not allowed.");
@@ -358,25 +367,41 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
                 relevantTranslations = relevantTranslations.Where(t => t.Sequence == 1);
             }
 
-            var allDestinationFieldsAreEmpty = relevantTranslations.All(item => string.IsNullOrWhiteSpace(GetFieldValue(item, update.DestinationField)));
-            var allSourceFieldsAreNonEmpty = relevantTranslations.All(item => !string.IsNullOrWhiteSpace(GetFieldValue(item, update.SourceField)));
-            var allChangesSupported = relevantTranslations.All(item => IsSupported(item, update.SourceField, update.DestinationField));
+            var translations = relevantTranslations.ToList();
 
-            logger.LogDebug("Move content prerequisite checks, allDestinationFieldsAreEmpty: {allDestinationFieldsAreEmpty}, allSourceFieldsAreNonEmpty: {allSourceFieldsAreNonEmpty}, allChangesSupported: {allChangesSupported}",
-                allDestinationFieldsAreEmpty, allSourceFieldsAreNonEmpty, allChangesSupported);
+            var allDestinationFieldsAreEmpty = translations.All(
+                item => string.IsNullOrWhiteSpace(
+                    GetFieldValue(item, update.DestinationField)));
 
-            if (!allDestinationFieldsAreEmpty || !allSourceFieldsAreNonEmpty || !allChangesSupported)
+            var allSourceFieldsAreNonEmpty = translations.All(
+                item => !string.IsNullOrWhiteSpace(
+                    GetFieldValue(item, update.SourceField)));
+
+            var allChangesSupported = translations.All(
+                item => IsSupported(
+                    item, update.SourceField, update.DestinationField));
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug(
+                    "Move content prerequisite checks, allDestinationFieldsAreEmpty: {AllDestinationFieldsAreEmpty}, AllSourceFieldsAreNonEmpty: {AllSourceFieldsAreNonEmpty}, AllChangesSupported: {AllChangesSupported}",
+                    allDestinationFieldsAreEmpty,
+                    allSourceFieldsAreNonEmpty,
+                    allChangesSupported);
+            }
+
+            if (!allDestinationFieldsAreEmpty ||
+                !allSourceFieldsAreNonEmpty ||
+                !allChangesSupported)
             {
                 nonChangedEntryIds.Add(databaseEntry.Id);
                 continue;
             }
 
-            foreach (var item in relevantTranslations)
+            foreach (var item in translations)
             {
                 var oldValue = GetFieldValue(item, update.SourceField);
                 var oldSource = GetSourceValueForField(item, update.SourceField);
-                var newValue = GetFieldValue(item, update.DestinationField);
-                var newSource = GetSourceValueForField(item, update.DestinationField);
 
                 SetFieldValue(item, update.DestinationField, oldValue);
                 SetSourceValueForField(item, update.DestinationField, oldSource);
@@ -388,6 +413,7 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
                 databaseEntry.ModifiedBy = userName;
             }
         }
+
         await userAccountService.UpdateLastAction(userName);
 
         await unitOfWork.SaveChangesAsync();
@@ -403,6 +429,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryMultipleUpdateResult> UpdateAdminInfos(EntryChipFieldInputUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         // Add new AdminInfos and save them in masterdata first
         foreach (var newAdminInfo in update.Codes.Where(a => a.Id == null))
         {
@@ -437,6 +465,8 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
 
     public async Task<EntryMultipleUpdateResult> UpdateRelatedCollections(EntryChipFieldUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         var databaseEntries = await entryRepository.GetByIdsForUpdate(update.Ids);
         AssertPermission(databaseEntries);
         AssertNoDeletedEntries(databaseEntries);
@@ -474,7 +504,7 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
         };
     }
 
-    private bool IsSupported(EntryLanguage item, string sourceField, string destinationField)
+    private static bool IsSupported(EntryLanguage item, string sourceField, string destinationField)
     {
         static bool HasAny(params string[] fields) => fields.Any(f => !string.IsNullOrWhiteSpace(f));
 
@@ -504,11 +534,17 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
         };
     }
 
-    private void AssertNoDeletedEntries(IEnumerable<Entry> entryList)
+    private static void AssertNoDeletedEntries(IEnumerable<Entry> entryList)
     {
-        if (entryList.Any(y => y.Deleted))
+        var deletedEntry = entryList.FirstOrDefault(y => y.Deleted);
+
+        if (deletedEntry is not null)
         {
-            throw new CanNotBeChangedException(string.Format(BackendTexts.EntryDeletedCanNotBeEdited, entryList.FirstOrDefault(y => y.Deleted)!.Id));
+            throw new CanNotBeChangedException(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    BackendTexts.EntryDeletedCanNotBeEdited,
+                    deletedEntry.Id));
         }
     }
 
@@ -802,7 +838,7 @@ public class EntryHeaderUpdateService : IEntryHeaderUpdateService
     private static bool TryUpdateSourceField(EntryLanguage item, string sourceField, string value, MultiEditAction action, out bool notFullyUpdated)
     {
         var currentValue = GetFieldValue(item, sourceField);
-        var baseValue = GetFieldValue(item, sourceField.Replace("Source", ""));
+        var baseValue = GetFieldValue(item, sourceField.Replace("Source", "", StringComparison.InvariantCulture));
 
         // Example for 'DefinitionSource':
         // - The Definition field must be empty.

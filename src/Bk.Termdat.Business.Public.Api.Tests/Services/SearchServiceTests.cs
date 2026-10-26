@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ using PrivateApiResourceModels = Bk.Termdat.Business.Resource.Models;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class SearchServiceTests
+internal class SearchServiceTests
 {
     private SearchService searchService;
     private IEntryRepository entryRepositoryMock;
@@ -294,97 +295,97 @@ public class SearchServiceTests
         Assert.That(result, Is.EqualTo(entryDetails));
         if (terminus)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminus") && kvp.Value.StartsWith("Terminus")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminus", StringComparison.Ordinal) && kvp.Value.StartsWith("Terminus", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminus") && kvp.Value.StartsWith("Terminus")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminus", StringComparison.Ordinal) && kvp.Value.StartsWith("Terminus", StringComparison.Ordinal)))));
         }
         if (name)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("name") && kvp.Value.StartsWith("Name")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("name", StringComparison.Ordinal) && kvp.Value.StartsWith("Name", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("name") && kvp.Value.StartsWith("Name")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("name", StringComparison.Ordinal) && kvp.Value.StartsWith("Name", StringComparison.Ordinal)))));
         }
         if (abbreviation)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviation") && kvp.Value.StartsWith("Abbreviation")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviation", StringComparison.Ordinal) && kvp.Value.StartsWith("Abbreviation", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviation") && kvp.Value.StartsWith("Abbreviation")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviation", StringComparison.Ordinal) && kvp.Value.StartsWith("Abbreviation", StringComparison.Ordinal)))));
         }
         if (phraseology)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseology") && kvp.Value.StartsWith("Phraseology")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseology", StringComparison.Ordinal) && kvp.Value.StartsWith("Phraseology", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseology") && kvp.Value.StartsWith("Phraseology")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseology", StringComparison.Ordinal) && kvp.Value.StartsWith("Phraseology", StringComparison.Ordinal)))));
         }
         if (definition)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definition") && kvp.Value.StartsWith("Definition")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definition", StringComparison.Ordinal) && kvp.Value.StartsWith("Definition", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definition") && kvp.Value.StartsWith("Definition")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definition", StringComparison.Ordinal) && kvp.Value.StartsWith("Definition", StringComparison.Ordinal)))));
         }
         if (note)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("note") && kvp.Value.StartsWith("Note")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("note", StringComparison.Ordinal) && kvp.Value.StartsWith("Note", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("note") && kvp.Value.StartsWith("Note")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("note", StringComparison.Ordinal) && kvp.Value.StartsWith("Note", StringComparison.Ordinal)))));
         }
         if (context)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("context") && kvp.Value.StartsWith("Context")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("context", StringComparison.Ordinal) && kvp.Value.StartsWith("Context", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("context") && kvp.Value.StartsWith("Context")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("context", StringComparison.Ordinal) && kvp.Value.StartsWith("Context", StringComparison.Ordinal)))));
         }
         if (source)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviationsource") && kvp.Value.StartsWith("AbbreviationSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("contextsource") && kvp.Value.StartsWith("ContextSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definitionsource") && kvp.Value.StartsWith("DefinitionSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadatasource") && kvp.Value.StartsWith("MetadataSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("notesource") && kvp.Value.StartsWith("NoteSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("namesource") && kvp.Value.StartsWith("NameSource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseologysource") && kvp.Value.StartsWith("PhraseologySource")))));
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminussource") && kvp.Value.StartsWith("TerminusSource")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviationsource", StringComparison.Ordinal) && kvp.Value.StartsWith("AbbreviationSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("contextsource", StringComparison.Ordinal) && kvp.Value.StartsWith("ContextSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definitionsource", StringComparison.Ordinal) && kvp.Value.StartsWith("DefinitionSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadatasource", StringComparison.Ordinal) && kvp.Value.StartsWith("MetadataSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("notesource", StringComparison.Ordinal) && kvp.Value.StartsWith("NoteSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("namesource", StringComparison.Ordinal) && kvp.Value.StartsWith("NameSource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseologysource", StringComparison.Ordinal) && kvp.Value.StartsWith("PhraseologySource", StringComparison.Ordinal)))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminussource", StringComparison.Ordinal) && kvp.Value.StartsWith("TerminusSource", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviationsource") && kvp.Value.StartsWith("AbbreviationSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("contextsource") && kvp.Value.StartsWith("ContextSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definitionsource") && kvp.Value.StartsWith("DefinitionSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadatasource") && kvp.Value.StartsWith("MetadataSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("notesource") && kvp.Value.StartsWith("NoteSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("namesource") && kvp.Value.StartsWith("NameSource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseologysource") && kvp.Value.StartsWith("PhraseologySource")))));
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminussource") && kvp.Value.StartsWith("TerminusSource")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("abbreviationsource", StringComparison.Ordinal) && kvp.Value.StartsWith("AbbreviationSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("contextsource", StringComparison.Ordinal) && kvp.Value.StartsWith("ContextSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("definitionsource", StringComparison.Ordinal) && kvp.Value.StartsWith("DefinitionSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadatasource", StringComparison.Ordinal) && kvp.Value.StartsWith("MetadataSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("notesource", StringComparison.Ordinal) && kvp.Value.StartsWith("NoteSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("namesource", StringComparison.Ordinal) && kvp.Value.StartsWith("NameSource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("phraseologysource", StringComparison.Ordinal) && kvp.Value.StartsWith("PhraseologySource", StringComparison.Ordinal)))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("terminussource", StringComparison.Ordinal) && kvp.Value.StartsWith("TerminusSource", StringComparison.Ordinal)))));
         }
         if (metadata)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadata") && kvp.Value.StartsWith("Metadata")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadata", StringComparison.Ordinal) && kvp.Value.StartsWith("Metadata", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadata") && kvp.Value.StartsWith("Metadata")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("metadata", StringComparison.Ordinal) && kvp.Value.StartsWith("Metadata", StringComparison.Ordinal)))));
         }
         if (country)
         {
-            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("country") && kvp.Value.StartsWith("Country")))));
+            Assert.That(result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("country", StringComparison.Ordinal) && kvp.Value.StartsWith("Country", StringComparison.Ordinal)))));
         }
         else
         {
-            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("country") && kvp.Value.StartsWith("Country")))));
+            Assert.That(!result.All(r => r.Hits.Any(h => h.Any(kvp => kvp.Key.Equals("country", StringComparison.Ordinal) && kvp.Value.StartsWith("Country", StringComparison.Ordinal)))));
         }
         // The entry comment is internal and must never be returned as a hit, even if the comment field was searched
         Assert.That(result.All(r => r.Hits.All(h => !h.ContainsKey("comment"))));

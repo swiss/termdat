@@ -14,10 +14,10 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class IdentityServiceTests
+internal class IdentityServiceTests
 {
     private IdentityService identityService;
-    private AuthorizationOptions authorizationOptions = null!;
+    private AuthorizationOptions authorizationOptions;
 
     private readonly IHttpContextAccessor httpContextAccessorMock = Substitute.For<IHttpContextAccessor>();
     private readonly IOptions<AuthorizationOptions> options = Substitute.For<IOptions<AuthorizationOptions>>();

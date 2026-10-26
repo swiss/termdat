@@ -24,7 +24,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 [TestFixture]
 internal class EntryHeaderUpdateServiceTests
 {
-    private IEntryHeaderUpdateService service;
+    private EntryHeaderUpdateService service;
 
     private readonly IEntryValidationService entryValidationServiceMock = Substitute.For<IEntryValidationService>();
     private readonly IIdentityService identityServiceMock = Substitute.For<IIdentityService>();
@@ -707,8 +707,8 @@ internal class EntryHeaderUpdateServiceTests
             arg.SubjectIds.Equals(entryHeaderUpdate.SubjectIds) &&
             arg.DomainIds.Equals(entryHeaderUpdate.DomainIds)));
         entryRepositoryMock.Received(1).UpdateMandatoryHeaderFields(Arg.Any<Entry>(), Arg.Is<Entry>(x =>
-            x.Subjects.Count() == 1 &&
-            x.Domains.Count() == 1 &&
+            x.Subjects.Count == 1 &&
+            x.Domains.Count == 1 &&
             x.Subjects.First().Id == 2 &&
             x.Domains.First().Id == 4));
         await unitOfWorkMock.Received(1).SaveChangesAsync();
@@ -741,8 +741,8 @@ internal class EntryHeaderUpdateServiceTests
             arg.SubjectIds.Equals(entryHeaderUpdate.SubjectIds) &&
             arg.DomainIds.Equals(entryHeaderUpdate.DomainIds)));
         entryRepositoryMock.Received(1).UpdateMandatoryHeaderFields(Arg.Any<Entry>(), Arg.Is<Entry>(x =>
-            x.Subjects.Count() == 2 &&
-            x.Domains.Count() == 2 &&
+            x.Subjects.Count == 2 &&
+            x.Domains.Count == 2 &&
             x.Subjects.First().Id == 1 &&
             x.Domains.First().Id == 11 &&
             x.Subjects.Last().Id == 2 &&
@@ -953,7 +953,7 @@ internal class EntryHeaderUpdateServiceTests
     }
 
     [Test]
-    public void UpdateChipFields_ForEntryWithoutPermission_ShouldThrowForbiddenException()
+    public void UpdateGlossaries_ForEntryWithoutPermission_ShouldThrowForbiddenException()
     {
         authorizationService.CanEdit(Arg.Is<Entry>(y => y.Id == 1)).Returns(false);
         var ids = new List<int> { 1 };
@@ -968,7 +968,7 @@ internal class EntryHeaderUpdateServiceTests
     }
 
     [Test]
-    public void UpdateChipFields_ForEntryWithDeletedFlag_ShouldThrowCanNotBeChangedException()
+    public void UpdateGlossaries_ForEntryWithDeletedFlag_ShouldThrowCanNotBeChangedException()
     {
         var ids = new List<int> { 1 };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Is(ids)).Returns([new() { Id = 1, Deleted = true }]);
@@ -982,7 +982,7 @@ internal class EntryHeaderUpdateServiceTests
     }
 
     [Test]
-    public void UpdateChipFields_WithValidData_ShouldSetModified()
+    public async Task UpdateGlossaries_WithValidData_ShouldSetModified()
     {
         var dto = new EntryChipFieldUpdate
         {
@@ -1002,14 +1002,14 @@ internal class EntryHeaderUpdateServiceTests
 
         mapperMock.Map<Entry>(Arg.Any<EntryUpdate>()).Returns(mappedEntry);
 
-        service.UpdateGlossaries(dto);
+        await service.UpdateGlossaries(dto);
 
         Assert.That(mappedEntry.ModifiedBy, Is.EqualTo(TestEmail));
         Assert.That(mappedEntry.Modified, Is.Not.EqualTo(default(DateTime)));
     }
 
     [Test]
-    public void UpdateGlossary_ForUnknownAction_ShouldThrowInvalidEnumArgumentException()
+    public void UpdateGlossaries_ForUnknownAction_ShouldThrowInvalidEnumArgumentException()
     {
         var dto = new EntryChipFieldUpdate
         {
@@ -1022,7 +1022,7 @@ internal class EntryHeaderUpdateServiceTests
     }
 
     [Test]
-    public void UpdateGlossary_AsNonAdminWithoutGlossaryPermission_ShouldThrowForbiddenException()
+    public void UpdateGlossaries_AsNonAdminWithoutGlossaryPermission_ShouldThrowForbiddenException()
     {
         var dto = new EntryChipFieldUpdate
         {
@@ -1038,7 +1038,7 @@ internal class EntryHeaderUpdateServiceTests
     }
 
     [Test]
-    public void UpdateGlossary_ForInvalidCode_ShouldThrowInvalidEnumArgumentException()
+    public void UpdateGlossaries_ForInvalidCode_ShouldThrowInvalidEnumArgumentException()
     {
         var dto = new EntryChipFieldUpdate
         {
@@ -1568,8 +1568,7 @@ internal class EntryHeaderUpdateServiceTests
         Assert.That(updateResult.DataWasChanged, Is.True);
 
         await entryRepositoryMock.Received(1).GetByIdsForUpdate(Arg.Is<List<int>>(arg => arg.SequenceEqual(ids)));
-        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg =>
-            arg.Comment.Equals("comment" + Environment.NewLine + "Add comment")));
+        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg => string.Equals(arg.Comment, "comment" + Environment.NewLine + "Add comment", StringComparison.Ordinal)));
         entryRepositoryMock.Received(1).UpdateWithoutRelations(Arg.Any<Entry>(), Arg.Is<Entry>(x =>
         x.ConcurrencyToken == entry.ConcurrencyToken &&
         x.Status == entry.Status &&
@@ -1659,8 +1658,7 @@ internal class EntryHeaderUpdateServiceTests
         Assert.That(updateResult.DataWasChanged, Is.True);
 
         await entryRepositoryMock.Received(1).GetByIdsForUpdate(Arg.Is<List<int>>(arg => arg.SequenceEqual(ids)));
-        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg =>
-           arg.Comment.Equals("Test comment")));
+        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg => string.Equals(arg.Comment, "Test comment", StringComparison.Ordinal)));
         entryRepositoryMock.Received(1).UpdateWithoutRelations(Arg.Any<Entry>(), Arg.Is<Entry>(x =>
         x.ConcurrencyToken == entry.ConcurrencyToken &&
         x.Status == entry.Status &&
@@ -1741,8 +1739,7 @@ internal class EntryHeaderUpdateServiceTests
         Assert.That(updateResult.DataWasChanged, Is.False);
 
         await entryRepositoryMock.Received(1).GetByIdsForUpdate(Arg.Is<List<int>>(arg => arg.SequenceEqual(ids)));
-        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg =>
-            arg.Comment.Equals("Set comment")));
+        mapperMock.Received(1).Map<Entry>(Arg.Is<EntryUpdate>(arg => string.Equals(arg.Comment, "Set comment", StringComparison.Ordinal)));
         entryRepositoryMock.Received(1).UpdateWithoutRelations(Arg.Any<Entry>(), Arg.Is<Entry>(x => EntryHasOriginalValues(x)));
         await unitOfWorkMock.Received(1).SaveChangesAsync();
         await entryRepositoryMock.Received(1).GetByIdsForIndex(Arg.Is(dto.Ids));
@@ -2114,7 +2111,7 @@ internal class EntryHeaderUpdateServiceTests
         };
 
         var resultDto = await TestSourceUpdate(dto, [1, 2, 3]);
-        var allAffectedTranslations = entriesForSourceUpdate.Take(3).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Take(3).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.Empty);
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == dto.UpdateValue));
@@ -2148,7 +2145,7 @@ internal class EntryHeaderUpdateServiceTests
         };
 
         var resultDto = await TestSourceUpdate(dto, []);
-        var allAffectedTranslations = entriesForSourceUpdate.Take(3).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Take(3).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([1, 2, 3]));
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "DefinitionSource " + t.LanguageId));
@@ -2178,8 +2175,8 @@ internal class EntryHeaderUpdateServiceTests
         const int expectedChangedEntryId = 3;
 
         var resultDto = await TestSourceUpdate(dto, [expectedChangedEntryId]);
-        var allAffectedTranslations = entriesForSourceUpdate.Where(e => e.Id == expectedChangedEntryId).SelectMany(e => e.Translations);
-        var allNonAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id) && e.Id != expectedChangedEntryId).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Where(e => e.Id == expectedChangedEntryId).SelectMany(e => e.Translations).ToList();
+        var allNonAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id) && e.Id != expectedChangedEntryId).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([1, 2]));
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.MetadataSource == "newSource"));
@@ -2203,7 +2200,7 @@ internal class EntryHeaderUpdateServiceTests
         };
 
         var resultDto = await TestSourceUpdate(dto, []);
-        var allAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id)).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id)).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([1, 2]));
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.MetadataSource == "MetadataSource " + t.LanguageId));
@@ -2225,7 +2222,7 @@ internal class EntryHeaderUpdateServiceTests
         };
 
         var resultDto = await TestSourceUpdate(dto, [3]);
-        var allAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id)).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id)).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([3]));
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.MetadataSource == "newSource"));
@@ -2249,7 +2246,7 @@ internal class EntryHeaderUpdateServiceTests
         var allAffectedTranslations = entriesForSourceUpdate.Where(e => ids.Contains(e.Id)).SelectMany(e => e.Translations);
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([4]));
-        Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.AbbreviationSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.AbbreviationSource)));
     }
 
     [Test]
@@ -2269,13 +2266,13 @@ internal class EntryHeaderUpdateServiceTests
         const int expectedChangedEntryId = 4;
 
         var resultDto = await TestSourceUpdate(dto, [expectedChangedEntryId]);
-        var allAffectedTranslations = entriesForSourceUpdate.Where(e => e.Id == expectedChangedEntryId).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForSourceUpdate.Where(e => e.Id == expectedChangedEntryId).SelectMany(e => e.Translations).ToList();
 
         Assert.That(resultDto.DataWasChanged, Is.True);
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([4]));
         Assert.That(allAffectedTranslations.Where(t => dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "newSource"));
-        Assert.That(allAffectedTranslations.Where(t => !dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
-        Assert.That(allAffectedTranslations.All(t => t.AbbreviationSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => !dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
+        Assert.That(allAffectedTranslations.All(t => string.IsNullOrEmpty(t.AbbreviationSource)));
     }
 
     [TestCase(EntrySearchAndReplaceUpdate.AbbreviationSource)]
@@ -2299,7 +2296,6 @@ internal class EntryHeaderUpdateServiceTests
         const int expectedChangedEntryId = 3;
 
         var resultDto = await TestSourceUpdate(dto, [expectedChangedEntryId]);
-        var allAffectedTranslations = entriesForSourceUpdate.Where(e => e.Id == expectedChangedEntryId).SelectMany(e => e.Translations);
 
         Assert.That(resultDto.NotFullyUpdatedEntryIds, Is.EqualTo([4]));
         Assert.That(resultDto.DataWasChanged, Is.True);
@@ -2383,9 +2379,9 @@ internal class EntryHeaderUpdateServiceTests
         var ids = new List<int> { 1, 2 };
         var dto = new EntryContentMove
         {
-            LanguageIds = [1],
+            LanguageIds = [],
             Ids = ids,
-            SourceField = "",
+            SourceField = "source",
             DestinationField = "terminus",
             ForAllSynonyms = true
         };
@@ -2501,13 +2497,13 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(3));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(3).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(3).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.Empty);
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.ContextSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.ContextSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.PhraseologySource == "ContextSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Context == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Context)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Phraseology == "Context " + t.LanguageId));
     }
 
@@ -2529,14 +2525,14 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(3).Concat([dbEntryLocked]));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([3]));
         Assert.That(result.LockInfos.ToList(), Has.Count.EqualTo(1));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Terminus)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == "Terminus " + t.LanguageId));
     }
 
@@ -2554,18 +2550,18 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(3));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([3]));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Terminus)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == "Terminus " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.DefinitionSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == "Terminus " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && !dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Definition)));
     }
 
     [Test]
@@ -2582,37 +2578,37 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(1));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.False);
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([1]));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Abbreviation == "Abbreviation " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.AbbreviationSource == "AbbreviationSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.NoteSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.NoteSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Note == "Note " + t.LanguageId));
     }
 
     [Test]
-    public async Task MoveContent_NotAllBaseFieldsAreEmpty_ShouldNotUpdateEntry()
+    public async Task MoveContent_AllBaseFieldsAreEmpty_ShouldNotUpdateEntry()
     {
-        var ids = new List<int> { 1 };
+        var ids = new List<int> { 4 };
         var dto = new EntryContentMove
         {
             Ids = ids,
-            SourceField = EntrySearchAndReplaceUpdate.Abbreviation,
+            SourceField = EntrySearchAndReplaceUpdate.Terminus,
             DestinationField = EntrySearchAndReplaceUpdate.Note,
             LanguageIds = [1],
             ForAllSynonyms = true
         };
-        entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(1));
+        entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns([entriesForContentMove[3]]);
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.False);
-        Assert.That(result.NonAffectedEntryIds, Is.EqualTo([1]));
+        Assert.That(result.NonAffectedEntryIds, Is.EqualTo([4]));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Abbreviation == "Abbreviation " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.AbbreviationSource == "AbbreviationSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.NoteSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.NoteSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Note == "Note " + t.LanguageId));
     }
 
@@ -2630,13 +2626,13 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(1));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(1).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.False);
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([1]));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Phraseology == string.Empty));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.PhraseologySource == string.Empty));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Name == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Phraseology)));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.PhraseologySource)));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Name)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Name == "Name " + t.LanguageId));
     }
 
@@ -2654,18 +2650,18 @@ internal class EntryHeaderUpdateServiceTests
         };
         entryRepositoryMock.GetByIdsForUpdate(Arg.Any<IEnumerable<int>>()).Returns(entriesForContentMove.Take(2));
         var result = await service.MoveContent(dto);
-        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations);
+        var allAffectedTranslations = entriesForContentMove.Take(2).SelectMany(e => e.Translations).ToList();
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.Empty);
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Terminus)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == "Terminus " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "TerminusSource " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "DefinitionSource " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == "Terminus " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Definition)));
     }
 
     [Test]
@@ -2686,9 +2682,9 @@ internal class EntryHeaderUpdateServiceTests
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.Empty);
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == string.Empty));
+        Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Terminus)));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == "Terminus " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "TerminusSource " + t.LanguageId));
         Assert.That(allAffectedTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "DefinitionSource " + t.LanguageId));
@@ -2716,8 +2712,8 @@ internal class EntryHeaderUpdateServiceTests
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([4]));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == "Terminus " + t.LanguageId));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == string.Empty));
-        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == string.Empty));
+        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.DefinitionSource)));
+        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Definition)));
     }
 
     [Test]
@@ -2738,7 +2734,7 @@ internal class EntryHeaderUpdateServiceTests
 
         Assert.That(result.DataWasChanged, Is.True);
         Assert.That(result.NonAffectedEntryIds, Is.Empty);
-        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == string.Empty));
+        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.TerminusSource)));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.NameSource == "TerminusSource " + t.LanguageId));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Name == "Terminus " + t.LanguageId));
     }
@@ -2763,8 +2759,8 @@ internal class EntryHeaderUpdateServiceTests
         Assert.That(result.NonAffectedEntryIds, Is.EqualTo([3]));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Terminus == "Terminus " + t.LanguageId));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.TerminusSource == "TerminusSource " + t.LanguageId));
-        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == string.Empty));
-        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == string.Empty));
+        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.DefinitionSource)));
+        Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence == 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => string.IsNullOrEmpty(t.Definition)));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.DefinitionSource == "DefinitionSource " + t.LanguageId));
         Assert.That(allTranslations.Where(t => ids.Contains(t.EntryId) && t.Sequence != 1 && dto.LanguageIds.Contains(t.LanguageId)).All(t => t.Definition == "Definition " + t.LanguageId));
     }

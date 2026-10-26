@@ -34,6 +34,8 @@ public class TokenService : ITokenService
         TimeProvider timeProvider,
         ILogger<TokenService> logger)
     {
+        ArgumentNullException.ThrowIfNull(oidcOptions);
+
         this.httpClientFactory = httpClientFactory;
         this.httpContextAccessor = httpContextAccessor;
         this.oidcOptions = oidcOptions.Value;
@@ -150,13 +152,21 @@ public class TokenService : ITokenService
         }
     }
 
+    private static readonly JsonSerializerOptions TokenJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+    };
+
     private async Task<TokenResponse?> RefreshToken(string refreshToken)
     {
         try
         {
             using var httpClient = httpClientFactory.CreateClient(TokenHttpClientName);
 
-            var tokenEndpoint = $"{oidcOptions.Authority}{oidcOptions.TokenEndpointPath}";
+            var tokenEndpoint = new Uri(
+                $"{oidcOptions.Authority.TrimEnd('/')}/{oidcOptions.TokenEndpointPath.TrimStart('/')}",
+                UriKind.Absolute);
+
             var requestParams = new List<KeyValuePair<string, string>>
             {
                 new("grant_type", "refresh_token"),
@@ -165,22 +175,25 @@ public class TokenService : ITokenService
                 new("client_secret", oidcOptions.ClientSecret)
             };
 
-            var response = await httpClient.PostAsync(tokenEndpoint, new FormUrlEncodedContent(requestParams));
+            using var requestContent = new FormUrlEncodedContent(requestParams);
+
+            using var response = await httpClient.PostAsync(tokenEndpoint, requestContent);
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                logger.LogWarning("Token refresh failed: {StatusCode} - {Content}", response.StatusCode, errorContent);
+
+                logger.LogWarning(
+                    "Token refresh failed: {StatusCode} - {Content}",
+                    response.StatusCode,
+                    errorContent);
+
                 return null;
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            });
 
-            return tokenResponse;
+            return JsonSerializer.Deserialize<TokenResponse>(content, TokenJsonOptions);
         }
         catch (Exception ex)
         {
@@ -189,7 +202,7 @@ public class TokenService : ITokenService
         }
     }
 
-    private async Task UpdateAuthenticationProperties(HttpContext httpContext, TokenResponse tokens)
+    private static async Task UpdateAuthenticationProperties(HttpContext httpContext, TokenResponse tokens)
     {
         var authResult = await httpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 

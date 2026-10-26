@@ -38,6 +38,8 @@ public class SearchService : ISearchService
         ILogger<SearchService> logger)
 #pragma warning restore S107
     {
+        ArgumentNullException.ThrowIfNull(publicApiOptions);
+
         this.entryRepository = entryRepository;
         this.collectionRepository = collectionRepository;
         this.classificationRepository = classificationRepository;
@@ -50,12 +52,19 @@ public class SearchService : ISearchService
 
     public async Task<IEnumerable<EntryDetail>> Search(SearchParameter parameter)
     {
+        ArgumentNullException.ThrowIfNull(parameter);
+
         await ValidateAndNormalizeCollectionIds(parameter);
 
         var inLanguageId = await languageValidationService.ValidateLanguageIsoCode(parameter.InLanguageCode);
-        logger.LogDebug("Found in language id '{LanguageId}' based on iso code {LanguageCode}", inLanguageId, parameter.InLanguageCode);
+
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Found in language id '{LanguageId}' based on iso code {LanguageCode}", inLanguageId, parameter.InLanguageCode);
+        }
+
         int? outLanguageId = !string.IsNullOrEmpty(parameter.OutLanguageCode) ? (await languageValidationService.ValidateLanguageIsoCode(parameter.OutLanguageCode)) : null;
-        if (outLanguageId.HasValue)
+        if (outLanguageId.HasValue && logger.IsEnabled(LogLevel.Debug))
         {
             logger.LogDebug("Found out language id '{LanguageId}' based on iso code {LanguageCode}", outLanguageId, parameter.OutLanguageCode);
         }
@@ -78,8 +87,11 @@ public class SearchService : ISearchService
         PrivateApiResourceModels.SearchFields searchFields, int inLanguageId, int? outLanguageId)
     {
         var searchResult = await searchApiClient.Search(searchFilterParameter, searchFields);
-        logger.LogDebug("Received {TotalEntryCount} results for search for details", searchResult.TotalEntryCount);
 
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Received {TotalEntryCount} results for search for details", searchResult.TotalEntryCount);
+        }
         var entries = (await entryRepository.GetByIdsForApiDetail(searchResult.EntryIds)).ToList();
 
         foreach (var entry in entries)
@@ -103,8 +115,11 @@ public class SearchService : ISearchService
         PrivateApiResourceModels.SearchFields searchFields, int inLanguageId)
     {
         var searchResult = await searchApiClient.Search(searchFilterParameter, searchFields);
-        logger.LogDebug("Received {TotalEntryCount} results for search for summary", searchResult.TotalEntryCount);
 
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Received {TotalEntryCount} results for search for summary", searchResult.TotalEntryCount);
+        }
         var entries = (await entryRepository.GetByIdsForApiSummary(searchResult.EntryIds)).ToList();
 
         foreach (var entry in entries)
@@ -223,7 +238,7 @@ public class SearchService : ISearchService
         }
 
         var preselectedClassification = allowedClassifications
-            .SingleOrDefault(classification => string.Equals(classification.Code, publicApiOptions.DefaultVariaClassification, StringComparison.CurrentCultureIgnoreCase));
+            .SingleOrDefault(classification => string.Equals(classification.Code, publicApiOptions.DefaultVariaClassification, StringComparison.OrdinalIgnoreCase));
         var preselectedCollectionIds = preselectedClassification != null
             ? allowedCollections
                 .Where(code => code.ClassificationId == preselectedClassification.Id)
@@ -231,7 +246,7 @@ public class SearchService : ISearchService
                 .ToList()
             : new List<int>();
 
-        if (!preselectedCollectionIds.Any())
+        if (preselectedCollectionIds.Count == 0)
         {
             logger.LogWarning("No collections with classification code '{DefaultVariaClassification}' found", publicApiOptions.DefaultVariaClassification);
         }

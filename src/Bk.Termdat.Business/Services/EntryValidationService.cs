@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -65,6 +66,8 @@ public class EntryValidationService : IEntryValidationService
 
     public void ValidateLanguageDetails(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         var languageDetailsByLanguage = entryModification.LanguageDetails.GroupBy(ld => ld.LanguageId);
         foreach (var languageDetails in languageDetailsByLanguage)
         {
@@ -77,8 +80,7 @@ public class EntryValidationService : IEntryValidationService
             {
                 throw new BusinessValidationException(
                     nameof(EntryCreate.LanguageDetails),
-                    string.Format(BackendTexts.EntryLanguageDetailsSequenceInvalid, string.Join(",", expectedSequences),
-                        string.Join(",", actualSequences), languageDetails.Key));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryLanguageDetailsSequenceInvalid, string.Join(",", expectedSequences), string.Join(",", actualSequences), languageDetails.Key));
             }
 
             foreach (var detail in languageDetails)
@@ -91,6 +93,8 @@ public class EntryValidationService : IEntryValidationService
 
     public void EscapeBracketsInHyperlinksInSources(EntryModificationLanguageDetail detail)
     {
+        ArgumentNullException.ThrowIfNull(detail);
+
         detail.AbbreviationSource = EncodeNonEmptyHyperlinks(detail.AbbreviationSource);
         detail.ContextSource = EncodeNonEmptyHyperlinks(detail.ContextSource);
         detail.DefinitionSource = EncodeNonEmptyHyperlinks(detail.DefinitionSource);
@@ -103,12 +107,14 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<Collection> ValidateCollection(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         var requestedCollection = await collectionRepository.GetById(entryModification.CollectionId);
         if (requestedCollection == null)
         {
             throw new BusinessValidationException(
                 nameof(EntryCreate.CollectionId),
-                string.Format(BackendTexts.CollectionNotFound, entryModification.CollectionId));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, entryModification.CollectionId));
         }
 
         return requestedCollection;
@@ -136,12 +142,14 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<Office> ValidateOffice(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         var requestedOffice = await officeRepository.GetById(entryModification.OfficeId);
         if (requestedOffice == null)
         {
             throw new BusinessValidationException(
                 nameof(EntryCreate.OfficeId),
-                string.Format(BackendTexts.EntryOfficeNotFound, entryModification.OfficeId));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryOfficeNotFound, entryModification.OfficeId));
         }
 
         return requestedOffice;
@@ -149,6 +157,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<ConceptSystemPosition> ValidateConceptSystemPosition(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (!entryModification.ConceptSystemPositionId.HasValue)
         {
             return null;
@@ -160,7 +170,7 @@ public class EntryValidationService : IEntryValidationService
         {
             throw new BusinessValidationException(
                 nameof(EntryCreate.ConceptSystemPositionId),
-                string.Format(BackendTexts.ConceptSystemNotFound, entryModification.ConceptSystemPositionId.Value));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemNotFound, entryModification.ConceptSystemPositionId.Value));
         }
 
         return conceptSystemPosition;
@@ -175,20 +185,22 @@ public class EntryValidationService : IEntryValidationService
             {
                 throw new BusinessValidationException(
                     nameof(picture),
-                    string.Format(BackendTexts.PictureMinimalFields));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.PictureMinimalFields));
             }
 
             if (pictureFile.Length > MaxSizeByte)
             {
                 throw new BusinessValidationException(
                     nameof(pictureFile),
-                    string.Format(BackendTexts.PictureFileSize, ((long)MaxSizeByte).ToSize(SizeExtension.SizeUnits.KB)));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.PictureFileSize, ((long)MaxSizeByte).ToSize(SizeExtension.SizeUnits.KB)));
             }
         }
     }
 
     public async Task<IList<LenochClassification>> ValidateLenochClassification(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.LenochClassificationIds == null || !entryModification.LenochClassificationIds.Any())
         {
             return new List<LenochClassification>();
@@ -203,7 +215,7 @@ public class EntryValidationService : IEntryValidationService
         {
             throw new BusinessValidationException(
                 nameof(entryModification.LenochClassificationIds),
-                string.Format(BackendTexts.EntryLenochClassificationsNotFound, string.Join(",", requestedLenochClassificationIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryLenochClassificationsNotFound, string.Join(",", requestedLenochClassificationIds)));
         }
 
         return requestedLenochClassifications;
@@ -211,6 +223,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<IList<Subject>> ValidateSubjects(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.SubjectIds == null || !entryModification.SubjectIds.Any())
         {
             return new List<Subject>();
@@ -228,7 +242,7 @@ public class EntryValidationService : IEntryValidationService
         var loadedSubjectIds = requestedSubjects.OrderBy(rc => rc.Id).Select(rc => rc.Id).ToArray();
         if (!requestedSubjectsIds.SequenceEqual(loadedSubjectIds))
         {
-            throw new BusinessValidationException(nameof(entryModification.SubjectIds), string.Format(BackendTexts.EntrySubjectsNotFound, string.Join(",", entryModification.SubjectIds)));
+            throw new BusinessValidationException(nameof(entryModification.SubjectIds), string.Format(CultureInfo.InvariantCulture, BackendTexts.EntrySubjectsNotFound, string.Join(",", entryModification.SubjectIds)));
         }
 
         return requestedSubjects;
@@ -236,6 +250,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<IList<Domain.Models.Domain>> ValidateDomains(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.DomainIds == null || !entryModification.DomainIds.Any())
         {
             return new List<Domain.Models.Domain>();
@@ -247,7 +263,7 @@ public class EntryValidationService : IEntryValidationService
 
         if (!requestedDomainIds.SequenceEqual(loadedDomainIds))
         {
-            throw new BusinessValidationException(nameof(entryModification.DomainIds), string.Format(BackendTexts.EntryDomainsNotFound, string.Join(",", entryModification.DomainIds)));
+            throw new BusinessValidationException(nameof(entryModification.DomainIds), string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryDomainsNotFound, string.Join(",", entryModification.DomainIds)));
         }
 
         var requestedDomainSubjectIds = requestedDomains.Select(rd => rd.SubjectId).Distinct().ToList();
@@ -255,7 +271,7 @@ public class EntryValidationService : IEntryValidationService
         if (!requestedDomainSubjectIds.TrueForAll(id => entryModification.SubjectIds.Contains(id)))
         {
             var invalidDomains = requestedDomainSubjectIds.Where(id => !entryModification.SubjectIds.Contains(id)).ToList();
-            throw new BusinessValidationException(nameof(entryModification.DomainIds), string.Format(BackendTexts.EntryDomainsInvalid, string.Join(",", invalidDomains)));
+            throw new BusinessValidationException(nameof(entryModification.DomainIds), string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryDomainsInvalid, string.Join(",", invalidDomains)));
         }
 
         return requestedDomains;
@@ -263,6 +279,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<IList<Collection>> ValidateRelatedCollections(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.RelatedCollectionIds == null || !entryModification.RelatedCollectionIds.Any())
         {
             return new List<Collection>();
@@ -277,8 +295,7 @@ public class EntryValidationService : IEntryValidationService
         {
             throw new BusinessValidationException(
                 nameof(entryModification.RelatedCollectionIds),
-                string.Format(BackendTexts.EntryRelatedCollectionsNotFound,
-                    string.Join(",", requestedCollectionIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryRelatedCollectionsNotFound, string.Join(",", requestedCollectionIds)));
         }
 
         return requestedCollections;
@@ -286,6 +303,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<ICollection<Glossary>> ValidateGlossaries(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.GlossaryIds == null || !entryModification.GlossaryIds.Any())
         {
             return new List<Glossary>();
@@ -300,8 +319,7 @@ public class EntryValidationService : IEntryValidationService
         {
             throw new BusinessValidationException(
                 nameof(entryModification.GlossaryIds),
-                string.Format(BackendTexts.EntryGlossariesNotFound,
-                    string.Join(",", requestedGlossaryIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryGlossariesNotFound, string.Join(",", requestedGlossaryIds)));
         }
 
         return requestedGlossaries;
@@ -329,6 +347,9 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<ICollection<EntryReference>> ValidateReferences(IEntryModification entryModification, Entry clientEntry)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+        ArgumentNullException.ThrowIfNull(clientEntry);
+
         if (entryModification.References == null || !entryModification.References.Any())
         {
             return new List<EntryReference>();
@@ -351,8 +372,7 @@ public class EntryValidationService : IEntryValidationService
         {
             throw new BusinessValidationException(
                 nameof(entryModification.References),
-                string.Format(BackendTexts.EntryReferencesNotFound,
-                    string.Join(",", requestedEntryIds)));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryReferencesNotFound, string.Join(",", requestedEntryIds)));
         }
 
         foreach (var entryReference in clientEntry.References)
@@ -365,6 +385,9 @@ public class EntryValidationService : IEntryValidationService
 
     public ICollection<EntryExternalLink> ValidateExternalLinks(IEntryModification entryModification, Entry clientEntry)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+        ArgumentNullException.ThrowIfNull(clientEntry);
+
         if (entryModification.ExternalLinks == null || !entryModification.ExternalLinks.Any())
         {
             return new List<EntryExternalLink>();
@@ -380,7 +403,7 @@ public class EntryValidationService : IEntryValidationService
             {
                 throw new BusinessValidationException(
                     nameof(entryModification.ExternalLinks),
-                    string.Format(BackendTexts.ExternalLinkInvalid, entryExternalLink.Url));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.ExternalLinkInvalid, entryExternalLink.Url));
             }
 
             entryExternalLink.EntryId = clientEntry.Id;
@@ -408,8 +431,7 @@ public class EntryValidationService : IEntryValidationService
             {
                 throw new BusinessValidationException(
                     nameof(pictureTranslation.Language),
-                    string.Format(BackendTexts.EntryLanguageNotFound,
-                        pictureTranslation.LanguageId));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryLanguageNotFound, pictureTranslation.LanguageId));
             }
         }
 
@@ -418,6 +440,8 @@ public class EntryValidationService : IEntryValidationService
 
     public async Task<IList<AdminInfo>> ValidateAdminInfos(IEntryModification entryModification)
     {
+        ArgumentNullException.ThrowIfNull(entryModification);
+
         if (entryModification.AdminInfos == null || !entryModification.AdminInfos.Any())
         {
             return new List<AdminInfo>();
@@ -437,7 +461,7 @@ public class EntryValidationService : IEntryValidationService
 
     private static string EscapeHyperlinksInString(string markDownString)
     {
-        var regex = new Regex(@"\[([^\]]+)]\(([^)]+)\)");
+        var regex = new Regex(@"\[([^\]]+)]\(([^)]+)\)", RegexOptions.None, TimeSpan.FromSeconds(1));
         var matchesWithHyperLink = regex.Matches(markDownString);
         var escapedString = markDownString;
         if (matchesWithHyperLink.Count > 0)
@@ -445,7 +469,7 @@ public class EntryValidationService : IEntryValidationService
             foreach (Match match in matchesWithHyperLink)
             {
                 var hyperlinkGroup = match.Groups[2];
-                if (hyperlinkGroup.Value.Contains('('))
+                if (hyperlinkGroup.Value.Contains('(', StringComparison.InvariantCulture))
                 {
                     var hyperlink = GetHyperlinkWithBrackets(markDownString, hyperlinkGroup.Index - 1);
                     if (hyperlink is null)
@@ -453,7 +477,7 @@ public class EntryValidationService : IEntryValidationService
                         continue;
                     }
                     var escapedHyperlink = EscapeBrackets(hyperlink);
-                    escapedString = escapedString.Replace(hyperlink, escapedHyperlink);
+                    escapedString = escapedString.Replace(hyperlink, escapedHyperlink, StringComparison.InvariantCulture);
                 }
             }
         }

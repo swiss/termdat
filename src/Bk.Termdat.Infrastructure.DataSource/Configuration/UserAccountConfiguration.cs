@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class UserAccountConfiguration : EntityChangeTrackingConfiguration<UserAc
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<UserAccount> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(u => u.Email)
             .HasMaxLength(100)
             .IsRequired();

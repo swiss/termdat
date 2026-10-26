@@ -202,7 +202,7 @@ public class EntryMappingProfile : Profile
             .ForMember(dest => dest.NoteTooltips, opt => opt.MapFrom<EntryLanguageNoteTooltipResolver>())
             .ForMember(dest => dest.References, opt =>
             {
-                opt.PreCondition(src => src.Sequence == 1 && (src.Entry?.References?.Any() ?? false));
+                opt.PreCondition(src => src.Sequence == 1 && src.Entry?.References?.Count > 0);
                 opt.MapFrom(src => CreateReferences(src.Entry, src.LanguageId));
             })
             .AfterMap<EntryLanguageDetailAuthorizationAction>();
@@ -354,7 +354,7 @@ public class EntryMappingProfile : Profile
             .ForMember(dest => dest.AdminInfos, opt => opt.MapFrom<EntryWatchlistAdminInfosResolver>());
     }
 
-    private static IList<ResourceModels.EntryReferenceSummary> CreateReferences(DomainModels.Entry entry, int languageId)
+    private static List<ResourceModels.EntryReferenceSummary> CreateReferences(DomainModels.Entry entry, int languageId)
     {
         var references = new List<ResourceModels.EntryReferenceSummary>();
 

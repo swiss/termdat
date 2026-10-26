@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Services.Interfaces;
@@ -15,6 +16,8 @@ public class CollectionDisplayNameResolver : IValueResolver<Entry, object, strin
 
     public string Resolve(Entry source, object destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return $"{source.Collection.Code} - {cultureService.GetTranslation(source.Collection.Translations)}";
     }
 }

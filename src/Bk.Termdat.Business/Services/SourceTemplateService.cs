@@ -67,19 +67,19 @@ public class SourceTemplateService : ISourceTemplateService
 
     public async Task<IEnumerable<string>> GetAllForCurrentUserAsText(string isoCode)
     {
+        ArgumentNullException.ThrowIfNull(isoCode);
+
         var user = await _userAccountRepository.GetByEmail(_identityService.GetCurrentEmail());
 
         var sourceTemplates = await _sourceTemplateRepository.GetAll(user.Id);
 
-        var listOfSourceTemplatesAsString = new List<string>();
-
-        listOfSourceTemplatesAsString = isoCode.ToLower() switch
+        var listOfSourceTemplatesAsString = isoCode.ToUpperInvariant() switch
         {
-            "de" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextDe)).Select(y => y.TextDe).ToList(),
-            "fr" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextFr)).Select(y => y.TextFr).ToList(),
-            "it" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextIt)).Select(y => y.TextIt).ToList(),
-            "en" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextEn)).Select(y => y.TextEn).ToList(),
-            "rm" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextRm)).Select(y => y.TextRm).ToList(),
+            "DE" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextDe)).Select(y => y.TextDe).ToList(),
+            "FR" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextFr)).Select(y => y.TextFr).ToList(),
+            "IT" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextIt)).Select(y => y.TextIt).ToList(),
+            "EN" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextEn)).Select(y => y.TextEn).ToList(),
+            "RM" => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextRm)).Select(y => y.TextRm).ToList(),
             _ => sourceTemplates.Where(y => !string.IsNullOrEmpty(y.TextDe)).Select(y => y.TextDe).ToList(),
         };
 

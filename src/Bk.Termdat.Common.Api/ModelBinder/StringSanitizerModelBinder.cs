@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -8,6 +9,8 @@ public class StringSanitizerModelBinder : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
+        ArgumentNullException.ThrowIfNull(bindingContext);
+
         var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
         var value = valueProviderResult.FirstValue;
 
@@ -30,6 +33,6 @@ public class StringSanitizerModelBinder : IModelBinder
         //      - Space
         //      - ~
         //      - All other Unicode except DEL
-        return Regex.Replace(value, @"[^\u0009\u000A\u000D\u0020-\u007E\u0080-\uffff]", string.Empty);
+        return Regex.Replace(value, @"[^\u0009\u000A\u000D\u0020-\u007E\u0080-\uffff]", string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1));
     }
 }

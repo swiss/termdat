@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,6 +10,8 @@ public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T>
 {
     public void Configure(EntityTypeBuilder<T> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.HasKey(e => e.Id);
         builder.Property(e => e.ConcurrencyToken)
             .HasColumnName("xmin")

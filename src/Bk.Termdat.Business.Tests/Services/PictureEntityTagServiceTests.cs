@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class PictureEntityTagServiceTests
+internal class PictureEntityTagServiceTests
 {
     [TestCase("E3B0C44298FC1C149AFBF4C8996FB92427AE41E4", "")]
     [TestCase("294AC0B9648BCF7E775E68D2A943E72C8F745A9C", "bogue")]

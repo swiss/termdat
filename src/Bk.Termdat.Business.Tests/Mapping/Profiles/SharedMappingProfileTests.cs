@@ -53,11 +53,12 @@ internal class SharedMappingProfileTests
         services.AddTransient(typeof(NewsItemTitleResolver<,>));
         var provider = services.BuildServiceProvider();
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var config = new MapperConfiguration(c =>
         {
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new SharedMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
         mapper = config.CreateMapper();
     }
 

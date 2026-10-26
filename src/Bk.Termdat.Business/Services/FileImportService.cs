@@ -25,6 +25,8 @@ public class FileImportService : IFileImportService
         fileType)> IsFileValid(
         IFormFile file)
     {
+        ArgumentNullException.ThrowIfNull(file);
+
         var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
         switch (fileExtension)

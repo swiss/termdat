@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.DataSource.Tests.Repositories;
 
 [TestFixture]
-public class GlossaryRepositoryTests
+internal class GlossaryRepositoryTests
 {
     private GlossaryRepository glossaryRepository;
     private DataContext context;
@@ -62,7 +62,7 @@ public class GlossaryRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new GlossaryRepository(createContext);
 
         var newGlossary = new Glossary

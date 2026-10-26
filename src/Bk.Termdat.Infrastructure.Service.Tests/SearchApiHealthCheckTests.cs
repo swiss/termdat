@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.Service.Tests;
 
 [TestFixture]
-public class SearchApiStatusServiceTests
+internal class SearchApiStatusServiceTests
 {
     private readonly ISearchApiClient searchApiClientMock = Substitute.For<ISearchApiClient>();
     private SearchApiHealthCheck healthCheck;
@@ -28,7 +28,7 @@ public class SearchApiStatusServiceTests
     [Test]
     public async Task GetStatusShouldCallIsAlive()
     {
-        await healthCheck.CheckHealthAsync(null!);
+        await healthCheck.CheckHealthAsync(null);
         await searchApiClientMock.Received(1).IsAlive();
     }
 
@@ -37,7 +37,7 @@ public class SearchApiStatusServiceTests
     {
         searchApiClientMock.IsAlive().Returns(true);
 
-        var status = await healthCheck.CheckHealthAsync(null!);
+        var status = await healthCheck.CheckHealthAsync(null);
 
         await searchApiClientMock.Received(1).IsAlive();
         Assert.That(status.Status, Is.EqualTo(HealthStatus.Healthy));
@@ -48,7 +48,7 @@ public class SearchApiStatusServiceTests
     {
         searchApiClientMock.IsAlive().Returns(false);
 
-        var status = await healthCheck.CheckHealthAsync(null!);
+        var status = await healthCheck.CheckHealthAsync(null);
 
         await searchApiClientMock.Received(1).IsAlive();
         Assert.That(status.Status, Is.EqualTo(HealthStatus.Unhealthy));

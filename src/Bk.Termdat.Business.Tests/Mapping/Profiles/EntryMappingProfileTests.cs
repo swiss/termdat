@@ -23,6 +23,7 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 
 namespace Bk.Termdat.Business.Tests.Mapping.Profiles;
 
+[TestFixture]
 internal class EntryMappingProfileTests
 {
     private IMapper mapper;
@@ -68,6 +69,7 @@ internal class EntryMappingProfileTests
                 new() { Code = "EXP", Tooltip = "Exp tooltip" }
             });
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var config = new MapperConfiguration(c =>
         {
             var services = new ServiceCollection();
@@ -104,7 +106,7 @@ internal class EntryMappingProfileTests
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new EntryMappingProfile());
             c.AddProfile(new SharedMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
         mapper = config.CreateMapper();
 
         referencedEntry1 = GenerateReferencedEntry(2);
@@ -443,7 +445,7 @@ internal class EntryMappingProfileTests
         Assert.That(result.CreatedBy, Is.EqualTo(entry.CreatedBy));
         Assert.That(result.ModifiedBy, Is.EqualTo(entry.ModifiedBy));
         Assert.That(result.Comment, Is.EqualTo(entry.Comment));
-        Assert.That(result.RelatedCollections, Is.Null);
+        Assert.That(result.RelatedCollections, Is.Empty);
         Assert.That(result.Identification, Is.Null);
 
         Assert.That(result.Locked, Is.EqualTo(entry.Locked));
@@ -467,7 +469,7 @@ internal class EntryMappingProfileTests
         Assert.That(result.ModifiedBy, Is.Null);
         Assert.That(result.Comment, Is.EqualTo(entry.Comment));
         Assert.That(result.AdminInfos, Has.Count.EqualTo(2));
-        Assert.That(result.RelatedCollections, Is.Null);
+        Assert.That(result.RelatedCollections, Is.Empty);
         Assert.That(result.Identification, Is.Null);
 
         Assert.That(result.Locked, Is.Null);

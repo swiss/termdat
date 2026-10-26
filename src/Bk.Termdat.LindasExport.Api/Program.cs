@@ -108,7 +108,7 @@ try
     app.MapFChHealthChecks();
 
     Log.Information("Starting web host: Bk.Termdat.LindasExport.Api");
-    app.Run();
+    await app.RunAsync();
 
     return 0;
 }
@@ -120,5 +120,5 @@ catch (Exception ex) when (ex is not HostAbortedException)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

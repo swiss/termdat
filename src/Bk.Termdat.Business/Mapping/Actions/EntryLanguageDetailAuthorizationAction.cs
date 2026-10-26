@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Resource.Models;
@@ -16,6 +17,8 @@ public class EntryLanguageDetailAuthorizationAction : IMappingAction<EntryLangua
 
     public void Process(EntryLanguage source, EntryLanguageDetail destination, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(destination);
+
         if (authorizationService.IsAdmin() || authorizationService.IsSuperUser() || authorizationService.IsWriter())
         {
             return;

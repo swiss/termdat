@@ -18,7 +18,7 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("data")
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -1234,7 +1234,9 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
                         .HasColumnName("created");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("text")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("created_by");
 
                     b.Property<bool>("IsEnabled")
@@ -1246,7 +1248,9 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
                         .HasColumnName("modified");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("text")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("modified_by");
 
                     b.Property<int>("SortIndex")
@@ -2619,7 +2623,8 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
 
             modelBuilder.Entity("Bk.Termdat.Business.Domain.Models.Collection", b =>
                 {
-                    b.Navigation("ConceptSystem");
+                    b.Navigation("ConceptSystem")
+                        .IsRequired();
 
                     b.Navigation("Entries");
 
@@ -2647,7 +2652,8 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
                 {
                     b.Navigation("ExternalLinks");
 
-                    b.Navigation("Picture");
+                    b.Navigation("Picture")
+                        .IsRequired();
 
                     b.Navigation("ReferencedByEntries");
 
@@ -2696,7 +2702,8 @@ namespace Bk.Termdat.Infrastructure.DataSource.Migrations
 
             modelBuilder.Entity("Bk.Termdat.Business.Domain.Models.Picture", b =>
                 {
-                    b.Navigation("File");
+                    b.Navigation("File")
+                        .IsRequired();
 
                     b.Navigation("Translations");
                 });

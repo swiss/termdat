@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Services;
 using Bk.Termdat.Business.Services.Interfaces;
 
@@ -7,12 +8,14 @@ public static class IdentityServiceExtensions
 {
     public static StaticIdentityService ConvertToStaticIdentityService(this IIdentityService identityService)
     {
+        ArgumentNullException.ThrowIfNull(identityService);
+
         return new StaticIdentityService
         {
-            CurrentEmail = identityService.GetCurrentEmail(),
-            CurrentLastName = identityService.GetCurrentLastName(),
-            CurrentFirstName = identityService.GetCurrentFirstName(),
-            CurrentRole = identityService.GetCurrentRole()
+            Email = identityService.GetCurrentEmail(),
+            LastName = identityService.GetCurrentLastName(),
+            FirstName = identityService.GetCurrentFirstName(),
+            Role = identityService.GetCurrentRole()
         };
     }
 }

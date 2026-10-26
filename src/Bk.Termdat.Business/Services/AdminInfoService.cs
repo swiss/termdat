@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bk.Termdat.Business.Clients;
@@ -58,7 +59,7 @@ public class AdminInfoService : IAdminInfoService
         var adminInfo = await adminInfoRepository.GetById(id);
         if (adminInfo is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.AdminInfoNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.AdminInfoNotFound, id));
         }
 
         return mapper.Map<AdminInfoUpdate>(adminInfo);
@@ -66,6 +67,8 @@ public class AdminInfoService : IAdminInfoService
 
     public async Task<AdminInfoDetail> GetOrCreateAdminInfos(AdminInfoSummary summary)
     {
+        ArgumentNullException.ThrowIfNull(summary);
+
         var existing = await GetByCode(summary.Code);
 
         if (existing == null)
@@ -96,11 +99,13 @@ public class AdminInfoService : IAdminInfoService
 
     public async Task<AdminInfoDetail> Update(AdminInfoUpdate adminInfoUpdate)
     {
+        ArgumentNullException.ThrowIfNull(adminInfoUpdate);
+
         var databaseAdminInfo = await adminInfoRepository.GetById(adminInfoUpdate.Id);
 
         if (databaseAdminInfo == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.AdminInfoNotFound, adminInfoUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.AdminInfoNotFound, adminInfoUpdate.Id));
         }
 
         var mappedAdminInfo = mapper.Map<AdminInfo>(adminInfoUpdate);
@@ -124,7 +129,7 @@ public class AdminInfoService : IAdminInfoService
 
         if (adminInfo == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.AdminInfoNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.AdminInfoNotFound, id));
         }
 
         var entryIds = await entryRepository.GetIdsByAdminInfoId(adminInfo.Id);

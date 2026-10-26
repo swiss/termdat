@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class EntryLanguageConfiguration : EntityConfiguration<EntryLanguage>
 {
     protected override void ConfigureEntity(EntityTypeBuilder<EntryLanguage> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.IsTranslation();
 
         builder.Property(et => et.Sequence)

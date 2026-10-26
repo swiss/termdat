@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bk.Termdat.Private.Api.Controllers;
 
+#pragma warning disable S6960 // SMELL: Controller has multiple responsibilities
 [ApiController]
 [Route("api/entries")]
 public class EntriesController : ControllerBase
@@ -49,16 +50,16 @@ public class EntriesController : ControllerBase
 
             return Ok(result);
         }
-        catch (EntryLockedException)
+        catch (EntryLockedException ex)
         {
-            logger.LogWarning("Entry with id='{Id}' is locked and cannot be accessed using /modification", id);
+            logger.LogWarning(ex, "Entry with id='{Id}' is locked and cannot be accessed using /modification", id);
 
             return BadRequest();
         }
     }
 
     [HttpPut("{id}/lock")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Lock([FromRoute] int id)
     {
         var concurrencyToken = await entryService.Lock(id);
@@ -67,7 +68,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("{id}/unlock")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Unlock([FromRoute] int id)
     {
         var concurrencyToken = await entryService.Unlock(id);
@@ -76,7 +77,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Create([FromBody] EntryCreate entryCreate)
     {
         if (entryCreate is null)
@@ -97,7 +98,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromForm] EntryUpdate entryUpdate)
     {
         if (entryUpdate is null)
@@ -123,7 +124,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("multiple-search-and-replace")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> MultipleSearchAndReplace([FromForm] EntrySearchAndReplaceUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any() || dto?.LanguageIds is null || !dto.LanguageIds.Any() ||
@@ -138,7 +139,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-mandatory-header-fields")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMandatoryHeaderFields([FromForm] EntryHeaderUpdate entryHeaderUpdate)
     {
         if (entryHeaderUpdate?.Ids is null || entryHeaderUpdate.Ids.Count == 0)
@@ -152,7 +153,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-multiple-admin-infos")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMultipleAdminInfos([FromBody] EntryChipFieldInputUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -166,7 +167,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-multiple-glossaries")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMultipleGlossaries([FromBody] EntryChipFieldUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -180,7 +181,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-multiple-related-collections")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMultipleRelatedCollections([FromBody] EntryChipFieldUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -195,7 +196,7 @@ public class EntriesController : ControllerBase
 
 
     [HttpPut("update-multiple-comment")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMultipleComment([FromBody] EntryCommentUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -209,7 +210,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-multiple-concept-system-position")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> UpdateMultipleConceptSystemPosition([FromBody] EntryConceptSystemPositionUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -229,7 +230,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("update-multiple-source")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> UpdateSource([FromBody] EntrySourceUpdate dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -249,7 +250,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPut("move-content")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> MoveContent([FromBody] EntryContentMove dto)
     {
         if (dto?.Ids is null || !dto.Ids.Any())
@@ -270,7 +271,7 @@ public class EntriesController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrSuperUserPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id, [FromQuery] bool soft = true)
     {
         var updateInfos = await entryService.DeleteMultiple([id], soft);
@@ -278,7 +279,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpDelete("multi-delete")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> DeleteMultiple([FromBody] int[] ids, [FromQuery] bool soft = true)
     {
         var lockInfos = await entryService.DeleteMultiple(ids, soft);
@@ -286,7 +287,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPost("restore")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Restore([FromBody] int id)
     {
         var entry = await entryService.RestoreMultiple(new[] { id });
@@ -294,7 +295,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpPost("multi-restore")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> RestoreMultiple([FromBody] int[] ids)
     {
         var lockInfos = await entryService.RestoreMultiple(ids);
@@ -302,7 +303,7 @@ public class EntriesController : ControllerBase
     }
 
     [HttpGet("{id}/reference")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> GetReferenceDetail([FromRoute] int id)
     {
         var result = await entryService.GetReferenceDetail(id);
@@ -310,3 +311,4 @@ public class EntriesController : ControllerBase
         return Ok(result);
     }
 }
+#pragma warning restore S6960

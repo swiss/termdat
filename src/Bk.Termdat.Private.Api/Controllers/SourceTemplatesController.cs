@@ -3,6 +3,7 @@ using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bk.Termdat.Private.Api.Controllers;
@@ -19,7 +20,8 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpGet("")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
+    [ProducesResponseType(typeof(SourceTemplateDefaults), StatusCodes.Status200OK)]
     public ActionResult GetAllDefaults()
     {
         var result = sourceTemplateService.GetAllDefaults();
@@ -27,7 +29,7 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpGet("current-user")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> GetAllForCurrentUser()
     {
         var sourceTemplates = await sourceTemplateService.GetAllForCurrentUser();
@@ -35,7 +37,7 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpGet("current-user/texts/{isoCode}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> GetAllForCurrentUserAsText([FromRoute] string isoCode)
     {
         var sourceTemplates = await sourceTemplateService.GetAllForCurrentUserAsText(isoCode);
@@ -43,7 +45,7 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] SourceTemplateModification sourceTemplateUpdate)
     {
         await sourceTemplateService.Update(id, sourceTemplateUpdate);
@@ -51,7 +53,7 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Create([FromBody] SourceTemplateModification sourceTemplateCreate)
     {
         await sourceTemplateService.Create(sourceTemplateCreate);
@@ -59,7 +61,7 @@ public class SourceTemplatesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await sourceTemplateService.Delete(id);

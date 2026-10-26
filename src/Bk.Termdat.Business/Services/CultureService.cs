@@ -28,25 +28,13 @@ public class CultureService : ICultureService
     }
 
     public string GetTranslation(IEnumerable<IEntityNameTranslation> srcTranslations)
-    {
+    {        
         var currentLang = GetCurrentIsoCode();
         var defaultLang = GetDefaultIsoCode();
         var translationList = srcTranslations?.ToList() ?? new List<IEntityNameTranslation>();
 
-        var translation = translationList.FirstOrDefault(t => t.Language.IsoCode.ToUpperInvariant() == currentLang)
-                          ?? translationList.FirstOrDefault(t => t.Language.IsoCode.ToUpperInvariant() == defaultLang);
-
-        return translation?.Name;
-    }
-
-    public string GetLanguageTranslation(IEnumerable<LanguageTranslation> srcTranslations)
-    {
-        var currentLang = GetCurrentIsoCode();
-        var defaultLang = GetDefaultIsoCode();
-        var translationList = srcTranslations.ToList();
-
-        var translation = translationList.FirstOrDefault(t => string.Equals(t.IsoCode, currentLang, StringComparison.InvariantCultureIgnoreCase))
-            ?? translationList.FirstOrDefault(t => string.Equals(t.IsoCode, defaultLang, StringComparison.InvariantCultureIgnoreCase));
+        var translation = translationList.FirstOrDefault(t => string.Equals(t.Language.IsoCode, currentLang, StringComparison.OrdinalIgnoreCase))
+                          ?? translationList.FirstOrDefault(t => string.Equals(t.Language.IsoCode, defaultLang, StringComparison.OrdinalIgnoreCase));
 
         return translation?.Name;
     }
@@ -58,8 +46,20 @@ public class CultureService : ICultureService
 
         var list = translations?.ToList() ?? [];
 
-        return list.FirstOrDefault(t => t.Language.IsoCode.ToUpperInvariant() == currentLang)
-            ?? list.FirstOrDefault(t => t.Language.IsoCode.ToUpperInvariant() == defaultLang);
+        return list.FirstOrDefault(t => string.Equals(t.Language.IsoCode, currentLang, StringComparison.OrdinalIgnoreCase))
+            ?? list.FirstOrDefault(t => string.Equals(t.Language.IsoCode, defaultLang, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public string GetLanguageTranslation(IEnumerable<LanguageTranslation> srcTranslations)
+    {
+        var currentLang = GetCurrentIsoCode();
+        var defaultLang = GetDefaultIsoCode();
+        var translationList = srcTranslations.ToList();
+
+        var translation = translationList.FirstOrDefault(t => string.Equals(t.IsoCode, currentLang, StringComparison.OrdinalIgnoreCase))
+            ?? translationList.FirstOrDefault(t => string.Equals(t.IsoCode, defaultLang, StringComparison.OrdinalIgnoreCase));
+
+        return translation?.Name;
     }
 
     private static string GetIso(CultureInfo info)

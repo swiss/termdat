@@ -20,7 +20,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 [SetUICulture("de")]
 internal class EntryValidationServiceTests
 {
-    private IEntryValidationService service;
+    private EntryValidationService service;
 
     private readonly IAuthorizationService authorizationServiceMock = Substitute.For<IAuthorizationService>();
     private readonly ICollectionRepository collectionRepositoryMock = Substitute.For<ICollectionRepository>();
@@ -39,13 +39,13 @@ internal class EntryValidationServiceTests
     private DomainModel.Collection collection;
     private DomainModel.Office office;
     private DomainModel.ConceptSystemPosition conceptSystemPosition;
-    private IEntryModification entryModification;
+    private EntryCreate entryModification;
     private IList<DomainModel.Language> languages;
     private DomainModel.Picture picture;
-    private IList<DomainModel.Domain> domains;
-    private IList<DomainModel.Subject> subjects;
-    private IList<DomainModel.AdminInfo> adminInfos;
-    private IList<AdminInfoSummary> adminInfoSummaries;
+    private List<DomainModel.Domain> domains;
+    private List<DomainModel.Subject> subjects;
+    private List<DomainModel.AdminInfo> adminInfos;
+    private List<AdminInfoSummary> adminInfoSummaries;
 
     [SetUp]
     public void SetUp()

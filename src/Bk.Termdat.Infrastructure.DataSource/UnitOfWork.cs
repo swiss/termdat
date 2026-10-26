@@ -47,7 +47,7 @@ public class UnitOfWork : IUnitOfWork
     }
 
     // See: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/implement-resilient-entity-framework-core-sql-connections
-    private class ResilientTransaction
+    private sealed class ResilientTransaction
     {
         private readonly DbContext context;
 

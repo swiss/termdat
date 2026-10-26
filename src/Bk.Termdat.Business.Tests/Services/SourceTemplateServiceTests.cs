@@ -18,7 +18,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class SourceTemplateServiceTests
+internal class SourceTemplateServiceTests
 {
     private readonly ISourceTemplateRepository sourceTemplateRepositoryMock = Substitute.For<ISourceTemplateRepository>();
     private readonly IUserAccountRepository userAccountRepositoryMock = Substitute.For<IUserAccountRepository>();
@@ -30,7 +30,7 @@ public class SourceTemplateServiceTests
     private SourceTemplateModification sourceTemplateUpdate;
     private SourceTemplate sourceTemplate1;
     private SourceTemplate sourceTemplate2;
-    private IList<SourceTemplate> sourceTemplates;
+    private IList<SourceTemplate> _sourceTemplates;
     private IList<SourceTemplateSummary> sourceTemplateDetails;
     private UserAccount user;
 
@@ -81,7 +81,7 @@ public class SourceTemplateServiceTests
             ModifiedBy = "Modifier"
         };
 
-        sourceTemplates = new List<SourceTemplate>()
+        _sourceTemplates = new List<SourceTemplate>()
         {
             new()
             {
@@ -158,15 +158,22 @@ public class SourceTemplateServiceTests
             }
         };
 
-        user = new UserAccount { Id = 1, };
+        user = new UserAccount
+        {
+            Id = 1,
+            CreatedBy = "SYSTEM",
+            Created = new DateTime(2026, 1, 1),
+            Email = "test@test.ch"
+        };
+
         userAccountRepositoryMock.GetByEmail(Arg.Any<string>()).Returns(user);
 
         mapperMock.Map<SourceTemplate>(sourceTemplateCreate).Returns(sourceTemplate1);
         mapperMock.Map<SourceTemplate>(sourceTemplateUpdate).Returns(sourceTemplate2);
-        mapperMock.Map<IEnumerable<SourceTemplateSummary>>(sourceTemplates).Returns(sourceTemplateDetails);
+        mapperMock.Map<IEnumerable<SourceTemplateSummary>>(_sourceTemplates).Returns(sourceTemplateDetails);
         sourceTemplateRepositoryMock.GetById(1).Returns(sourceTemplate1);
         sourceTemplateRepositoryMock.GetById(2).Returns(sourceTemplate2);
-        sourceTemplateRepositoryMock.GetAll(1).Returns(sourceTemplates);
+        sourceTemplateRepositoryMock.GetAll(1).Returns(_sourceTemplates);
     }
 
     [TearDown]
@@ -213,7 +220,7 @@ public class SourceTemplateServiceTests
     [Test]
     public async Task Create_WhenCalled_ShouldSucceed()
     {
-        SourceTemplate createdTemplate = null!;
+        SourceTemplate createdTemplate = null;
         sourceTemplateRepositoryMock.When(x => x.Create(Arg.Any<SourceTemplate>()))
             .Do(x => createdTemplate = x.Arg<SourceTemplate>());
 
@@ -233,7 +240,7 @@ public class SourceTemplateServiceTests
     [Test]
     public async Task Update_WhenCalled_ShouldSucceed()
     {
-        SourceTemplate updatedTemplate = null!;
+        SourceTemplate updatedTemplate = null;
         sourceTemplateRepositoryMock.When(x => x.Update(Arg.Any<SourceTemplate>(), Arg.Any<SourceTemplate>()))
             .Do(x => updatedTemplate = x.ArgAt<SourceTemplate>(1));
 
@@ -257,7 +264,7 @@ public class SourceTemplateServiceTests
     [Test]
     public async Task Delete_WhenCalled_ShouldSucceed()
     {
-        SourceTemplate deletedTemplate = null!;
+        SourceTemplate deletedTemplate = null;
         sourceTemplateRepositoryMock.When(x => x.Delete(Arg.Any<SourceTemplate>()))
             .Do(x => deletedTemplate = x.Arg<SourceTemplate>());
 

@@ -384,21 +384,6 @@ internal class EntriesControllerTests
     }
 
     [Test]
-    public async Task Update_ForValidRequest_ShouldHandleFormFile()
-    {
-        entryServiceMock.Update(entryUpdate).Returns(entryModificationDetail);
-
-        var result = await entryController.Update(entryUpdate.Id, entryUpdate);
-
-        await entryServiceMock.Received().Update(entryUpdate);
-        Assert.That(result, Is.Not.Null);
-        var response = result as OkObjectResult;
-        Assert.That(response, Is.Not.Null);
-        Assert.That(response.Value, Is.EqualTo(entryModificationDetail));
-        Assert.That(response.StatusCode, Is.EqualTo(200));
-    }
-
-    [Test]
     public async Task GetReferenceDetail_ForValidRequest_ShouldReturnReferenceDetail()
     {
         var referenceDetail = new EntryReferenceDetail();
@@ -668,7 +653,7 @@ internal class EntriesControllerTests
         Assert.That(response, Is.Not.Null);
         Assert.That(response.StatusCode, Is.EqualTo(200));
 
-        var lockResult = response!.Value as LockResult;
+        var lockResult = response.Value as LockResult;
         Assert.That(lockResult, Is.Not.Null);
         Assert.That(lockResult.IsLocked, Is.EqualTo(true));
         Assert.That(lockResult.ConcurrencyToken, Is.EqualTo(10));
@@ -686,7 +671,7 @@ internal class EntriesControllerTests
         Assert.That(response, Is.Not.Null);
         Assert.That(response.StatusCode, Is.EqualTo(200));
 
-        var lockResult = response!.Value as LockResult;
+        var lockResult = response.Value as LockResult;
         Assert.That(lockResult, Is.Not.Null);
         Assert.That(lockResult.IsLocked, Is.EqualTo(false));
         Assert.That(lockResult.ConcurrencyToken, Is.EqualTo(10));

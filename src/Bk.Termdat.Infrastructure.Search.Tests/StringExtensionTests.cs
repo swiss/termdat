@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.Search.Tests;
 
 [TestFixture]
-public class StringExtensionTests
+internal class StringExtensionTests
 {
     [TestCase("test AND phrase OR NOT abc", new[] { "test", "phrase", "abc" })]
     [TestCase("      phrase         with    spaces       ", new[] { "phrase", "with", "spaces" })]

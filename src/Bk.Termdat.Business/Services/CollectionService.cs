@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -113,11 +114,13 @@ public class CollectionService : ICollectionService
 
     public async Task<CollectionDetail> Update(CollectionUpdate collectionUpdate)
     {
+        ArgumentNullException.ThrowIfNull(collectionUpdate);
+
         var databaseCollection = await collectionRepository.GetById(collectionUpdate.Id);
 
         if (databaseCollection == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.CollectionNotFound, collectionUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, collectionUpdate.Id));
         }
 
         var mappedCollection = mapper.Map<Collection>(collectionUpdate);
@@ -188,7 +191,7 @@ public class CollectionService : ICollectionService
         var collection = await collectionRepository.GetById(id);
         if (collection == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.CollectionNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, id));
         }
         var mappedCollection = mapper.Map<CollectionUpdate>(collection);
 
@@ -200,7 +203,7 @@ public class CollectionService : ICollectionService
         var collectionWithEntryCount = await collectionRepository.GetByIdForDelete(id);
         if (collectionWithEntryCount == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.CollectionNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, id));
         }
 
         return collectionWithEntryCount;

@@ -114,7 +114,7 @@ internal class AdminInfoRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
            .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new AdminInfoRepository(createContext);
 
         var newAdminInfo = new AdminInfo

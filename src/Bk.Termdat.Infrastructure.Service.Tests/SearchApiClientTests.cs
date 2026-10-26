@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.Service.Tests;
 
 [TestFixture]
-public class SearchApiClientTests
+internal class SearchApiClientTests
 {
     private const string HttpBaseAddress = "http://fake.io/api/";
     private SearchApiClient searchApiClient;
@@ -55,14 +56,16 @@ public class SearchApiClientTests
         searchApiOptions.BaseUrl = HttpBaseAddress;
 
         const string mockResponse = "[{\"status\":\"UP\",\"serviceName\":\"Result\",\"serviceStatusTime\":\"2022-07-06T14:44:58.30204Z\"}]";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(mockResponse, Encoding.UTF8, "application/json")
         });
 
-        var httpClient = new HttpClient(httpMessageHandlerMock);
+        using var httpClient = new HttpClient(httpMessageHandlerMock);
+#pragma warning disable CA2000
         httpClientFactoryMock.CreateClient().Returns(httpClient);
+#pragma warning restore CA2000
 
         var result = await searchApiClient.IsAlive();
 
@@ -75,7 +78,7 @@ public class SearchApiClientTests
     public async Task SearchExecutesSearchRequest()
     {
         const string searchResult = "{\"EntryIds\": [1,2,3], \"TotalEntryCount\": 13}";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(searchResult, Encoding.UTF8, "application/json")
@@ -102,7 +105,7 @@ public class SearchApiClientTests
     public async Task SearchExecutesSearchRequestWithAuthorizationHeader()
     {
         const string searchResult = "{\"EntryIds\": [1], \"TotalEntryCount\": 1}";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(searchResult, Encoding.UTF8, "application/json")
@@ -110,7 +113,7 @@ public class SearchApiClientTests
         SetupHttpClientFactory(httpMessageHandlerMock);
         var httpContext = new DefaultHttpContext();
         const string expectedAuthorizeValue = "superauthtoken";
-        httpContext.Request.Headers.Add("Authorization", expectedAuthorizeValue);
+        httpContext.Request.Headers["Authorization"] = expectedAuthorizeValue;
         httpContextAccessorMock.HttpContext.Returns(httpContext);
 
         var searchFilterParameter = fixture.Create<SearchFilterParameter>();
@@ -141,7 +144,7 @@ public class SearchApiClientTests
     public async Task SearchExecutesEmptySearchRequest()
     {
         const string responseString = "{\"EntryIds\": [], \"TotalEntryCount\": 0}";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -165,7 +168,7 @@ public class SearchApiClientTests
     [TestCase("")]
     public void SearchWithUnexpectedResponseThrows(string responseString)
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -180,7 +183,7 @@ public class SearchApiClientTests
     [Test]
     public void SearchWithEmptyResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK
         });
@@ -194,7 +197,7 @@ public class SearchApiClientTests
     [Test]
     public void SearchWithErrorResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.InternalServerError
         });
@@ -208,7 +211,7 @@ public class SearchApiClientTests
     [Test]
     public void SearchWithBadRequestResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.BadRequest
         });
@@ -223,7 +226,7 @@ public class SearchApiClientTests
     public async Task RecommendExecutesRecommendRequest()
     {
         const string responseString = "[\"one\",\"two\",\"three\"]";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -246,7 +249,7 @@ public class SearchApiClientTests
     public async Task RecommendExecutesRecommendRequestWithPhrase()
     {
         const string responseString = "[\"one\",\"two\",\"three\"]";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -268,7 +271,7 @@ public class SearchApiClientTests
     public async Task RecommendExecutesRecommendRequestWithAuthorizationHeader()
     {
         const string responseString = "[]";
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -276,7 +279,7 @@ public class SearchApiClientTests
         SetupHttpClientFactory(httpMessageHandlerMock);
         var httpContext = new DefaultHttpContext();
         const string expectedAuthorizeValue = "superauthtoken";
-        httpContext.Request.Headers.Add("Authorization", expectedAuthorizeValue);
+        httpContext.Request.Headers["Authorization"] = expectedAuthorizeValue;
         httpContextAccessorMock.HttpContext.Returns(httpContext);
 
         var searchPhrase = fixture.Create<string>();
@@ -302,7 +305,7 @@ public class SearchApiClientTests
     [TestCase("")]
     public void RecommendWithUnexpectedResponseThrows(string responseString)
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(responseString, Encoding.UTF8, "application/json")
@@ -316,7 +319,7 @@ public class SearchApiClientTests
     [Test]
     public void RecommendWithEmptyResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK
         });
@@ -329,7 +332,7 @@ public class SearchApiClientTests
     [Test]
     public void RecommendWithErrorResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.InternalServerError
         });
@@ -342,7 +345,7 @@ public class SearchApiClientTests
     [Test]
     public void RecommendWithBadRequestResponseThrows()
     {
-        var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
+        using var httpMessageHandlerMock = new HttpMessageHandlerMock(new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.BadRequest
         });
@@ -358,14 +361,14 @@ public class SearchApiClientTests
 
         if (searchFilterParameter.Phrase != null)
         {
-            stringBuilder.Append($"{nameof(SearchFilterParameter.Phrase)}={searchFilterParameter.Phrase}&");
+            stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Phrase)}={searchFilterParameter.Phrase}&");
         }
 
         if (searchFilterParameter.SourceLanguageIds != null)
         {
             foreach (var id in searchFilterParameter.SourceLanguageIds)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.SourceLanguageIds)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.SourceLanguageIds)}={id}&");
             }
         }
 
@@ -373,48 +376,48 @@ public class SearchApiClientTests
         {
             foreach (var id in searchFilterParameter.Offices)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.Offices)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Offices)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.OfficesPriority)}={searchFilterParameter.OfficesPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.OfficesPriority)}={searchFilterParameter.OfficesPriority}&");
 
         if (searchFilterParameter.LenochClassifications != null)
         {
             foreach (var id in searchFilterParameter.LenochClassifications)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.LenochClassifications)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.LenochClassifications)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.LenochClassificationPriority)}={searchFilterParameter.LenochClassificationPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.LenochClassificationPriority)}={searchFilterParameter.LenochClassificationPriority}&");
 
         if (searchFilterParameter.Collections != null)
         {
             foreach (var id in searchFilterParameter.Collections)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.Collections)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Collections)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.CollectionsPriority)}={searchFilterParameter.CollectionsPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.CollectionsExclude)}={searchFilterParameter.CollectionsExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CollectionsPriority)}={searchFilterParameter.CollectionsPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CollectionsExclude)}={searchFilterParameter.CollectionsExclude}&");
 
         if (searchFilterParameter.SubjectDomains != null)
         {
             foreach (var id in searchFilterParameter.SubjectDomains)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.SubjectDomains)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.SubjectDomains)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.SubjectDomainsPriority)}={searchFilterParameter.SubjectDomainsPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.SubjectDomainsPriority)}={searchFilterParameter.SubjectDomainsPriority}&");
 
         if (searchFilterParameter.RelatedCollections != null)
         {
             foreach (var id in searchFilterParameter.RelatedCollections)
             {
-                stringBuilder.Append($"{nameof(searchFilterParameter.RelatedCollections)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(searchFilterParameter.RelatedCollections)}={id}&");
             }
         }
 
@@ -422,95 +425,95 @@ public class SearchApiClientTests
         {
             foreach (var id in searchFilterParameter.Glossaries)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.Glossaries)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Glossaries)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.GlossariesExclude)}={searchFilterParameter.GlossariesExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.GlossariesExclude)}={searchFilterParameter.GlossariesExclude}&");
 
         if (searchFilterParameter.Status != null)
         {
             foreach (var id in searchFilterParameter.Status)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.Status)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Status)}={id}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.StatusPriority)}={searchFilterParameter.StatusPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.StatusPriority)}={searchFilterParameter.StatusPriority}&");
 
         if (searchFilterParameter.AdminInfos != null)
         {
             foreach (var adminInfo in searchFilterParameter.AdminInfos)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.AdminInfos)}={adminInfo}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.AdminInfos)}={adminInfo}&");
             }
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.AdminInfosPriority)}={searchFilterParameter.AdminInfosPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.AdminInfosExclude)}={searchFilterParameter.AdminInfosExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.AdminInfosPriority)}={searchFilterParameter.AdminInfosPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.AdminInfosExclude)}={searchFilterParameter.AdminInfosExclude}&");
 
         if (searchFilterParameter.CommentStatus != null)
         {
             foreach (var selectedOption in searchFilterParameter.CommentStatus)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.CommentStatus)}={selectedOption}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CommentStatus)}={selectedOption}&");
             }
         }
 
         if (searchFilterParameter.CreatedBy != null)
         {
-            stringBuilder.Append($"{nameof(SearchFilterParameter.CreatedBy)}={searchFilterParameter.CreatedBy}&");
+            stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CreatedBy)}={searchFilterParameter.CreatedBy}&");
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.CreatedByPriority)}={searchFilterParameter.CreatedByPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.CreatedByExclude)}={searchFilterParameter.CreatedByExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CreatedByPriority)}={searchFilterParameter.CreatedByPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.CreatedByExclude)}={searchFilterParameter.CreatedByExclude}&");
 
         if (searchFilterParameter.ModifiedBy != null)
         {
-            stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedBy)}={searchFilterParameter.ModifiedBy}&");
+            stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedBy)}={searchFilterParameter.ModifiedBy}&");
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedByPriority)}={searchFilterParameter.ModifiedByPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedByExclude)}={searchFilterParameter.ModifiedByExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedByPriority)}={searchFilterParameter.ModifiedByPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedByExclude)}={searchFilterParameter.ModifiedByExclude}&");
 
         if (searchFilterParameter.ModifiedFrom.HasValue)
         {
-            stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedFrom)}={UrlEncoder.Default.Encode(searchFilterParameter.ModifiedFrom.Value.ToString("O"))}&");
+            stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedFrom)}={UrlEncoder.Default.Encode(searchFilterParameter.ModifiedFrom.Value.ToString("O"))}&");
         }
 
         if (searchFilterParameter.ModifiedTo.HasValue)
         {
-            stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedTo)}={UrlEncoder.Default.Encode(searchFilterParameter.ModifiedTo.Value.ToString("O"))}&");
+            stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedTo)}={UrlEncoder.Default.Encode(searchFilterParameter.ModifiedTo.Value.ToString("O"))}&");
         }
 
-        stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedPeriodPriority)}={searchFilterParameter.ModifiedPeriodPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.ModifiedPeriodExclude)}={searchFilterParameter.ModifiedPeriodExclude}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedPeriodPriority)}={searchFilterParameter.ModifiedPeriodPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ModifiedPeriodExclude)}={searchFilterParameter.ModifiedPeriodExclude}&");
 
         if (searchFilterParameter.Reliability != null)
         {
             foreach (var id in searchFilterParameter.Reliability)
             {
-                stringBuilder.Append($"{nameof(SearchFilterParameter.Reliability)}={id}&");
+                stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Reliability)}={id}&");
             }
         }
-        stringBuilder.Append($"{nameof(SearchFilterParameter.ReliabilityPriority)}={searchFilterParameter.ReliabilityPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.Deleted)}={searchFilterParameter.Deleted}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.DeletedPriority)}={searchFilterParameter.DeletedPriority}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.HasMissingSource)}={searchFilterParameter.HasMissingSource}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.PageIndex)}={searchFilterParameter.PageIndex}&");
-        stringBuilder.Append($"{nameof(SearchFilterParameter.PageSize)}={searchFilterParameter.PageSize}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.ReliabilityPriority)}={searchFilterParameter.ReliabilityPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.Deleted)}={searchFilterParameter.Deleted}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.DeletedPriority)}={searchFilterParameter.DeletedPriority}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.HasMissingSource)}={searchFilterParameter.HasMissingSource}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.PageIndex)}={searchFilterParameter.PageIndex}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFilterParameter.PageSize)}={searchFilterParameter.PageSize}&");
 
-        stringBuilder.Append($"{nameof(SearchFields.Terminus)}={searchFields.Terminus}&");
-        stringBuilder.Append($"{nameof(SearchFields.Name)}={searchFields.Name}&");
-        stringBuilder.Append($"{nameof(SearchFields.Abbreviation)}={searchFields.Abbreviation}&");
-        stringBuilder.Append($"{nameof(SearchFields.Phraseology)}={searchFields.Phraseology}&");
-        stringBuilder.Append($"{nameof(SearchFields.Definition)}={searchFields.Definition}&");
-        stringBuilder.Append($"{nameof(SearchFields.Note)}={searchFields.Note}&");
-        stringBuilder.Append($"{nameof(SearchFields.Context)}={searchFields.Context}&");
-        stringBuilder.Append($"{nameof(SearchFields.Source)}={searchFields.Source}&");
-        stringBuilder.Append($"{nameof(SearchFields.Metadata)}={searchFields.Metadata}&");
-        stringBuilder.Append($"{nameof(SearchFields.Country)}={searchFields.Country}&");
-        stringBuilder.Append($"{nameof(SearchFields.Comment)}={searchFields.Comment}");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Terminus)}={searchFields.Terminus}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Name)}={searchFields.Name}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Abbreviation)}={searchFields.Abbreviation}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Phraseology)}={searchFields.Phraseology}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Definition)}={searchFields.Definition}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Note)}={searchFields.Note}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Context)}={searchFields.Context}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Source)}={searchFields.Source}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Metadata)}={searchFields.Metadata}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Country)}={searchFields.Country}&");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(SearchFields.Comment)}={searchFields.Comment}");
         return stringBuilder.ToString();
     }
 
@@ -518,7 +521,7 @@ public class SearchApiClientTests
     {
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.Append($"{nameof(searchPhrase)}={searchPhrase}");
+        stringBuilder.Append(CultureInfo.InvariantCulture, $"{nameof(searchPhrase)}={searchPhrase}");
         if (languageIds != null)
         {
             stringBuilder.Append('&');
@@ -530,10 +533,12 @@ public class SearchApiClientTests
 
     private void SetupHttpClientFactory(HttpMessageHandlerMock httpMessageHandlerMock)
     {
+        #pragma warning disable CA2000
         var httpClient = new HttpClient(httpMessageHandlerMock)
         {
             BaseAddress = new Uri(HttpBaseAddress)
         };
+#pragma warning restore CA2000
         httpClientFactoryMock.CreateClient(SearchApiOptions.HttpClientName).Returns(httpClient);
     }
 

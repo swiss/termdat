@@ -18,6 +18,8 @@ public class SearchStatisticService : ISearchStatisticService
 
     public SearchStatisticService(IStatisticService statisticService, ILanguageRepository languageRepository, IOptions<PrivateOptions> privateOptions)
     {
+        ArgumentNullException.ThrowIfNull(privateOptions);
+
         this.privateOptions = privateOptions.Value;
         this.statisticService = statisticService;
         this.languageRepository = languageRepository;
@@ -25,6 +27,8 @@ public class SearchStatisticService : ISearchStatisticService
 
     public async Task<StatisticSummary> LogUnsuccessfulSearch(SearchFilterParameter searchFilterParameter, SearchFields searchFields)
     {
+        ArgumentNullException.ThrowIfNull(searchFilterParameter);
+
         if (!CheckLogConditions(searchFilterParameter, searchFields))
         {
             return null;
@@ -50,7 +54,7 @@ public class SearchStatisticService : ISearchStatisticService
             searchFilterParameter.ModifiedBy != null ||
             searchFilterParameter.ModifiedFrom.HasValue ||
             searchFilterParameter.ModifiedTo.HasValue ||
-            searchFilterParameter.Offices.Length != 1 || (searchFilterParameter.Offices.Length == 1 && !searchFilterParameter.Offices.Any(o => o == privateOptions.AchOfficeId)) ||
+            searchFilterParameter.Offices.Length != 1 || (!searchFilterParameter.Offices.Any(o => o == privateOptions.AchOfficeId)) ||
             !searchFilterParameter.OfficesPriority ||
             searchFilterParameter.RelatedCollections.Length > 0 ||
             searchFilterParameter.Status.Length != 1 || (searchFilterParameter.Status.Length == 1 && !searchFilterParameter.Status.Any(s => s == Status.Validated)) ||
@@ -60,7 +64,7 @@ public class SearchStatisticService : ISearchStatisticService
         );
     }
 
-    private bool CheckSearchFields(SearchFields searchFields)
+    private static bool CheckSearchFields(SearchFields searchFields)
     {
         // in any of these fields have to be searched to return true
         return searchFields.Abbreviation || searchFields.Name || searchFields.Metadata ||
@@ -90,7 +94,7 @@ public class SearchStatisticService : ISearchStatisticService
         return string.Join(", ", languageStrings);
     }
 
-    private string CreateSearchFieldString(SearchFields searchFields)
+    private static string CreateSearchFieldString(SearchFields searchFields)
     {
         var sb = new StringBuilder();
 

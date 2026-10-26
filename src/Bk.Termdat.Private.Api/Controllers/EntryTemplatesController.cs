@@ -19,7 +19,7 @@ public class EntryTemplatesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> GetTemplateById([FromRoute] int id)
     {
         var result = await entryTemplateService.GetTemplateById(id);
@@ -28,7 +28,7 @@ public class EntryTemplatesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> GetForUser()
     {
         var result = await entryTemplateService.GetForUser();
@@ -37,7 +37,7 @@ public class EntryTemplatesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> CreateTemplate([FromBody] EntryTemplateCreate entryTemplateDetail)
     {
         if (entryTemplateDetail is null)
@@ -51,7 +51,7 @@ public class EntryTemplatesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] EntryTemplateUpdate entryTemplateUpdate)
     {
         if (entryTemplateUpdate is null || entryTemplateUpdate.Id != id)
@@ -65,7 +65,7 @@ public class EntryTemplatesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await entryTemplateService.Delete(id);

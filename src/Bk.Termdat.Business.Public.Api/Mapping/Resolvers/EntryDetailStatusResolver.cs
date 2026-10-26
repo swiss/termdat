@@ -17,6 +17,9 @@ public class EntryDetailStatusResolver : IValueResolver<Entry, EntryDetail, Code
 
     public CodeAndText Resolve(Entry source, EntryDetail destination, CodeAndText destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(source);
+
         if (context.Items.TryGetValue(PublicApiMappingProfile.LanguageIsoCode, out var isoCode))
         {
             return new CodeAndText

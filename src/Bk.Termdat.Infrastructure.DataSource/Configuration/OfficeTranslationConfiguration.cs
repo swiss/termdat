@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class OfficeTranslationConfiguration : EntityConfiguration<OfficeTranslat
 {
     protected override void ConfigureEntity(EntityTypeBuilder<OfficeTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.IsTranslation();
 
         builder.Property(ot => ot.Name)

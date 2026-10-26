@@ -14,7 +14,7 @@ namespace Bk.Termdat.Business.Tests.Mapping;
 [TestFixture]
 internal class LanguageNewsTranslationMapperTests
 {
-    private ILanguageNewsTranslationMapper mapper;
+    private LanguageNewsTranslationMapper mapper;
     private ILanguageRepository languageRepositoryMock;
     private List<DomainModels.Language> languages;
 

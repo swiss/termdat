@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Private.Api.Tests.Controllers;
 
 [TestFixture]
-public class PicturesControllerTests
+internal class PicturesControllerTests
 {
     private IPictureService service;
     private PicturesController controller;
@@ -43,7 +43,7 @@ public class PicturesControllerTests
     [Test]
     public async Task GetPictureReturnsCorrectPicture()
     {
-        var result = await controller.GetPicture(1);
+        var result = await controller.GetPicture(null, 1);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.InstanceOf<FileContentResult>());
@@ -60,7 +60,7 @@ public class PicturesControllerTests
     [Test]
     public async Task GetPictureReturnsNotFoundForNonExistingPictures()
     {
-        var result = await controller.GetPicture(2);
+        var result = await controller.GetPicture(null, 2);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.InstanceOf<NotFoundResult>());
@@ -70,8 +70,12 @@ public class PicturesControllerTests
     [Test]
     public async Task GetPictureReturns304WhenEtagMatchesOnRequestHeaders()
     {
-        controller.HttpContext.Request.Headers.Add(new KeyValuePair<string, StringValues>("If-None-Match", picture.EntityTag));
-        var result = await controller.GetPicture(1);
+        controller.HttpContext.Request.Headers.Add(
+            new KeyValuePair<string, StringValues>(
+                "If-None-Match",
+                picture.EntityTag));
+
+        var result = await controller.GetPicture(picture.EntityTag, 1);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.InstanceOf<StatusCodeResult>());

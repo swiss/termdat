@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,11 +31,14 @@ public class LanguageNewsTranslationMapper : ILanguageNewsTranslationMapper
 
         return usedLanguages
             .Select(l => MapTranslation(source, l))
-            .Where(t => t != null)!;
+            .Where(t => t != null);
     }
 
     public void MapTranslationsTo(IEnumerable<NewsItemTranslation> translations, ILanguageNewsTranslation destination)
     {
+        ArgumentNullException.ThrowIfNull(translations);
+        ArgumentNullException.ThrowIfNull(destination);
+
         foreach (var translation in translations)
         {
             switch (translation.Language.IsoCode)

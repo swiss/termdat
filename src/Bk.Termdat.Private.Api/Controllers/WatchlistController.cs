@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Bk.Termdat.Private.Api.Controllers;
 
+#pragma warning disable S6960 // SMELL: Controller has multiple responsibilities
+
 [ApiController]
 [Route("api/watchlist")]
 public class WatchlistController : ControllerBase
@@ -28,7 +30,7 @@ public class WatchlistController : ControllerBase
     }
 
     [HttpPost("")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
     public async Task<ActionResult> GetEntries([FromBody] WatchlistQuery query)
     {
         if (query?.EntryIds is null)
@@ -45,7 +47,7 @@ public class WatchlistController : ControllerBase
     }
 
     [HttpPost("export:pdf")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
     public async Task<ActionResult> ExportPdf([FromBody] WatchlistQuery query)
     {
         if (query?.EntryIds is null)
@@ -64,7 +66,7 @@ public class WatchlistController : ControllerBase
     }
 
     [HttpPost("export:xlsx")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterPolicy)]
     public async Task<ActionResult> ExportXlsx([FromBody] WatchlistQuery query)
     {
         if (query?.EntryIds is null || !query.EntryIds.Any())
@@ -77,5 +79,5 @@ public class WatchlistController : ControllerBase
 
         return File(content, ExcelMimeType, fileName);
     }
-
 }
+#pragma warning restore S6960

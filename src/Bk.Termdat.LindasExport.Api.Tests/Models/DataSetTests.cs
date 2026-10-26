@@ -10,7 +10,7 @@ internal class DataSetTests
     [Test]
     public void GetTriples_ShouldSucceed()
     {
-        var graph = new Graph();
+        using var graph = new Graph();
         var triples = DataSet.GetTriples(graph).ToList();
 
         graph.Assert(triples);

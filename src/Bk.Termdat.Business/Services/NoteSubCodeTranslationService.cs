@@ -15,7 +15,7 @@ public class NoteSubCodeTranslationService : INoteSubCodeTranslationService
 
     private static readonly Regex noteRegex =
         new(@"(?<code>[A-Z]{3})\s*:\s*(?<text>.*?)(?=\s*;\s*[A-Z]{3}\s*:|$)",
-            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
 
     private readonly INoteSubCodeRepository repository;
     private readonly IMemoryCache cache;
@@ -73,7 +73,7 @@ public class NoteSubCodeTranslationService : INoteSubCodeTranslationService
             return repository.GetTranslations().ToDictionary(
                 x => (x.NoteSubCode.Code.ToUpperInvariant(), x.LanguageId),
                 x => x.Name);
-        })!;
+        });
     }
 
     private Dictionary<string, int> GetLanguageIsoToId()
@@ -97,7 +97,7 @@ public class NoteSubCodeTranslationService : INoteSubCodeTranslationService
             }
 
             return map;
-        })!;
+        });
     }
 
     private static string NormalizeIsoCode(string isoCode)

@@ -13,11 +13,11 @@ using OpenIdConnectOptions = Bk.Termdat.Gateway.Configuration.OpenIdConnectOptio
 namespace Bk.Termdat.Gateway.Tests.Services;
 
 [TestFixture]
-internal class TokenServiceTests
+internal sealed class TokenServiceTests
 {
-    private IHttpClientFactory httpClientFactory = null!;
-    private IHttpContextAccessor httpContextAccessor = null!;
-    private TokenService tokenService = null!;
+    private IHttpClientFactory httpClientFactory;
+    private IHttpContextAccessor httpContextAccessor;
+    private TokenService tokenService;
 
     [SetUp]
     public void SetUp()

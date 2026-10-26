@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Bk.Termdat.Business.Services.Interfaces;
@@ -16,11 +17,15 @@ public class EntrySummaryIsMainOfficeResolver : IValueResolver<DomainModels.Entr
 
     public EntrySummaryIsMainOfficeResolver(IOptions<PrivateOptions> privateOptions)
     {
+        ArgumentNullException.ThrowIfNull(privateOptions);
+
         this.privateOptions = privateOptions.Value;
     }
 
     public bool Resolve(DomainModels.Entry source, ResourceModels.EntrySummary destination, bool destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return source.OfficeId == privateOptions.AchOfficeId;
     }
 }
@@ -31,11 +36,15 @@ public class EntryDetailIsMainOfficeResolver : IValueResolver<DomainModels.Entry
 
     public EntryDetailIsMainOfficeResolver(IOptions<PrivateOptions> privateOptions)
     {
+        ArgumentNullException.ThrowIfNull(privateOptions);
+
         this.privateOptions = privateOptions.Value;
     }
 
     public bool Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, bool destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return source.OfficeId == privateOptions.AchOfficeId;
     }
 }
@@ -46,11 +55,15 @@ public class WatchlistEntryIsMainOfficeResolver : IValueResolver<DomainModels.En
 
     public WatchlistEntryIsMainOfficeResolver(IOptions<PrivateOptions> privateOptions)
     {
+        ArgumentNullException.ThrowIfNull(privateOptions);
+
         this.privateOptions = privateOptions.Value;
     }
 
     public bool Resolve(DomainModels.Entry source, ResourceModels.WatchlistEntry destination, bool destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return source.OfficeId == privateOptions.AchOfficeId;
     }
 }
@@ -61,6 +74,8 @@ public class EntryCanBeAddedToWatchListResolver : IValueResolver<DomainModels.En
 
     public EntryCanBeAddedToWatchListResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
@@ -76,6 +91,8 @@ public class EntryCanDeleteResolver : IValueResolver<DomainModels.Entry, Resourc
 
     public EntryCanDeleteResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
@@ -91,6 +108,8 @@ public class EntryCanRestoreResolver : IValueResolver<DomainModels.Entry, Resour
 
     public EntryCanRestoreResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
@@ -106,11 +125,15 @@ public class EntryCanEditCollectionResolver : IValueResolver<DomainModels.Entry,
 
     public EntryCanEditCollectionResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
     public bool Resolve(DomainModels.Entry source, ResourceModels.IEntryDetail destination, bool destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.HasAccessToCollection(source.CollectionId);
     }
 }
@@ -121,6 +144,8 @@ public class EntryCanEditResolver : IValueResolver<DomainModels.Entry, ResourceM
 
     public EntryCanEditResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
@@ -136,11 +161,15 @@ public class EntryLockedResolver : IValueResolver<DomainModels.Entry, ResourceMo
 
     public EntryLockedResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
     public DateTime? Resolve(DomainModels.Entry source, ResourceModels.IEntryDetail destination, DateTime? destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.CanEdit(source) ? source.Locked : null;
     }
 }
@@ -151,11 +180,15 @@ public class EntryLockedByResolver : IValueResolver<DomainModels.Entry, Resource
 
     public EntryLockedByResolver(IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         this.authorizationService = authorizationService;
     }
 
     public string Resolve(DomainModels.Entry source, ResourceModels.IEntryDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.CanEdit(source) ? source.LockedBy : null;
     }
 }
@@ -166,17 +199,22 @@ public class EntryDetailConceptUriResolver : IValueResolver<DomainModels.Entry, 
 
     public EntryDetailConceptUriResolver(IOptions<PrivateOptions> privateOptions)
     {
+        ArgumentNullException.ThrowIfNull(privateOptions);
+
         this.privateOptions = privateOptions.Value;
     }
 
     public string Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(destination);
+
         if (source.Collection == null || !source.Collection.Active || source.Collection.Deleted || !source.Collection.ExportLindas)
         {
             return null;
         }
 
-        return string.Format(privateOptions.ConceptUriFormat, source.Id);
+        return string.Format(CultureInfo.InvariantCulture, privateOptions.ConceptUriFormat, source.Id);
     }
 }
 
@@ -191,14 +229,17 @@ public class EntryDetailRelatedCollectionsResolver : IValueResolver<DomainModels
 
     public IList<ResourceModels.CollectionSummary> Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, IList<ResourceModels.CollectionSummary> destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(context);
+
         if (!authorizationService.IsAdmin() && !authorizationService.IsSuperUser())
         {
-            return null;
+            return new List<ResourceModels.CollectionSummary>();
         }
 
         var relatedCollections = source.RelatedCollections?.Where(rc => !rc.Deleted).ToList();
         return relatedCollections == null
-            ? null
+            ? new List<ResourceModels.CollectionSummary>()
             : context.Mapper.Map<IList<ResourceModels.CollectionSummary>>(relatedCollections);
     }
 }
@@ -214,6 +255,8 @@ public class EntryDetailIdentificationResolver : IValueResolver<DomainModels.Ent
 
     public int? Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, int? destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.IsAdmin() || authorizationService.IsSuperUser() ? source.Identification : null;
     }
 }
@@ -229,6 +272,8 @@ public class EntryDetailCommentResolver : IValueResolver<DomainModels.Entry, Res
 
     public string Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.IsAdmin() || authorizationService.IsSuperUser() || authorizationService.IsWriter() || authorizationService.IsSuperReader()
             ? source.Comment
             : null;
@@ -246,13 +291,16 @@ public class EntryDetailAdminInfosResolver : IValueResolver<DomainModels.Entry, 
 
     public IList<ResourceModels.AdminInfoSummary> Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, IList<ResourceModels.AdminInfoSummary> destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(context);
+
         if (!authorizationService.IsAdmin() && !authorizationService.IsSuperUser() && !authorizationService.IsWriter() && !authorizationService.IsSuperReader())
         {
-            return null;
+            return new List<ResourceModels.AdminInfoSummary>();
         }
 
         return source.AdminInfos == null
-            ? null
+            ? new List<ResourceModels.AdminInfoSummary>()
             : context.Mapper.Map<IList<ResourceModels.AdminInfoSummary>>(source.AdminInfos);
     }
 }
@@ -268,6 +316,8 @@ public class EntryDetailCreatedByResolver : IValueResolver<DomainModels.Entry, R
 
     public string Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.IsAdmin() || authorizationService.IsSuperUser() || authorizationService.IsWriter() ? source.CreatedBy : null;
     }
 }
@@ -283,6 +333,8 @@ public class EntryDetailModifiedByResolver : IValueResolver<DomainModels.Entry, 
 
     public string Resolve(DomainModels.Entry source, ResourceModels.EntryDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return authorizationService.IsAdmin() || authorizationService.IsSuperUser() || authorizationService.IsWriter() ? source.ModifiedBy : null;
     }
 }
@@ -302,6 +354,8 @@ public class EntryLanguageNoteTooltipResolver : IValueResolver<DomainModels.Entr
         IList<ResourceModels.NoteSubCodeTooltip> destMember,
         ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return _service.GetTooltips(source.Note);
     }
 }
@@ -314,6 +368,8 @@ public class EntryWatchlistGlossariesResolver : IValueResolver<DomainModels.Entr
         string destMember,
         ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return string.Join(", ", source.Glossaries.Select(x => x.Code));
     }
 }
@@ -326,6 +382,8 @@ public class EntryWatchlistAdminInfosResolver : IValueResolver<DomainModels.Entr
         string destMember,
         ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return string.Join(", ", source.AdminInfos.Select(x => x.Code));
     }
 }

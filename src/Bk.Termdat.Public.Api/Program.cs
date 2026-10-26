@@ -124,7 +124,7 @@ try
     app.MapFChHealthChecks("/v2/systemstatus");
 
     Log.Information("Starting web host: Bk.Termdat.Public.Api");
-    app.Run();
+    await app.RunAsync();
 
     return 0;
 }
@@ -136,5 +136,5 @@ catch (Exception ex) when (ex is not HostAbortedException)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

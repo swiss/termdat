@@ -69,6 +69,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexAddCatchesOperationCanceledException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -78,6 +79,8 @@ internal class SearchQueueClientTests
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
             .ThrowsForAnyArgs(new OperationCanceledException());
+        #pragma warning restore CA2012
+
         var indexEntries = fixture.CreateMany<IndexEntry>();
 
         await searchQueueClient.QueueIndexAdd(indexEntries);
@@ -96,6 +99,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexAddCatchesException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -104,7 +108,9 @@ internal class SearchQueueClientTests
                 Arg.Any<BasicProperties>(),
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
-            .ThrowsForAnyArgs(new Exception());
+            .ThrowsForAnyArgs(new ArgumentException("test"));
+        #pragma warning restore CA2012
+
         var indexEntries = fixture.CreateMany<IndexEntry>();
 
         await searchQueueClient.QueueIndexAdd(indexEntries);
@@ -141,6 +147,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexUpdateCatchesOperationCanceledException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -150,6 +157,8 @@ internal class SearchQueueClientTests
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
             .ThrowsForAnyArgs(new OperationCanceledException());
+        #pragma warning restore CA2012
+
         var indexEntries = fixture.CreateMany<IndexEntry>();
 
         await searchQueueClient.QueueIndexUpdate(indexEntries);
@@ -168,6 +177,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexUpdateCatchesException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -176,7 +186,9 @@ internal class SearchQueueClientTests
                 Arg.Any<BasicProperties>(),
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
-            .ThrowsForAnyArgs(new Exception());
+            .ThrowsForAnyArgs(new ArgumentException("test"));
+        #pragma warning restore CA2012
+
         var indexEntries = fixture.CreateMany<IndexEntry>();
 
         await searchQueueClient.QueueIndexUpdate(indexEntries);
@@ -213,6 +225,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexUpdateByIdsCatchesOperationCanceledException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -222,6 +235,7 @@ internal class SearchQueueClientTests
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
             .ThrowsForAnyArgs(new OperationCanceledException());
+        #pragma warning restore CA2012
         var entryIds = fixture.CreateMany<int>();
 
         await searchQueueClient.QueueIndexUpdateByIds(entryIds);
@@ -240,6 +254,7 @@ internal class SearchQueueClientTests
     [Test]
     public async Task QueueIndexUpdateByIdsCatchesException()
     {
+        #pragma warning disable CA2012
         channel
             .BasicPublishAsync(
                 Arg.Any<string>(),
@@ -248,7 +263,8 @@ internal class SearchQueueClientTests
                 Arg.Any<BasicProperties>(),
                 Arg.Any<ReadOnlyMemory<byte>>(),
                 Arg.Any<CancellationToken>())
-            .ThrowsForAnyArgs(new Exception());
+            .ThrowsForAnyArgs(new ArgumentException("test"));
+        #pragma warning restore CA2012
         var entryIds = fixture.CreateMany<int>();
 
         await searchQueueClient.QueueIndexUpdateByIds(entryIds);

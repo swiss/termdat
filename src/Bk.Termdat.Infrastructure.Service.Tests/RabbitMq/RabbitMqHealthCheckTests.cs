@@ -15,7 +15,7 @@ internal class RabbitMqHealthCheckTests
 {
     private readonly IRabbitMqChannelFactory channelFactory = Substitute.For<IRabbitMqChannelFactory>();
 
-    private RabbitMqHealthCheck healthCheck = null!;
+    private RabbitMqHealthCheck healthCheck;
 
     [SetUp]
     public void SetUp()
@@ -36,7 +36,7 @@ internal class RabbitMqHealthCheckTests
         channel.IsOpen.Returns(true);
         channelFactory.CreateChannel().Returns(channel);
 
-        var result = await healthCheck.CheckHealthAsync(null!);
+        var result = await healthCheck.CheckHealthAsync(null);
 
         Assert.That(result.Status, Is.EqualTo(HealthStatus.Healthy));
     }
@@ -48,7 +48,7 @@ internal class RabbitMqHealthCheckTests
         channel.IsOpen.Returns(false);
         channelFactory.CreateChannel().Returns(channel);
 
-        var result = await healthCheck.CheckHealthAsync(null!);
+        var result = await healthCheck.CheckHealthAsync(null);
 
         Assert.That(result.Status, Is.EqualTo(HealthStatus.Unhealthy));
     }
@@ -56,9 +56,9 @@ internal class RabbitMqHealthCheckTests
     [Test]
     public async Task CheckHealthAsync_WithException_ReturnsUnhealthy()
     {
-        channelFactory.CreateChannel().Throws(new Exception("SHOULD BE CAUGHT"));
+        channelFactory.CreateChannel().Throws(new ArgumentException("SHOULD BE CAUGHT"));
 
-        var result = await healthCheck.CheckHealthAsync(null!);
+        var result = await healthCheck.CheckHealthAsync(null);
 
         Assert.That(result.Status, Is.EqualTo(HealthStatus.Unhealthy));
     }

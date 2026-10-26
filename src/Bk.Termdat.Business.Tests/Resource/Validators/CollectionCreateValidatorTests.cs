@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Resource.Validators;
 
 [TestFixture]
-public class CollectionCreateValidatorTests
+internal class CollectionCreateValidatorTests
 {
     private CollectionCreateValidator validator;
 

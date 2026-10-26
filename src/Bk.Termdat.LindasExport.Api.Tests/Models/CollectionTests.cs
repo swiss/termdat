@@ -22,7 +22,7 @@ internal class CollectionTests
     [Test]
     public void GetTriples_ShouldReturnTriples()
     {
-        var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
+        using var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
         var triples = _collection.GetTriples(graph, false).ToList();
 
@@ -47,7 +47,7 @@ internal class CollectionTests
         // Names
         var nameTriples = triples.Where(item => item.Predicate.AsValuedNode().AsString() == Uris.Name).ToList();
         Assert.That(nameTriples, Has.Count.EqualTo(2));
-        Assert.That(nameTriples.First().Object.AsValuedNode().ToString(), Is.EqualTo($"{_collection.Names!.First().Value}@{_collection.Names!.First().Language.ToLowerCaseStringValue()}"));
-        Assert.That(nameTriples.Last().Object.AsValuedNode().ToString(), Is.EqualTo($"{_collection.Names!.Last().Value}@{_collection.Names!.Last().Language.ToLowerCaseStringValue()}"));
+        Assert.That(nameTriples.First().Object.AsValuedNode().ToString(), Is.EqualTo($"{_collection.Names.First().Value}@{_collection.Names.First().Language.ToLowerCaseStringValue()}"));
+        Assert.That(nameTriples.Last().Object.AsValuedNode().ToString(), Is.EqualTo($"{_collection.Names.Last().Value}@{_collection.Names.Last().Language.ToLowerCaseStringValue()}"));
     }
 }

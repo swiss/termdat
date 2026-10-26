@@ -14,6 +14,8 @@ public class CookieAuthenticationPostConfigureOptions : IPostConfigureOptions<Co
 
     public void PostConfigure(string? name, CookieAuthenticationOptions options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         if (name == CookieAuthenticationDefaults.AuthenticationScheme)
         {
             options.SessionStore = serviceProvider.GetRequiredService<ITicketStore>();

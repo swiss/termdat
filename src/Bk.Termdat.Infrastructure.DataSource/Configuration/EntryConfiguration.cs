@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,6 +9,8 @@ public class EntryConfiguration : EntityChangeTrackingConfiguration<Entry>
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Entry> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(e => e.Status)
             .HasConversion<string>()
             .HasMaxLength(256)

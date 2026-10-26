@@ -18,7 +18,7 @@ public class LanguageValidationService : ILanguageValidationService
     public async Task<int> ValidateLanguageIsoCode(string languageIsoCode)
     {
         var languages = await languageRepository.GetAllForValidation();
-        var language = languages.SingleOrDefault(l => string.Equals(l.IsoCode, languageIsoCode, StringComparison.InvariantCultureIgnoreCase)) ??
+        var language = languages.SingleOrDefault(l => string.Equals(l.IsoCode, languageIsoCode, StringComparison.OrdinalIgnoreCase)) ??
             throw new BusinessValidationException(string.Empty, $"The provided language '{languageIsoCode}' is not supported.");
 
         return language.Id;

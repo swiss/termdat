@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class NewsItemTranslationConfiguration : EntityConfiguration<NewsItemTran
 {
     protected override void ConfigureEntity(EntityTypeBuilder<NewsItemTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(nt => nt.Title)
             .IsRequired()
             .HasMaxLength(1000);

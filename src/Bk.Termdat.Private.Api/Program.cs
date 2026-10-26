@@ -48,7 +48,7 @@ try
     builder.Services.AddValidatedOptions<StatisticDeleteOptions>(builder.Configuration, StatisticDeleteOptions.SectionKey);
     builder.Services.AddValidatedOptions<EmailOptions>(builder.Configuration, EmailOptions.SectionKey);
     builder.Services.AddValidatedOptions<FrontendOptions>(builder.Configuration, FrontendOptions.SectionKey);
-    var migrationOptions = builder.Services.AddValidatedOptions<MigrationOptions>(builder.Configuration, MigrationOptions.SectionKey).Get<MigrationOptions>()!;
+    var migrationOptions = builder.Services.AddValidatedOptions<MigrationOptions>(builder.Configuration, MigrationOptions.SectionKey).Get<MigrationOptions>();
     var searchApiOptionsSection = builder.Services.AddValidatedOptions<SearchApiOptions>(builder.Configuration, SearchApiOptions.SectionKey);
     var authenticationOptionsSection = builder.Services.AddValidatedOptions<AuthenticationOptions>(builder.Configuration, AuthenticationOptions.SectionKey);
     var authorizationOptionsSection = builder.Services.AddValidatedOptions<AuthorizationOptions>(builder.Configuration, AuthorizationOptions.SectionKey);
@@ -131,7 +131,7 @@ try
     {
         using var scope = app.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-        db.Database.Migrate();
+        await db.Database.MigrateAsync();
     }
 
     if (app.Environment.IsDevelopment())
@@ -164,7 +164,7 @@ try
     app.MapFChHealthChecks();
 
     Log.Information("Starting web host: Bk.Termdat.Private.Api");
-    app.Run();
+    await app.RunAsync();
 
     return 0;
 }
@@ -176,5 +176,5 @@ catch (Exception ex) when (ex is not HostAbortedException)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

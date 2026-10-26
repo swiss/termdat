@@ -9,7 +9,7 @@ namespace Bk.Termdat.Private.Api.Tests.Controllers;
 [TestFixture]
 internal class SystemInformationControllerTests
 {
-    private SystemInformationController controller = null!;
+    private SystemInformationController controller;
 
     [SetUp]
     public void SetUp()
@@ -31,7 +31,7 @@ internal class SystemInformationControllerTests
         Assert.That(result, Is.Not.Null);
         Assert.That(result, Is.InstanceOf<OkObjectResult>());
 
-        var value = (result as OkObjectResult)!.Value as Version;
+        var value = (result as OkObjectResult).Value as Version;
         Assert.That(value, Is.Not.Null);
         Assert.That(value.ApplicationVersion, Is.EqualTo(expectedVersion));
     }

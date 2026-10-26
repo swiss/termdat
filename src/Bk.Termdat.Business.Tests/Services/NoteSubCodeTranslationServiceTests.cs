@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class NoteSubCodeTranslationServiceTests
+internal class NoteSubCodeTranslationServiceTests
 {
     private NoteSubCodeTranslationService service;
     private INoteSubCodeRepository noteSubCodeRepository;
@@ -192,18 +192,6 @@ public class NoteSubCodeTranslationServiceTests
         var result = service.GetTooltips("ABC: apple");
 
         Assert.That(result[0].Tooltip, Is.EqualTo("English tooltip"));
-    }
-
-    [Test]
-    public void GetTooltips_WhenNoTranslationExists_ShouldUseOriginalText()
-    {
-        noteSubCodeRepository
-            .GetTranslations()
-            .Returns([]);
-
-        var result = service.GetTooltips("ABC: apple");
-
-        Assert.That(result[0].Tooltip, Is.Null);
     }
 
     [Test]

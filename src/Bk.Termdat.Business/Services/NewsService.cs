@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -66,7 +68,7 @@ public class NewsService : INewsService
         var newsItem = await newsRepository.GetById(id);
         if (newsItem is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.NewsNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.NewsNotFound, id));
         }
 
         var dest = mapper.Map<NewsItemUpdate>(newsItem);
@@ -79,9 +81,9 @@ public class NewsService : INewsService
     public async Task<NewsItemDetail> Create(NewsItemCreate newsItemCreate)
     {
         var mappedNewsItem = mapper.Map<NewsItem>(newsItemCreate);
-        mappedNewsItem.Created = System.DateTime.UtcNow;
+        mappedNewsItem.Created = DateTime.UtcNow;
         mappedNewsItem.CreatedBy = identityService.GetCurrentEmail();
-        mappedNewsItem.Modified = System.DateTime.UtcNow;
+        mappedNewsItem.Modified = DateTime.UtcNow;
         mappedNewsItem.ModifiedBy = identityService.GetCurrentEmail();
 
         mappedNewsItem.SortIndex = await newsRepository.GetNextSortIndex();
@@ -101,7 +103,7 @@ public class NewsService : INewsService
 
         if (newsItem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.NewsNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.NewsNotFound, id));
         }
 
         newsRepository.Delete(newsItem);
@@ -111,18 +113,20 @@ public class NewsService : INewsService
 
     public async Task<NewsItemDetail> Update(NewsItemUpdate newsItemUpdate)
     {
+        ArgumentNullException.ThrowIfNull(newsItemUpdate);
+
         var databaseNewsItem = await newsRepository.GetById(newsItemUpdate.Id);
 
         if (databaseNewsItem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.NewsNotFound, newsItemUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.NewsNotFound, newsItemUpdate.Id));
         }
 
         databaseNewsItem.SortIndex = newsItemUpdate.SortIndex;
         databaseNewsItem.IsEnabled = newsItemUpdate.IsEnabled;
         databaseNewsItem.ValidFrom = newsItemUpdate.ValidFrom;
         databaseNewsItem.ValidTo = newsItemUpdate.ValidTo;
-        databaseNewsItem.Modified = System.DateTime.UtcNow;
+        databaseNewsItem.Modified = DateTime.UtcNow;
         databaseNewsItem.ModifiedBy = identityService.GetCurrentEmail();
         databaseNewsItem.Translations = (await languageNewsTranslationMapper.Map(newsItemUpdate)).ToList();
 
@@ -167,7 +171,7 @@ public class NewsService : INewsService
 
         if (newsItem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.NewsNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.NewsNotFound, id));
         }
 
         return newsItem;
@@ -179,7 +183,7 @@ public class NewsService : INewsService
         first.SortIndex = second.SortIndex;
         second.SortIndex = tempSortIndex;
 
-        var now = System.DateTime.UtcNow;
+        var now = DateTime.UtcNow;
         var user = identityService.GetCurrentEmail();
 
         first.Modified = now;

@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Bk.Termdat.Common.Resources;
 using Bk.Termdat.CrossCutting.Configuration;
@@ -13,11 +14,15 @@ public class RoleValueResolver : IValueResolver<DomainModels.UserAccount, Resour
 
     public RoleValueResolver(IOptions<AuthorizationOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.options = options.Value;
     }
 
     public string Resolve(DomainModels.UserAccount source, ResourceModels.UserAccountDetail destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         if (source.Role == options.Admin)
         {
             return BackendTexts.RoleAdmin;

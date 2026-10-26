@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.DataSource.Tests.Repositories;
 
 [TestFixture]
-public class EntryTemplateRepositoryTests
+internal class EntryTemplateRepositoryTests
 {
     private EntryTemplateRepository entryTemplateRepository;
     private DataContext context;
@@ -66,7 +66,7 @@ public class EntryTemplateRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new EntryTemplateRepository(createContext);
 
         var newEntryTemplate = new EntryTemplate
@@ -120,7 +120,7 @@ public class EntryTemplateRepositoryTests
     [Test]
     public async Task Delete_WhenCalled_RemovesEntryTemplate()
     {
-        var entryTemplateCount = context.EntryTemplates.Count();
+        var entryTemplateCount = await context.EntryTemplates.CountAsync();
 
         var newEntryTemplate = new EntryTemplate
         {
@@ -135,12 +135,12 @@ public class EntryTemplateRepositoryTests
 
         await entryTemplateRepository.Create(newEntryTemplate);
 
-        var entryTemplate = context.EntryTemplates.Last();
+        var entryTemplate = await context.EntryTemplates.LastAsync();
 
         entryTemplateRepository.Delete(entryTemplate);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
-        Assert.That(context.EntryTemplates.Count(), Is.EqualTo(entryTemplateCount));
+        Assert.That(await context.EntryTemplates.CountAsync(), Is.EqualTo(entryTemplateCount));
         Assert.That(context.EntryTemplates, Is.Not.Contains(entryTemplate));
     }
 }

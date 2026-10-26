@@ -22,6 +22,10 @@ public class ExportWatchlistEntryLanguageItemAction : IMappingAction<Entry, Watc
 
     public void Process(Entry source, WatchlistExportEntry destination, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(destination);
+        ArgumentNullException.ThrowIfNull(context);
+
         destination.LanguageItems = source.Translations
             .OrderBy(item => item.Language.SortIndex)
             .ThenBy(item => item.Sequence)
@@ -212,7 +216,7 @@ public class ExportWatchlistEntryLanguageItemAction : IMappingAction<Entry, Watc
             return null;
         }
 
-        var regex = new Regex(@"\[([^\]]+)\]\(([^\)]+)\)");
+        var regex = new Regex(@"\[([^\]]+)\]\(([^\)]+)\)", RegexOptions.None, TimeSpan.FromSeconds(1));
         return regex.Replace(text, "<a href=\"$2\">$1</a>");
     }
 }

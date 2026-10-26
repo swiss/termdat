@@ -14,10 +14,10 @@ using Yarp.ReverseProxy.Transforms;
 namespace Bk.Termdat.Gateway.Tests.Transforms;
 
 [TestFixture]
-internal class ApiAuthorizationRequestTransformTests
+internal sealed class ApiAuthorizationRequestTransformTests
 {
-    private ITokenService tokenService = null!;
-    private ApiAuthorizationRequestTransform transform = null!;
+    private ITokenService tokenService;
+    private ApiAuthorizationRequestTransform transform;
 
     [SetUp]
     public void SetUp()

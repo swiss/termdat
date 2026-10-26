@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class LenochClassificationTranslationConfiguration : EntityConfiguration<
 {
     protected override void ConfigureEntity(EntityTypeBuilder<LenochClassificationTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.IsTranslation();
 
         builder.Property(ct => ct.Name)

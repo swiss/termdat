@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class AdminInfoConfiguration : EntityChangeTrackingConfiguration<AdminInf
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<AdminInfo> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(a => a.Code)
         .HasMaxLength(100)
         .IsRequired();

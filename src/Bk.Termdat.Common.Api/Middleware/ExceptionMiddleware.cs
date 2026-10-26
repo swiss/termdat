@@ -31,43 +31,45 @@ public class ExceptionMiddleware
 
     public async Task InvokeAsync(HttpContext httpContext, ILogger<ExceptionMiddleware> logger)
     {
+        ArgumentNullException.ThrowIfNull(httpContext);
+
         try
         {
             await next(httpContext);
         }
         catch (SearchException ex)
         {
-            logger.LogWarning("Search exception: {Message}", ex.Message);
+            logger.LogWarning(ex, "Search exception: {Message}", ex.Message);
             await BadRequest(httpContext, string.Empty, ex.Message);
         }
         catch (SearchTimeoutException ex)
         {
-            logger.LogWarning("Search timeout exception: {Message}", ex.Message);
+            logger.LogWarning(ex, "Search timeout exception: {Message}", ex.Message);
             await GatewayTimeout(httpContext, ex.Message);
         }
         catch (BusinessValidationException ex)
         {
-            logger.LogInformation("Business validation exception: {Message}", ex.Message);
+            logger.LogError(ex, "Business validation exception: {Message}", ex.Message);
             await BadRequest(httpContext, ex.ModelKey, ex.Message);
         }
         catch (EntityNotFoundException ex)
         {
-            logger.LogInformation("Not found: {Message}", ex.Message);
+            logger.LogError(ex, "Not found: {Message}", ex.Message);
             await NotFound(httpContext, ex);
         }
         catch (ForbiddenException ex)
         {
-            logger.LogWarning("Forbidden: {Message}", ex.Message);
+            logger.LogWarning(ex, "Forbidden: {Message}", ex.Message);
             await httpContext.ForbidAsync();
         }
         catch (ConcurrencyException ex)
         {
-            logger.LogWarning("Conflict: {Message}", ex.Message);
+            logger.LogWarning(ex, "Conflict: {Message}", ex.Message);
             await HandleConcurrencyException(httpContext, ex);
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            logger.LogWarning("Conflict: {Message}", ex.Message);
+            logger.LogWarning(ex, "Conflict: {Message}", ex.Message);
             await HandleConcurrencyException(httpContext, ex);
         }
         catch (DbUpdateException ex)
@@ -76,7 +78,7 @@ public class ExceptionMiddleware
         }
         catch (CanNotBeChangedException ex)
         {
-            logger.LogWarning("CanNotBeChanged exception: {Message}", ex.Message);
+            logger.LogWarning(ex, "CanNotBeChanged exception: {Message}", ex.Message);
             await BadRequest(httpContext, string.Empty, ex.Message);
         }
         catch (Exception ex)

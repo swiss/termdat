@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.Search.Tests.Analyzers;
 
 [TestFixture]
-public class CharEquivalentAnalyzerTests : BaseTokenStreamTestCase
+internal class CharEquivalentAnalyzerTests : BaseTokenStreamTestCase
 {
     private readonly CharEquivalentsAnalyzer analyzer = new(LuceneVersion.LUCENE_48);
 

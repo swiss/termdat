@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class SourceTemplateConfiguration : EntityChangeTrackingConfiguration<Sou
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<SourceTemplate> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(et => et.TextDe)
         .HasMaxLength(4000);
 

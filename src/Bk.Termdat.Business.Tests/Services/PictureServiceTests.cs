@@ -20,7 +20,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
 [SetUICulture("de")]
-public class PictureServiceTests
+internal class PictureServiceTests
 {
     private IPictureRepository pictureRepositoryMock;
     private ILanguageRepository languageRepositoryMock;
@@ -28,7 +28,7 @@ public class PictureServiceTests
     private PictureService pictureService;
     private List<Language> languages;
     private PictureDetail dto;
-    private IFormFile actualFile;
+    private FormFile actualFile;
     private readonly IPictureTranslationMapper pictureTranslationMapper = new PictureTranslationMapper();
 
     [SetUp]
@@ -317,7 +317,7 @@ public class PictureServiceTests
         Assert.That(jpegPicture.FileExtension, Is.EqualTo(".jpg"));
     }
 
-    private static IFormFile GetFormFile()
+    private static FormFile GetFormFile()
     {
         var stream = File.OpenRead(Path.Join("Assets", "test-image.jpg"));
 

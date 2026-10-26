@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Repositories;
@@ -19,6 +21,8 @@ public class CollectionValidationService : ICollectionValidationService
 
     public async Task<Classification> ValidateClassification(ICollectionModification collectionModification)
     {
+        ArgumentNullException.ThrowIfNull(collectionModification);
+
         if (collectionModification.ActiveApi && collectionModification.ClassificationId == null)
         {
             throw new BusinessValidationException(
@@ -32,7 +36,7 @@ public class CollectionValidationService : ICollectionValidationService
             {
                 throw new BusinessValidationException(
                     nameof(CollectionCreate.ClassificationId),
-                    string.Format(BackendTexts.ClassificationNotFound, collectionModification.ClassificationId));
+                    string.Format(CultureInfo.InvariantCulture, BackendTexts.ClassificationNotFound, collectionModification.ClassificationId));
             }
 
             return requestedClassification;

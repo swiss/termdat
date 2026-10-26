@@ -13,7 +13,7 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class ClassificationServiceTests
+internal class ClassificationServiceTests
 {
     private ClassificationService classificationService;
     private IClassificationRepository classificationRepositoryMock;

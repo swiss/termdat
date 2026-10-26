@@ -32,12 +32,18 @@ public class HybridCacheTicketStore : ITicketStore
 
     public async Task<string> StoreAsync(AuthenticationTicket ticket)
     {
+        ArgumentNullException.ThrowIfNull(ticket);
+
         var key = Guid.NewGuid().ToString("N");
 
         try
         {
             await StoreTicketInCache(key, ticket);
-            logger.LogDebug("Successfully stored authentication ticket with key: {Key}", key);
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Successfully stored authentication ticket with key: {Key}", key);
+            }
         }
         catch (Exception ex)
         {
@@ -51,10 +57,16 @@ public class HybridCacheTicketStore : ITicketStore
 
     public async Task RenewAsync(string key, AuthenticationTicket ticket)
     {
+        ArgumentNullException.ThrowIfNull(ticket);
+
         try
         {
             await StoreTicketInCache(key, ticket);
-            logger.LogDebug("Successfully renewed authentication ticket with key: {Key}", key);
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Successfully renewed authentication ticket with key: {Key}", key);
+            }
         }
         catch (Exception ex)
         {
@@ -66,24 +78,36 @@ public class HybridCacheTicketStore : ITicketStore
     {
         try
         {
-            logger.LogDebug("Attempting to retrieve authentication ticket for key: {Key}", key);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Attempting to retrieve authentication ticket for key: {Key}", key);
+            }
 
             var serializedTicket = await cache.GetOrCreateAsync(
                 key,
                 factory: _ =>
                 {
-                    logger.LogDebug("Authentication ticket with key '{Key}' was not found in cache", key);
+                    if (logger.IsEnabled(LogLevel.Debug))
+                    {
+                        logger.LogDebug("Authentication ticket with key '{Key}' was not found in cache", key);
+                    }
                     return ValueTask.FromResult<byte[]?>(null);
                 });
 
             if (serializedTicket is { Length: > 0 })
             {
                 var ticket = TicketSerializer.Default.Deserialize(serializedTicket);
-                logger.LogDebug("Successfully retrieved authentication ticket for key: {Key}", key);
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("Successfully retrieved authentication ticket for key: {Key}", key);
+                }
                 return ticket;
             }
 
-            logger.LogDebug("Authentication ticket not found for key: {Key}", key);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Authentication ticket not found for key: {Key}", key);
+            }
             return null;
         }
         catch (Exception ex)
@@ -98,7 +122,11 @@ public class HybridCacheTicketStore : ITicketStore
         try
         {
             await cache.RemoveAsync(key);
-            logger.LogDebug("Successfully removed authentication ticket with key: {Key}", key);
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Successfully removed authentication ticket with key: {Key}", key);
+            }
         }
         catch (Exception ex)
         {
@@ -124,7 +152,10 @@ public class HybridCacheTicketStore : ITicketStore
                 key, lifetime);
         }
 
-        logger.LogDebug("Storing authentication ticket with key: {Key}, lifetime: {Lifetime}", key, lifetime);
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Storing authentication ticket with key: {Key}, lifetime: {Lifetime}", key, lifetime);
+        }
 
         var serializedTicket = TicketSerializer.Default.Serialize(ticket);
         await cache.SetAsync(

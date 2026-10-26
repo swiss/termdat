@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,6 @@ public class ExcelDataService : IExcelDataService
     // Column 2 (EntryId) is currently unused and reserved for future export/import update functionality.
     private const int ColGroupKey = 1;
 
-    // private const int ColEntryId = 2;
     private const int ColSequence = 3;
     private const int ColLanguage = 4;
     private const int ColName = 5;
@@ -62,7 +62,7 @@ public class ExcelDataService : IExcelDataService
     private readonly ILanguageRepository languageRepository;
     private readonly ILogger<ExcelDataService> logger;
     private readonly ITermdatUrlService termdatUrlService;
-    private readonly IList<KeyValuePair<string, string>> validationErrors = new List<KeyValuePair<string, string>>();
+    private readonly List<KeyValuePair<string, string>> validationErrors = new();
 
     public ExcelDataService(
         IOptions<FileImportOptions> fileImportOptions,
@@ -76,6 +76,9 @@ public class ExcelDataService : IExcelDataService
         ICultureService cultureService,
         ITermdatUrlService termdatUrlService)
     {
+        ArgumentNullException.ThrowIfNull(fileImportOptions);
+        ArgumentNullException.ThrowIfNull(emailOptions);
+
         this.fileImportOptions = fileImportOptions.Value;
         this.emailOptions = emailOptions.Value;
         this.logger = logger;
@@ -88,50 +91,64 @@ public class ExcelDataService : IExcelDataService
         this.termdatUrlService = termdatUrlService;
     }
 
-    public async Task<(bool isValid, IList<KeyValuePair<string, string>> validationErrors, XLWorkbook workbook)>
-        IsFileValid(IFormFile file)
+    public async Task<(bool isValid, IList<KeyValuePair<string, string>> validationErrors, XLWorkbook? workbook)> IsFileValid(IFormFile file)
     {
+        ArgumentNullException.ThrowIfNull(file);
+
+        validationErrors.Clear();
+
+        await using var stream = file.OpenReadStream();
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+
+        XLWorkbook? workbook = null;
+
         try
         {
-            validationErrors.Clear();
-
-            await using var stream = file.OpenReadStream();
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;
-
-            var workbook = new XLWorkbook(memoryStream);
+            workbook = new XLWorkbook(memoryStream);
 
             if (workbook.Worksheets.Count == 0)
             {
-                validationErrors.Add(new KeyValuePair<string, string>("error", "Excel file contains no worksheets"));
+                validationErrors.Add(new("error", "Excel file contains no worksheets"));
                 return (false, validationErrors, null);
             }
 
             var worksheet = workbook.Worksheet(1);
-            if (worksheet.LastRowUsed() == null || worksheet.LastRowUsed()?.RowNumber() < 2)
+
+            if (worksheet.LastRowUsed()?.RowNumber() < 2 ||
+                worksheet.LastRowUsed() == null)
             {
-                validationErrors.Add(new KeyValuePair<string, string>("error",
+                validationErrors.Add(new("error",
                     "Excel file must contain at least a header row and one data row"));
                 return (false, validationErrors, null);
             }
 
-            // Validate required columns exist (at least 21 columns)
-            if (worksheet.LastColumnUsed() == null || worksheet.LastColumnUsed()?.ColumnNumber() < 21)
+            if (worksheet.LastColumnUsed()?.ColumnNumber() < 21 ||
+                worksheet.LastColumnUsed() == null)
             {
-                validationErrors.Add(new KeyValuePair<string, string>("error",
+                validationErrors.Add(new("error",
                     "Excel file must contain all required columns (at least 21 columns)"));
                 return (false, validationErrors, null);
             }
 
-            return (!validationErrors.Any(), validationErrors, workbook);
+            var result = workbook;
+            workbook = null;
+
+            return (validationErrors.Count == 0, validationErrors, result);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error during Excel file validation attempt");
-            validationErrors.Add(new KeyValuePair<string, string>("error",
+            validationErrors.Add(new("error",
                 "Unexpected error during Excel file validation attempt"));
+
             return (false, validationErrors, null);
+        }
+        finally
+        {
+            workbook?.Dispose();
         }
     }
 
@@ -141,6 +158,8 @@ public class ExcelDataService : IExcelDataService
         IList<AdminInfoSummary> adminInfos,
         string comment)
     {
+        ArgumentNullException.ThrowIfNull(adminInfos);
+
         try
         {
             adminInfos.Add(new AdminInfoDetail { Code = importJobLabel });
@@ -153,12 +172,12 @@ public class ExcelDataService : IExcelDataService
                 await entryService.Create(entryCreateItem, fileImportOptions.Email);
             }
 
-            var mailBody = string.Format(BackendTexts.FileImportMailSuccess, importJobLabel, entryCreateItems.Count, 0);
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailSuccess, importJobLabel, entryCreateItems.Count, 0);
             await SendEmailAsync(mailBody);
         }
         catch (ForbiddenException)
         {
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel,
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel,
                 "Missing permissions for some or all included glossaries or collections.");
             await SendEmailAsync(mailBody);
         }
@@ -166,13 +185,13 @@ public class ExcelDataService : IExcelDataService
         {
             var validationExceptionMessage =
                 $"Validation exception: {businessValidationException.ModelKey ?? "unknown"}: {businessValidationException.Message}";
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel, validationExceptionMessage);
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel, validationExceptionMessage);
             await SendEmailAsync(mailBody);
         }
         catch (Exception exception)
         {
             logger.LogError(exception, "Unexpected error during import");
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel,
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel,
                 "Unexpected error during import.");
             await SendEmailAsync(mailBody);
         }
@@ -227,9 +246,9 @@ public class ExcelDataService : IExcelDataService
 
                     var row = new List<Cell>
                     {
-                        new() { Text = entry.Id.ToString() },
-                        new() { Text = entryLanguage.Sequence.ToString(), FormatType = CellFormatTypes.Number },
-                        new() { Text = entryLanguage.Language?.IsoCode?.ToUpper() ?? string.Empty },
+                        new() { Text = entry.Id.ToString(CultureInfo.InvariantCulture) },
+                        new() { Text = entryLanguage.Sequence.ToString(CultureInfo.InvariantCulture), FormatType = CellFormatTypes.Number },
+                        new() { Text = entryLanguage.Language?.IsoCode?.ToUpper(CultureInfo.InvariantCulture) ?? string.Empty },
                         new() { Text = entryUrl, Hyperlink = entryUrl },
                         new()
                         {
@@ -287,7 +306,7 @@ public class ExcelDataService : IExcelDataService
             }
         }
 
-        var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+        var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture);
         var fileName = $"Export-{timestamp}.xlsx";
         var stream = await documentService.CreateExcel(spreadsheet);
 
@@ -296,6 +315,8 @@ public class ExcelDataService : IExcelDataService
 
     public async Task<(string fileName, Stream content)> CreateDuplicateCheckExport(IList<DuplicateCheckMatch> matches)
     {
+        ArgumentNullException.ThrowIfNull(matches);
+
         var spreadsheet = new Spreadsheet();
 
         spreadsheet.HeaderCells.Add(CreateHeaderCell("DuplicateCheck.Export.XLSX.Header.EntryId"));
@@ -311,7 +332,7 @@ public class ExcelDataService : IExcelDataService
         {
             var row = new List<Cell>
             {
-                new() { Text = match.EntryId.ToString() },
+                new() { Text = match.EntryId.ToString(CultureInfo.InvariantCulture) },
             };
 
             var exportKeys = match.MatchedKeys
@@ -339,13 +360,13 @@ public class ExcelDataService : IExcelDataService
 
             foreach (var id in match.MatchedEntryIds)
             {
-                row.Add(new() { Text = id.ToString() });
+                row.Add(new() { Text = id.ToString(CultureInfo.InvariantCulture) });
             }
 
             spreadsheet.BodyCells.Add(row);
         }
 
-        var timestamp = DateTime.Now.ToString("yyyyMMdd");
+        var timestamp = DateTime.Now.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
         var fileName = $"{timestamp}_{BackendTexts.ResourceManager.GetString("DuplicateCheck.Export.XLSX.FileName")}.xlsx";
         var stream = await documentService.CreateExcel(spreadsheet);
 
@@ -389,7 +410,6 @@ public class ExcelDataService : IExcelDataService
         spreadsheet.HeaderCells.Add(CreateHeaderCell("Watchlist.Export.XLSX.Header.Metadata"));
         spreadsheet.HeaderCells.Add(CreateHeaderCell("Watchlist.Export.XLSX.Header.MetadataSource"));
         spreadsheet.HeaderCells.Add(CreateHeaderCell("Watchlist.Export.XLSX.Header.Country"));
-        return;
     }
 
     private static Cell CreateHeaderCell(string resourceKey) => new()
@@ -476,8 +496,17 @@ public class ExcelDataService : IExcelDataService
 
     private static string GetTextWithCode(string code, string translation)
     {
-        return string.IsNullOrWhiteSpace(translation) ? string.Empty :
-            !string.IsNullOrWhiteSpace(code) ? $"{code} - {translation}" : translation;
+        if (string.IsNullOrWhiteSpace(translation))
+        {
+            return string.Empty;
+        }
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return translation;
+        }
+
+        return $"{code} - {translation}";
     }
 
     private static string GetOutgoingReferencesText(ICollection<EntryReference> references)
@@ -545,6 +574,8 @@ public class ExcelDataService : IExcelDataService
         IList<AdminInfoSummary> adminInfos,
         string comment)
     {
+        ArgumentNullException.ThrowIfNull(workbook);
+
         var result = new List<EntryCreate>();
         var languages = await GetLanguages();
         var worksheet = workbook.Worksheet(1);
@@ -659,7 +690,7 @@ public class ExcelDataService : IExcelDataService
 
         // Only accept two-letter ISO codes (case-insensitive)
         var languageId = availableLanguages.FirstOrDefault(languageItem =>
-                languageItem.TwoLetterIsoCode.Equals(languageValue, StringComparison.InvariantCultureIgnoreCase))
+                languageItem.TwoLetterIsoCode.Equals(languageValue, StringComparison.OrdinalIgnoreCase))
             ?.LanguageId;
 
         if (!languageId.HasValue)
@@ -677,7 +708,7 @@ public class ExcelDataService : IExcelDataService
         return languages.Select(l => new LanguageItem { LanguageId = l.Id, TwoLetterIsoCode = l.IsoCode }).ToList();
     }
 
-    private record LanguageItem
+    private sealed record LanguageItem
     {
         public int LanguageId { get; init; }
         public string TwoLetterIsoCode { get; init; }
