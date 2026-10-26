@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,6 +9,8 @@ public abstract class EntityChangeTrackingConfiguration<T> : EntityConfiguration
 {
     protected override void ConfigureEntity(EntityTypeBuilder<T> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(e => e.CreatedBy)
             .HasMaxLength(100)
             .IsRequired();

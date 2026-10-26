@@ -36,10 +36,12 @@ public class FilesController : ControllerBase
     }
 
     [HttpPost("entries:import")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
-    [RequestSizeLimit(51 * 1024 * 1024)] // 51MB: 50MB for the file, 1MB spare for the rest of the request data
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
+    [RequestSizeLimit(51L * 1024 * 1024)] // 51MB: 50MB for the file, 1MB spare for the rest of the request data
     public async Task<ActionResult> Import([FromForm][Required] FileImportRequest importRequest)
     {
+        ArgumentNullException.ThrowIfNull(importRequest);
+
         try
         {
             var currentUserEmail = identityService.GetCurrentEmail();
@@ -72,9 +74,13 @@ public class FilesController : ControllerBase
                 var workItemLogger = scope.ServiceProvider.GetRequiredService<ILogger<QueuedBackgroundService>>();
 
                 var workItemName = $"{nameof(IFileImportService)}.{nameof(IFileImportService.ImportDocument)}";
-                workItemLogger.LogInformation(
-                    "Queued background work item {WorkItemName} - {ImportJobLabel}  is starting", workItemName,
-                    importJobLabel);
+
+                if (workItemLogger.IsEnabled(LogLevel.Information))
+                {
+                    workItemLogger.LogInformation(
+                        "Queued background work item {WorkItemName} - {ImportJobLabel}  is starting", workItemName,
+                        importJobLabel);
+                }
 
                 // Note:
                 // Override the default implementation of the authorization service with an always-true version to suppress any HttpContext-based role checking during the import process, which runs in the background.
@@ -95,9 +101,11 @@ public class FilesController : ControllerBase
                     importRequest.Status, importRequest.Reliability,
                     importRequest.SubjectIds, importRequest.DomainIds, importRequest.GlossaryIds,
                     importRequest.AdminInfos, importRequest.Comment);
-
-                workItemLogger.LogInformation("Queued background work item {WorkItemName} - {ImportJobLabel} ended",
-                    workItemName, importJobLabel);
+                if (workItemLogger.IsEnabled(LogLevel.Information))
+                {
+                    workItemLogger.LogInformation("Queued background work item {WorkItemName} - {ImportJobLabel} ended",
+                        workItemName, importJobLabel);
+                }
             });
 
             return Ok(new FileImportResponse { AdminInfoCode = importJobLabel });

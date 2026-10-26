@@ -19,7 +19,7 @@ public class DomainsController : ControllerBase
     }
 
     [HttpGet("descriptions")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDescriptions()
     {
         var descriptions = await domainService.GetAllDescriptions();
@@ -27,7 +27,7 @@ public class DomainsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] DomainModification domainUpdate)
     {
         if (domainUpdate?.Id != id)
@@ -41,7 +41,7 @@ public class DomainsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await domainService.Delete(id);

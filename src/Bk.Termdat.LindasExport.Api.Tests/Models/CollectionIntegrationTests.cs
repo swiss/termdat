@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.LindasExport.Api.Constants;
 using Bk.Termdat.LindasExport.Api.Models;
@@ -63,7 +64,7 @@ internal class CollectionIntegrationTests
         Reliability =
             new Reliability
             {
-                Code = ((int)Business.Domain.Models.Reliability.Translated).ToString(),
+                Code = ((int)Business.Domain.Models.Reliability.Translated).ToString(CultureInfo.InvariantCulture),
                 Names = Reliability.GetNamesByReliability(Business.Domain.Models.Reliability.Translated)
             },
         References = new List<Reference> { new() { Id = 109122, Type = ReferenceType.General } },
@@ -136,7 +137,7 @@ internal class CollectionIntegrationTests
             },
         Reliability = new Reliability
         {
-            Code = ((int)Business.Domain.Models.Reliability.FirstDraft).ToString(),
+            Code = ((int)Business.Domain.Models.Reliability.FirstDraft).ToString(CultureInfo.InvariantCulture),
             Names = Reliability.GetNamesByReliability(Business.Domain.Models.Reliability.FirstDraft)
         },
         Domains = new List<Domain>
@@ -243,7 +244,7 @@ internal class CollectionIntegrationTests
             },
         Reliability = new Reliability
         {
-            Code = ((int)Business.Domain.Models.Reliability.Verified).ToString(),
+            Code = ((int)Business.Domain.Models.Reliability.Verified).ToString(CultureInfo.InvariantCulture),
             Names = Reliability.GetNamesByReliability(Business.Domain.Models.Reliability.Verified)
         },
         References =
@@ -387,7 +388,7 @@ internal class CollectionIntegrationTests
                 }
             }
         };
-        var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
+        using var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
         var triples = collection.GetTriples(graph, false);
         graph.Assert(triples);
@@ -399,6 +400,7 @@ internal class CollectionIntegrationTests
         Assert.That(nTriplesData, Is.EqualTo(expectedData));
     }
 
+#pragma warning disable S2699 // Not a real unit test
     [Test]
     public void TurtleFileToTripleHelperTest()
     {
@@ -412,8 +414,9 @@ internal class CollectionIntegrationTests
 
         turtleParser.Load(graph, "Models/TestData/turtleData.ttl");
         // Have a look at the generated triples :-)
-        var nTriplesData = StringWriter.Write(graph, nTriplesWriter);
+        StringWriter.Write(graph, nTriplesWriter);
     }
+#pragma warning restore S2699
 
     [TestCaseSource(nameof(_testCases))]
     public void GetTriples_ForCollections_ShouldReturnTriples(Collection collection, Entry entry, string expectedResult)
@@ -421,7 +424,7 @@ internal class CollectionIntegrationTests
         collection.Entries.Clear();
         collection.Entries.Add(entry);
 
-        var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
+        using var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
         var triples = collection.GetTriples(graph, false);
         graph.Assert(triples);
@@ -440,7 +443,7 @@ internal class CollectionIntegrationTests
         _collectionPFS17.Entries.Clear();
         _collectionPFS17.Entries.Add(_entry109117);
 
-        var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
+        using var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
         var triples = _collectionPFS17.GetTriples(graph, true);
         graph.Assert(triples);

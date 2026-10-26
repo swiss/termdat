@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -54,7 +55,7 @@ public class LanguageService : ILanguageService
         var language = await languageRepository.GetById(id);
         if (language == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.LanguageNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.LanguageNotFound, id));
         }
         var mappedLanguage = mapper.Map<LanguageUpdate>(language);
 
@@ -81,6 +82,8 @@ public class LanguageService : ILanguageService
 
     public async Task<LanguageDetail> Update(LanguageUpdate languageUpdate)
     {
+        ArgumentNullException.ThrowIfNull(languageUpdate);
+
         var databaseLanguage = await languageRepository.GetById(languageUpdate.Id);
 
         if (databaseLanguage == null)

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Bk.Termdat.Business.Domain;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -8,7 +7,7 @@ namespace Bk.Termdat.Infrastructure.DataSource.Tests;
 [TestFixture]
 internal class UnitOfWorkTests
 {
-    private IUnitOfWork uow;
+    private UnitOfWork uow;
     private DataContext context;
 
     [OneTimeSetUp]
@@ -39,7 +38,15 @@ internal class UnitOfWorkTests
     [Test]
     public void SaveChanges_ChangesEntriesOnDataContext()
     {
-        var entityToAdd = new Business.Domain.Models.Entry() { Id = 1, CreatedBy = "test@test.ch", ModifiedBy = "test@test.ch" };
+        var entityToAdd = new Business.Domain.Models.Entry()
+        {
+            Id = 1,
+            CreatedBy = "test@test.ch",
+            ModifiedBy = "test@test.ch",
+            AdminInfo = "adminfo",
+            Comment = "comment",
+            LockedBy = "lockedBy"
+        };
         context.Entries.Add(entityToAdd);
 
         Assert.That(context.Entry(entityToAdd).State, Is.EqualTo(EntityState.Added));
@@ -52,7 +59,17 @@ internal class UnitOfWorkTests
     [Test]
     public void SaveChanges_ThrowsConcurrencyException_WhenContextHasChanged()
     {
-        var remoteEntity = new Business.Domain.Models.Entry() { Id = 10, ConcurrencyToken = 10, CreatedBy = "test@test.ch", ModifiedBy = "test@test.ch" };
+        var remoteEntity = new Business.Domain.Models.Entry()
+        {
+            Id = 10,
+            ConcurrencyToken = 10,
+            CreatedBy = "test@test.ch",
+            ModifiedBy = "test@test.ch",
+            AdminInfo = "adminfo",
+            Comment = "comment",
+            LockedBy = "lockedBy"
+        };
+
         context.Entries.Add(remoteEntity);
         uow.SaveChanges();
 
@@ -71,7 +88,16 @@ internal class UnitOfWorkTests
     [Test]
     public async Task SaveChangesAsync_ChangesEntriesOnDataContext()
     {
-        var entityToAdd = new Business.Domain.Models.Entry() { Id = 2, CreatedBy = "test@test.ch", ModifiedBy = "test@test.ch" };
+        var entityToAdd = new Business.Domain.Models.Entry()
+        {
+            Id = 2,
+            CreatedBy = "test@test.ch",
+            ModifiedBy = "test@test.ch",
+            AdminInfo = "adminfo",
+            Comment = "comment",
+            LockedBy = "lockedBy"
+        };
+
         context.Entries.Add(entityToAdd);
 
         Assert.That(context.Entry(entityToAdd).State, Is.EqualTo(EntityState.Added));
@@ -84,7 +110,17 @@ internal class UnitOfWorkTests
     [Test]
     public void SaveChangesAsync_ThrowsConcurrencyException_WhenContextHasChanged()
     {
-        var remoteEntity = new Business.Domain.Models.Entry() { Id = 20, ConcurrencyToken = 10, CreatedBy = "test@test.ch", ModifiedBy = "test@test.ch" };
+        var remoteEntity = new Business.Domain.Models.Entry()
+        {
+            Id = 20,
+            ConcurrencyToken = 10,
+            CreatedBy = "test@test.ch",
+            ModifiedBy = "test@test.ch",
+            AdminInfo = "adminfo",
+            Comment = "comment",
+            LockedBy = "lockedBy"
+        };
+
         context.Entries.Add(remoteEntity);
         uow.SaveChanges();
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,7 @@ using Status = Bk.Termdat.Business.Resource.Models.Status;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class TbxDataServiceTests
+internal class TbxDataServiceTests
 {
     private readonly IOptions<FileImportOptions> optionsMock = Substitute.For<IOptions<FileImportOptions>>();
     private readonly IOptions<EmailOptions> emailOptionsMock = Substitute.For<IOptions<EmailOptions>>();
@@ -31,11 +32,10 @@ public class TbxDataServiceTests
     [Test]
     public void AdjustLinkStructure_WithStructuredLinkContentOnly_ShouldAdjustToLinkStructure()
     {
-        var sut = new TestableTbxDataService(optionsMock, null, null, null, null, emailOptionsMock);
         var source =
             @"\h!https://www.fedlex.admin.ch/eli/cc/2000/282/it! Ordinanza sull’organizzazione del Dipartimento federale dell’interno; RS 172.212.1\s (30.03.2021)";
 
-        var result = sut.AdjustLinkStructureAccessor(source);
+        var result = TestableTbxDataService.AdjustLinkStructureAccessor(source);
 
         Assert.That(result,
             Is.EqualTo(
@@ -45,10 +45,9 @@ public class TbxDataServiceTests
     [Test]
     public void AdjustLinkStructure_WithPlainLinkOnly_ShouldAdjustToLinkStructure()
     {
-        var sut = new TestableTbxDataService(optionsMock, null, null, null, null, emailOptionsMock);
         var source = @"https://www.eawag.ch/fr/portrait/portrait/organisation/";
 
-        var result = sut.AdjustLinkStructureAccessor(source);
+        var result = TestableTbxDataService.AdjustLinkStructureAccessor(source);
 
         Assert.That(result,
             Is.EqualTo(
@@ -58,10 +57,9 @@ public class TbxDataServiceTests
     [Test]
     public void AdjustLinkStructure_WithNotParsableContent_ShouldReturnRawContent()
     {
-        var sut = new TestableTbxDataService(optionsMock, null, null, null, null, emailOptionsMock);
         var source = @"https://www.eawag.ch;";
 
-        var result = sut.AdjustLinkStructureAccessor(source);
+        var result = TestableTbxDataService.AdjustLinkStructureAccessor(source);
 
         Assert.That(result, Is.EqualTo("https://www.eawag.ch;"));
     }
@@ -69,7 +67,6 @@ public class TbxDataServiceTests
     [Test]
     public void AdjustLinkStructure_WithComplexContentV1_ShouldAdjustAllLinksToLinkStructure()
     {
-        var sut = new TestableTbxDataService(optionsMock, null, null, null, null, emailOptionsMock);
         var source = """
                      ...causes it, 2020
                                      (\h!https://www.who.int/emergencies/diseases/novel-coronavirus-2019/technical-guidance/naming-the-coronavirus-disease-covid-2019!Internet,
@@ -79,7 +76,7 @@ public class TbxDataServiceTests
                                      2020-03-03\s), Helmholtz...
                      """;
 
-        var actual = sut.AdjustLinkStructureAccessor(source);
+        var actual = TestableTbxDataService.AdjustLinkStructureAccessor(source);
 
         Assert.That(actual, Is.EqualTo("""
                                        ...causes it, 2020
@@ -94,11 +91,10 @@ public class TbxDataServiceTests
     [Test]
     public void AdjustLinkStructure_WithComplexContentV2_ShouldAdjustAllLinksToLinkStructure()
     {
-        var sut = new TestableTbxDataService(optionsMock, null, null, null, null, emailOptionsMock);
         var source =
             @"Internet DFAE, DSC, Partenariati in materia di migrazione; \hhttps://www.eda.admin.ch/deza/it/home/temi-dsc/migrazione/dialogo-migrazioni/migrationspartnerschaften.html\s (23.8.2024)";
 
-        var result = sut.AdjustLinkStructureAccessor(source);
+        var result = TestableTbxDataService.AdjustLinkStructureAccessor(source);
 
         Assert.That(result,
             Is.EqualTo(
@@ -114,7 +110,7 @@ public class TbxDataServiceTests
         var entryRepositoryMock = Substitute.For<IEntryRepository>();
         var entryServiceMock = Substitute.For<IEntryService>();
         var emailServiceMock = Substitute.For<IEmailService>();
-        Email emailToSend = null!;
+        Email emailToSend = null;
         emailServiceMock.Send(Arg.Do<Email>(v => emailToSend = v)).Returns(Task.CompletedTask);
         var emailOptions = new EmailOptions { SenderAddress = "test_sender_email" };
         emailOptionsMock.Value.Returns(emailOptions);
@@ -132,18 +128,18 @@ public class TbxDataServiceTests
         entryRepositoryMock.GetByExternalSystemId("00cb09aa-ffc2-4008-833a-bba336aec164").Returns(new Entry
         {
             ExternalSystemId = "00cb09aa-ffc2-4008-833a-bba336aec164",
-            Modified = DateTime.Parse("2024-02-15T10:09:10Z").ToUniversalTime()
+            Modified = DateTime.Parse("2024-02-15T10:09:10Z", CultureInfo.InvariantCulture).ToUniversalTime()
         });
         // Note: This entry should be updated because it is one second older than the entry in the file
         entryRepositoryMock.GetByExternalSystemId("aa44b3eb-07d6-47ca-a9e4-d44c2cb5aaf9").Returns(new Entry
         {
             ExternalSystemId = "aa44b3eb-07d6-47ca-a9e4-d44c2cb5aaf9",
-            Modified = DateTime.Parse("2024-02-19T09:14:20Z").ToUniversalTime().AddSeconds(-1),
+            Modified = DateTime.Parse("2024-02-19T09:14:20Z", CultureInfo.InvariantCulture).ToUniversalTime().AddSeconds(-1),
             ConcurrencyToken = 666,
             Id = 42
         });
         using var testDataReader = new StreamReader(Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream("Bk.Termdat.Business.Tests.Assets.Tbx.Testdata.tbx")!);
+            .GetManifestResourceStream("Bk.Termdat.Business.Tests.Assets.Tbx.Testdata.tbx"));
         var xDocument = XDocument.Load(testDataReader, LoadOptions.SetLineInfo);
         var sut = new TbxDataService(optionsMock, new NullLogger<TbxDataService>(), languageRepositoryMock,
             entryRepositoryMock, entryServiceMock, emailServiceMock, emailOptionsMock);
@@ -186,20 +182,20 @@ public class TbxDataServiceTests
         entryRepositoryMock.GetByExternalSystemId("00cb09aa-ffc2-4008-833a-bba336aec164").Returns(new Entry
         {
             ExternalSystemId = "00cb09aa-ffc2-4008-833a-bba336aec164",
-            Modified = DateTime.Parse("2024-02-15T10:09:10Z").ToUniversalTime()
+            Modified = DateTime.Parse("2024-02-15T10:09:10Z", CultureInfo.InvariantCulture).ToUniversalTime()
         });
 
         // Note: This entry should be updated because it is one second older than the entry in the file
         entryRepositoryMock.GetByExternalSystemId("aa44b3eb-07d6-47ca-a9e4-d44c2cb5aaf9").Returns(new Entry
         {
             ExternalSystemId = "aa44b3eb-07d6-47ca-a9e4-d44c2cb5aaf9",
-            Modified = DateTime.Parse("2024-02-19T09:14:20Z").ToUniversalTime().AddSeconds(-1),
+            Modified = DateTime.Parse("2024-02-19T09:14:20Z", CultureInfo.InvariantCulture).ToUniversalTime().AddSeconds(-1),
             ConcurrencyToken = 666,
             Id = 42
         });
 
         using var testDataReader = new StreamReader(Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream("Bk.Termdat.Business.Tests.Assets.Tbx.Testdata.tbx")!);
+            .GetManifestResourceStream("Bk.Termdat.Business.Tests.Assets.Tbx.Testdata.tbx"));
         var xDocument = XDocument.Load(testDataReader, LoadOptions.SetLineInfo);
         var sut = new TestableTbxDataService(optionsMock, languageRepositoryMock, entryRepositoryMock, null, null,
             emailOptionsMock);

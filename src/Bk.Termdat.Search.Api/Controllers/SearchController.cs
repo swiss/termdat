@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,6 +25,7 @@ public class SearchController : ControllerBase
     }
 
     [HttpGet("search")]
+    [ProducesResponseType(typeof(SearchResult), StatusCodes.Status200OK)]
     public ActionResult Search([FromQuery] SearchFilterParameter searchQuery, [FromQuery] SearchFields searchFields)
     {
         if (searchQuery is null)
@@ -39,6 +41,7 @@ public class SearchController : ControllerBase
     }
 
     [HttpGet("recommend")]
+    [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     public ActionResult Recommend([FromQuery] string searchPhrase, [FromQuery] IEnumerable<int> languageIds = null)
     {
         if (searchPhrase is null)

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.LindasExport.Api.Constants;
 using Bk.Termdat.LindasExport.Api.Extensions;
@@ -20,7 +21,16 @@ public class Entry
 
     public IEnumerable<Triple> GetTriples(IGraph graph, Collection collection, bool addCubeLinkData)
     {
-        var entrySubject = graph.CreateUriNode(UriFactory.Create(string.Format(Uris.TermdatEntryUriFormat, Id)));
+        ArgumentNullException.ThrowIfNull(graph);
+        ArgumentNullException.ThrowIfNull(collection);
+
+        return GetTriplesIterator(graph, collection, addCubeLinkData);
+
+    }
+
+    private IEnumerable<Triple> GetTriplesIterator(IGraph graph, Collection collection, bool addCubeLinkData)
+    {
+        var entrySubject = graph.CreateUriNode(UriFactory.Create(string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryUriFormat, Id)));
 
         // DateModified
         yield return new Triple(
@@ -31,7 +41,7 @@ public class Entry
         // AdminInfos
         foreach (var adminInfoCode in AdminInfoCodeItems)
         {
-            var adminInfoSubject = graph.CreateUriNode(UriFactory.Create(string.Format(
+            var adminInfoSubject = graph.CreateUriNode(UriFactory.Create(string.Format(CultureInfo.InvariantCulture,
                 Uris.TermdatEntryAdditionUriFormat,
                 Uris.TermdatAdministrativeNoteUriAddition, adminInfoCode)));
 
@@ -119,7 +129,7 @@ public class Entry
         var mainEntryType = GetMainEntryType(mainParts);
 
         // Main entry metadata like Type, URL etc
-        foreach (var triple in GetMetaDataTriples(graph, entrySubject, mainEntryType, firstPosition, Id.ToString(),
+        foreach (var triple in GetMetaDataTriples(graph, entrySubject, mainEntryType, firstPosition, Id.ToString(CultureInfo.InvariantCulture),
                      collection.Uri))
         {
             yield return triple;
@@ -135,7 +145,7 @@ public class Entry
         IUriNode? termSubject = null;
         if (mainEntryType != EntryType.Term && mainParts.Any(p => p.Term is not null))
         {
-            var termSubjectUri = string.Format(Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatTermUriAddition);
+            var termSubjectUri = string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatTermUriAddition);
             termSubject = graph.CreateUriNode(UriFactory.Create(termSubjectUri));
 
             foreach (var triple in GetMetaDataTriples(graph, termSubject, EntryType.Term, firstPosition))
@@ -154,7 +164,7 @@ public class Entry
         if (mainEntryType != EntryType.Phraseology && mainParts.Any(p => p.Phraseology is not null))
         {
             var phraseologySubjectUri =
-                string.Format(Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatPhraseologyUriAddition);
+                string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatPhraseologyUriAddition);
             phraseologySubject = graph.CreateUriNode(UriFactory.Create(phraseologySubjectUri));
 
             foreach (var triple in GetMetaDataTriples(graph, phraseologySubject, EntryType.Phraseology, firstPosition))
@@ -174,7 +184,7 @@ public class Entry
             mainParts.Any(p => p.AbbreviationCitation is not null))
         {
             var abbreviationSubjectUri =
-                string.Format(Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatAbbreviationUriAddition);
+                string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryAdditionUriFormat, Id, Uris.TermdatAbbreviationUriAddition);
             abbreviationSubject = graph.CreateUriNode(UriFactory.Create(abbreviationSubjectUri));
 
             foreach (var triple in GetMetaDataTriples(graph, abbreviationSubject, EntryType.Abbreviation,
@@ -232,10 +242,10 @@ public class Entry
         foreach (var subPart in subParts)
         {
             var language = subPart.Language.ToLowerCaseStringValue();
-            var subPartUri = string.Format(Uris.TermdatEntryPartUriFormat, Id, subPart.Sequence, language);
+            var subPartUri = string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryPartUriFormat, Id, subPart.Sequence, language);
 
             // Determine sub part typ
-            var subPartType = subPart.GetEntryType();
+            var subPartType = subPart.EntryType;
 
             // Some synonyms only have context (probably legacy data) so everything else is null and those entries must be skipped
             if (subPartType == EntryType.None)
@@ -249,7 +259,7 @@ public class Entry
                 hasPartPredicate,
                 graph.CreateUriNode(UriFactory.Create(subPartUri)));
 
-            foreach (var triple in GetMetaDataTriples(graph, subPartSubject, subPartType, subPart.Sequence.ToString(),
+            foreach (var triple in GetMetaDataTriples(graph, subPartSubject, subPartType, subPart.Sequence.ToString(CultureInfo.InvariantCulture),
                          isSynonym: true))
             {
                 yield return triple;
@@ -294,7 +304,7 @@ public class Entry
         INode subPartSubject)
     {
         var hasPartPredicate = graph.CreateUriNode(UriFactory.Create(Uris.HasPart));
-        var termSubPartUri = string.Format(Uris.TermdatEntryPartAdditionUriFormat, Id, subPart.Sequence,
+        var termSubPartUri = string.Format(CultureInfo.InvariantCulture, Uris.TermdatEntryPartAdditionUriFormat, Id, subPart.Sequence,
             entryType.GetUriAddition(), subPart.Language.ToLowerCaseStringValue());
         var termSubPartSubject = graph.CreateUriNode(UriFactory.Create(termSubPartUri));
 
@@ -303,7 +313,7 @@ public class Entry
             hasPartPredicate,
             graph.CreateUriNode(UriFactory.Create(termSubPartUri)));
 
-        foreach (var triple in GetMetaDataTriples(graph, termSubPartSubject, entryType, subPart.Sequence.ToString(),
+        foreach (var triple in GetMetaDataTriples(graph, termSubPartSubject, entryType, subPart.Sequence.ToString(CultureInfo.InvariantCulture),
                      isSynonym: true))
         {
             yield return triple;
@@ -350,7 +360,7 @@ public class Entry
             yield return new Triple(
                 subject,
                 graph.CreateUriNode(UriFactory.Create(Uris.Url)),
-                graph.CreateLiteralNode(string.Format(Uris.TermdatLinkFormat, id), UriFactory.Create("xsd:anyURI")));
+                graph.CreateLiteralNode(string.Format(CultureInfo.InvariantCulture, Uris.TermdatLinkFormat, id), UriFactory.Create("xsd:anyURI")));
         }
 
         // TermSet

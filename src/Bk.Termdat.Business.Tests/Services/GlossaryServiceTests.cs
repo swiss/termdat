@@ -21,9 +21,9 @@ using DomainModels = Bk.Termdat.Business.Domain.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class GlossaryServiceTests
+internal class GlossaryServiceTests
 {
-    private IGlossaryService glossaryService;
+    private GlossaryService glossaryService;
     private IGlossaryRepository glossaryRepositoryMock;
     private IMapper mapperMock;
     private IEntryRepository entryRepositoryMock;

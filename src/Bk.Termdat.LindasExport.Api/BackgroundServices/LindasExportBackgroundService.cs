@@ -21,6 +21,8 @@ public class LindasExportBackgroundService : BackgroundService
         IExportScheduler exportScheduler,
         TimeProvider timeProvider)
     {
+        ArgumentNullException.ThrowIfNull(lindasExOptions);
+
         this.logger = logger;
         this.serviceProvider = serviceProvider;
         this.lindasExOptions = lindasExOptions.Value;
@@ -28,9 +30,12 @@ public class LindasExportBackgroundService : BackgroundService
         this.timeProvider = timeProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken ct)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("{BackgroundService} is starting...", nameof(LindasExportBackgroundService));
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("{BackgroundService} is starting...", nameof(LindasExportBackgroundService));
+        }
 
         if (!lindasExOptions.Enabled)
         {
@@ -38,11 +43,15 @@ public class LindasExportBackgroundService : BackgroundService
             return;
         }
 
-        while (!ct.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             var nextRun = exportScheduler.GetNextRun();
-            logger.LogInformation("Next LINDAS export scheduled for {NextRun}", nextRun);
-            await Task.Delay(nextRun - timeProvider.GetUtcNow(), timeProvider, ct);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Next LINDAS export scheduled for {NextRun}", nextRun);
+            }
+
+            await Task.Delay(nextRun - timeProvider.GetUtcNow(), timeProvider, stoppingToken);
 
             try
             {
@@ -51,12 +60,15 @@ public class LindasExportBackgroundService : BackgroundService
 
                 using var scope = serviceProvider.CreateScope();
                 var lindasExportService = scope.ServiceProvider.GetRequiredService<ILindasExportService>();
-                var result = await lindasExportService.ExportCollections(ct);
+                var result = await lindasExportService.ExportCollections(stoppingToken);
 
                 timer.Stop();
                 if (result.IsSuccess)
                 {
-                    logger.LogInformation("Export collections to LINDAS finished. Duration: {Duration:g}", timer.Elapsed);
+                    if (logger.IsEnabled(LogLevel.Information))
+                    {
+                        logger.LogInformation("Export collections to LINDAS finished. Duration: {Duration:g}", timer.Elapsed);
+                    }
                 }
                 else
                 {
@@ -68,9 +80,12 @@ public class LindasExportBackgroundService : BackgroundService
                 var process = Process.GetCurrentProcess();
                 var memory = process.PeakWorkingSet64;
 
-                logger.LogInformation("Process peak memory usage for collection export: {Size}", memory.ToSize(SizeExtension.SizeUnits.MB));
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation("Process peak memory usage for collection export: {Size}", memory.ToSize(SizeExtension.SizeUnits.MB));
+                }
             }
-            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
                 return;
             }

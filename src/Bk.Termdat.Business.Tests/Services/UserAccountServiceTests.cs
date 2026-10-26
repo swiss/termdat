@@ -101,7 +101,7 @@ internal class UserAccountServiceTests
         identityServiceMock.GetCurrentLastName().Returns(currentLastName);
         identityServiceMock.GetCurrentRole().Returns(currentRole);
 
-        UserAccount receivedUserAccount = null!;
+        UserAccount receivedUserAccount = null;
         userAccountRepositoryMock.When(x => x.Create(Arg.Any<UserAccount>()))
             .Do(x => receivedUserAccount = x.Arg<UserAccount>());
 
@@ -152,7 +152,7 @@ internal class UserAccountServiceTests
         userAccountRepositoryMock.GetDetailByEmail(currentEmail).Returns(userAccount);
         userAccountRepositoryMock.GetDetailByEmailForUpdate(currentEmail).Returns(userAccount);
 
-        UserAccount receivedUserAccount = null!;
+        UserAccount receivedUserAccount = null;
         userAccountRepositoryMock.When(x => x.Update(Arg.Any<UserAccount>(), Arg.Any<UserAccount>()))
             .Do(x => receivedUserAccount = x.ArgAt<UserAccount>(1));
 

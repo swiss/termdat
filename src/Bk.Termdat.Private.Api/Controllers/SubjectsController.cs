@@ -26,7 +26,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await subjectService.GetDetail(id);
@@ -34,7 +34,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var subjects = await subjectService.GetAllDetails();
@@ -42,7 +42,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpPost("")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] SubjectModification subjectCreate)
     {
         if (subjectCreate is null)
@@ -55,7 +55,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] SubjectModification subjectUpdate)
     {
         if (subjectUpdate?.Id != id)
@@ -69,7 +69,7 @@ public class SubjectsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await subjectService.Delete(id);

@@ -394,7 +394,7 @@ internal class ExceptionMiddlewareTests
         contextMock.RequestServices.Returns(serviceProvider);
         contextMock.Request.RouteValues = new RouteValueDictionary { { "test", "test" } };
 
-        next = _ => Task.FromException(new Exception("SHOULD CATCH THIS"));
+        next = _ => Task.FromException(new ArgumentException("SHOULD CATCH THIS"));
         middleware = new ExceptionMiddleware(next, false);
 
         Assert.DoesNotThrowAsync(async () =>
@@ -433,7 +433,7 @@ internal class ExceptionMiddlewareTests
         contextMock.RequestServices.Returns(serviceProvider);
         contextMock.Request.RouteValues = new RouteValueDictionary { { "test", "test" } };
 
-        next = _ => Task.FromException(new Exception("SHOULD CATCH THIS WITH DETAILS"));
+        next = _ => Task.FromException(new ArgumentException("SHOULD CATCH THIS WITH DETAILS"));
         middleware = new ExceptionMiddleware(next, true);
 
         Assert.DoesNotThrowAsync(async () =>

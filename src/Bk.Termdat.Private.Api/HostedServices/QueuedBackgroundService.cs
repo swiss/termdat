@@ -20,17 +20,20 @@ public class QueuedBackgroundService : BackgroundService
         this.serviceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("{ServiceName} is running", nameof(QueuedBackgroundService));
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("{ServiceName} is running", nameof(QueuedBackgroundService));
+        }
 
-        while (!cancellationToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                var workItem = await backgroundTaskQueue.DequeueBackgroundWorkItemAsync(cancellationToken);
+                var workItem = await backgroundTaskQueue.DequeueBackgroundWorkItemAsync(stoppingToken);
 
-                await workItem(cancellationToken, serviceProvider);
+                await workItem(stoppingToken, serviceProvider);
             }
             catch (Exception ex)
             {
@@ -40,10 +43,13 @@ public class QueuedBackgroundService : BackgroundService
         }
     }
 
-    public override async Task StopAsync(CancellationToken stoppingToken)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("{ServiceName} is stopping", nameof(QueuedBackgroundService));
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("{ServiceName} is stopping", nameof(QueuedBackgroundService));
+        }
 
-        await base.StopAsync(stoppingToken);
+        await base.StopAsync(cancellationToken);
     }
 }

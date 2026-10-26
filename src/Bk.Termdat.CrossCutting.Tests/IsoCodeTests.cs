@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Bk.Termdat.CrossCutting.Tests;
 
-public class IsoCodeTests
+internal class IsoCodeTests
 {
     [TestCase("dE", IsoCode.De)]
     [TestCase("de", IsoCode.De)]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -63,6 +64,8 @@ public class EntryService : IEntryService
 
     public async Task<EntryModificationDetail> Create(EntryCreate entryCreate, string processingUser = null)
     {
+        ArgumentNullException.ThrowIfNull(entryCreate);
+
         entryValidationService.AuthorizeCollection(entryCreate.CollectionId);
         entryValidationService.AuthorizeGlossaries(entryCreate.GlossaryIds);
 
@@ -110,11 +113,13 @@ public class EntryService : IEntryService
 
     public async Task<EntryModificationDetail> Update(EntryUpdate entryUpdate, string processingUser = null)
     {
+        ArgumentNullException.ThrowIfNull(entryUpdate);
+
         var databaseEntry = await FindEntryForUpdate(entryUpdate.Id);
 
         if (databaseEntry.Locked.HasValue && databaseEntry.LockedBy != identityService.GetCurrentEmail())
         {
-            throw new EntryLockedException(string.Format(BackendTexts.EntryLocked, entryUpdate.Id));
+            throw new EntryLockedException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryLocked, entryUpdate.Id));
         }
 
         entryValidationService.AuthorizeCollection(entryUpdate.CollectionId, databaseEntry.CollectionId);
@@ -200,13 +205,13 @@ public class EntryService : IEntryService
         var entry = await entryRepository.GetByIdForEntryDetail(entryId);
         if (entry is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, entryId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, entryId));
         }
 
         // Only admins are allowed to see/know that deleted entries exist
         if (entry.Deleted && !authorizationService.IsAdmin())
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, entryId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, entryId));
         }
 
         if (authorizationService.IsWriter())
@@ -239,13 +244,13 @@ public class EntryService : IEntryService
 
         entry.Translations = entry.Translations
             .Where(t =>
-                sourceLanguageIdArray == null || !sourceLanguageIdArray.Any() || sourceLanguageIdArray.Contains(t.LanguageId) ||
-                targetLanguageIdArray == null || !targetLanguageIdArray.Any() || targetLanguageIdArray.Contains(t.LanguageId))
+                sourceLanguageIdArray == null || sourceLanguageIdArray.Length == 0 || sourceLanguageIdArray.Contains(t.LanguageId) ||
+                targetLanguageIdArray == null || targetLanguageIdArray.Length == 0 || targetLanguageIdArray.Contains(t.LanguageId))
             .ToList();
 
         entry.Collection.Translations = entry.Collection.Translations.Where(t =>
-            sourceLanguageIdArray == null || !sourceLanguageIdArray.Any() || sourceLanguageIdArray.Contains(t.LanguageId) ||
-            targetLanguageIdArray == null || !targetLanguageIdArray.Any() || targetLanguageIdArray.Contains(t.LanguageId)
+            sourceLanguageIdArray == null || sourceLanguageIdArray.Length == 0 || sourceLanguageIdArray.Contains(t.LanguageId) ||
+            targetLanguageIdArray == null || targetLanguageIdArray.Length == 0 || targetLanguageIdArray.Contains(t.LanguageId)
         ).ToList();
 
         return mapper.Map<EntryDetail>(entry);
@@ -257,7 +262,7 @@ public class EntryService : IEntryService
 
         if (entry == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, entryId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, entryId));
         }
 
         if (!authorizationService.CanEdit(entry))
@@ -267,7 +272,7 @@ public class EntryService : IEntryService
 
         if (entry.Locked.HasValue && entry.LockedBy != identityService.GetCurrentEmail())
         {
-            throw new EntryLockedException(string.Format(BackendTexts.EntryLocked, entryId));
+            throw new EntryLockedException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryLocked, entryId));
         }
 
         return mapper.Map<EntryModificationDetail>(entry);
@@ -279,7 +284,7 @@ public class EntryService : IEntryService
 
         if (entry == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, entryId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, entryId));
         }
 
         return mapper.Map<EntryReferenceDetail>(entry);
@@ -287,11 +292,13 @@ public class EntryService : IEntryService
 
     public async Task<IEnumerable<EntryMultipleUpdateInfo>> DeleteMultiple(int[] ids, bool soft = true)
     {
+        ArgumentNullException.ThrowIfNull(ids);
+
         var entries = (await entryRepository.GetByIds(ids)).ToList();
 
         if (soft && entries.Count != ids.Length)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, string.Join(",", ids)));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, string.Join(",", ids)));
         }
 
         if (entries.Exists(e => !authorizationService.CanDelete(e)))
@@ -316,11 +323,13 @@ public class EntryService : IEntryService
 
     public async Task<IEnumerable<EntryMultipleUpdateInfo>> RestoreMultiple(int[] ids)
     {
+        ArgumentNullException.ThrowIfNull(ids);
+
         var entries = (await entryRepository.GetByIds(ids)).ToList();
 
         if (entries.Count != ids.Length)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryNotFound, string.Join(",", ids)));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryNotFound, string.Join(",", ids)));
         }
 
         if (entries.Exists(e => !authorizationService.CanRestore(e)))
@@ -393,6 +402,8 @@ public class EntryService : IEntryService
 
     public async Task<EntryMultipleUpdateResult> MultipleSearchAndReplace(EntrySearchAndReplaceUpdate update)
     {
+        ArgumentNullException.ThrowIfNull(update);
+
         var databaseEntries = (await entryRepository.GetByIdsForReplace(update.Ids, update.SearchField, update.SearchValue)).ToList();
 
         if (databaseEntries.Any(y => !authorizationService.CanEdit(y)))
@@ -402,7 +413,7 @@ public class EntryService : IEntryService
 
         if (databaseEntries.Exists(y => y.Deleted))
         {
-            throw new CanNotBeChangedException(string.Format(BackendTexts.EntryDeletedCanNotBeEdited, databaseEntries.First(y => y.Deleted).Id));
+            throw new CanNotBeChangedException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryDeletedCanNotBeEdited, databaseEntries.First(y => y.Deleted).Id));
         }
 
         var occurrences = 0;
@@ -446,7 +457,7 @@ public class EntryService : IEntryService
 
         if (entry.Deleted)
         {
-            throw new CanNotBeChangedException(string.Format(BackendTexts.EntryDeletedCanNotBeEdited, id));
+            throw new CanNotBeChangedException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryDeletedCanNotBeEdited, id));
         }
 
         if (!authorizationService.CanEdit(entry))
@@ -467,12 +478,12 @@ public class EntryService : IEntryService
         //whole-words bounded by whitespace or special character  (or at the beginning/end of the source text)
         var replaceRegexPattern = @"(?<=^|\s|,|\(|\[|\{|\-|\.|&|_|=|<|>|#|\)|\]|\}|;|%|/|\\|:)" + Regex.Escape(update.SearchValue) + @"(?=$|\s|,|\(|\[|\{|\-|\.|&|_|=|<|>|#|\)|\]|\}|;|%|/|\\|:)";
 
-        var matches = Regex.Matches(source, replaceRegexPattern);
+        var matches = Regex.Matches(source, replaceRegexPattern, RegexOptions.None, TimeSpan.FromSeconds(1));
 
         var occurrences = matches.Count;
 
         return occurrences > 0
-            ? (Regex.Replace(source, replaceRegexPattern, update.ReplaceValue ?? string.Empty), occurrences)
+            ? (Regex.Replace(source, replaceRegexPattern, update.ReplaceValue ?? string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1)), occurrences)
             : (source, 0);
     }
 

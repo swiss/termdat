@@ -18,9 +18,9 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class EntryServiceTests
+internal class EntryServiceTests
 {
-    private IEntryService entryService;
+    private EntryService entryService;
     private IEntryRepository entryRepositoryMock;
     private ILanguageValidationService languageValidationServiceMock;
     private IOptions<PublicApiOptions> publicApiOptionsMock;

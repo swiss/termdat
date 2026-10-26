@@ -7,5 +7,5 @@ namespace Bk.Termdat.Business.Mapping;
 
 public interface ILanguageDescriptionMapper
 {
-    Task<IEnumerable<T>> Map<T>(ILanguageDescription languageDescription) where T : IEntityNameTranslation, new();
+    Task<IEnumerable<T>> Map<T>(ILanguageDescription languageDescription) where T : class, IEntityNameTranslation, new();
 }

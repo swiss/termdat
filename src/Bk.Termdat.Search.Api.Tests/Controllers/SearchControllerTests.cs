@@ -131,7 +131,7 @@ internal class SearchControllerTests
 
         searchRepositoryMock
             .Recommend(searchPhrase, languageIds, includeDeleted)
-            .Throws(new Exception("boom"));
+            .Throws(new ArgumentException("boom"));
 
         var result = searchController.Recommend(searchPhrase, languageIds);
 

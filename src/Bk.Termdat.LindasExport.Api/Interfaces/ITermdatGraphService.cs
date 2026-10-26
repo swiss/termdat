@@ -4,7 +4,8 @@ namespace Bk.Termdat.LindasExport.Api.Interfaces;
 
 public interface ITermdatGraphService
 {
-    IReadOnlyCollection<string> Targets { get; }
+    IReadOnlyCollection<string> GetTargets();
+
     Task DeleteGraph(string target, CancellationToken ct);
     Task AddCollection(string target, Collection collection, CancellationToken ct);
     Task AddDataSet(string target, CancellationToken ct);

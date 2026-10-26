@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class LanguageValidationServiceTests
+internal class LanguageValidationServiceTests
 {
     private LanguageValidationService languageValidationService;
     private ILanguageRepository languageRepositoryMock;

@@ -118,15 +118,15 @@ public class SearchMappingProfile : Profile
             });
     }
 
-    private int[] SplitEntryIds(string entryIds)
+    private static int[] SplitEntryIds(string entryIds)
     {
         if (!string.IsNullOrEmpty(entryIds))
         {
-            entryIds = entryIds.Replace(" ", "");
+            entryIds = entryIds.Replace(" ", "", StringComparison.InvariantCulture);
             var allIds = entryIds.Split(",").ToArray();
             var allIdsAsNumbers = Array.ConvertAll(allIds, int.Parse);
             return allIdsAsNumbers;
         }
-        return null;
+        return [];
     }
 }

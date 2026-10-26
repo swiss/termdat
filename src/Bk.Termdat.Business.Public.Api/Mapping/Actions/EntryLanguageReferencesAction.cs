@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -21,7 +22,10 @@ public class EntryLanguageReferencesAction : IMappingAction<EntryLanguage, Entry
 
     public void Process(EntryLanguage source, EntryLanguageDetail destination, ResolutionContext context)
     {
-        if (source.Sequence != 1 || source.Entry?.References?.Any() != true)
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(destination);
+
+        if (source.Sequence != 1 || source.Entry?.References?.Count is null || source.Entry.References.Count == 0)
         {
             return;
         }

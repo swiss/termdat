@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Resource.Validators;
 
 [TestFixture]
-public class ConceptSystemUpdateValidatorTests
+internal class ConceptSystemUpdateValidatorTests
 {
     private ConceptSystemUpdateValidator validator;
 

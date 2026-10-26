@@ -72,12 +72,15 @@ public class SearchRepository : ISearchRepository
         SearchGateway.MetadataEquivalentsField
     };
 
-    private static readonly Regex DangerousWildCardRegex = new(@"[^A-Za-z0-9]\*");
+    private static readonly Regex DangerousWildCardRegex = new(@"[^A-Za-z0-9]\*", RegexOptions.None, TimeSpan.FromSeconds(1));
 
     private readonly IDictionary<string, Analyzer> fieldSpecificAnalyzers;
 
     public SearchRepository(ILogger<SearchRepository> logger, ISearchGateway searchGateway, IOptions<SearchOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(searchGateway);
+        ArgumentNullException.ThrowIfNull(options);
+
         this.logger = logger;
         this.searchGateway = searchGateway;
         this.options = options.Value;
@@ -109,6 +112,8 @@ public class SearchRepository : ISearchRepository
 
     public SearchResult Search(SearchFilterParameter searchFilterParameter, SearchFields searchFields, bool includeDeleted = false, bool includeDeactivatedCollectionEntries = false)
     {
+        ArgumentNullException.ThrowIfNull(searchFilterParameter);
+
         var (entryIds, totalEntryCount) = GetSearchResult(searchFilterParameter, searchFields, includeDeleted, includeDeactivatedCollectionEntries);
 
         return new SearchResult
@@ -178,7 +183,10 @@ public class SearchRepository : ISearchRepository
             );
             groupingSearch.SetGroupSort(sort);
 
-            logger.LogDebug("Lucene Search Query: {Queries}", allQueries);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Lucene Search Query: {Queries}", allQueries);
+            }
 
             var offset = (searchFilterParameter.PageIndex - 1) * searchFilterParameter.PageSize;
 
@@ -201,7 +209,10 @@ public class SearchRepository : ISearchRepository
                 .Select(groupedTopDoc => searcher.Doc(groupedTopDoc.Doc))
                 .Select(foundDoc => int.Parse(foundDoc.Get(SearchGateway.IdField))).ToList();
 
-            logger.LogDebug("Hits: {Count}", result.TotalGroupCount);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("Hits: {Count}", result.TotalGroupCount);
+            }
 
             return (groupedIds, result.TotalGroupCount ?? 0);
         }
@@ -296,6 +307,8 @@ public class SearchRepository : ISearchRepository
 
     public void AddEntries(IEnumerable<IndexEntry> entries)
     {
+        ArgumentNullException.ThrowIfNull(entries);
+
         var indexWriter = searchGateway.Writer;
 
         foreach (var entry in entries)
@@ -314,7 +327,7 @@ public class SearchRepository : ISearchRepository
 
         foreach (var id in ids)
         {
-            indexWriter.DeleteDocuments(new Term(SearchGateway.IdField, id.ToString()));
+            indexWriter.DeleteDocuments(new Term(SearchGateway.IdField, id.ToString(CultureInfo.InvariantCulture)));
         }
 
         indexWriter.Commit();
@@ -325,7 +338,7 @@ public class SearchRepository : ISearchRepository
     {
         var indexWriter = searchGateway.Writer;
         var entryList = entries.ToList();
-        if (!entryList.Any())
+        if (entryList.Count == 0)
         {
             throw new InvalidOperationException($"Cannot update on an empty list of {nameof(entries)}.");
         }
@@ -334,7 +347,7 @@ public class SearchRepository : ISearchRepository
 
         foreach (var entryId in entryIdsToDelete)
         {
-            indexWriter.DeleteDocuments(new Term(SearchGateway.IdField, entryId.ToString()));
+            indexWriter.DeleteDocuments(new Term(SearchGateway.IdField, entryId.ToString(CultureInfo.InvariantCulture)));
         }
 
         foreach (var entry in entryList)
@@ -345,7 +358,10 @@ public class SearchRepository : ISearchRepository
         indexWriter.Commit();
         searchGateway.SearcherManager.MaybeRefresh();
 
-        logger.LogInformation("Lucene.NET: Updated {Count} in index", entryList.Count);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Lucene.NET: Updated {Count} in index", entryList.Count);
+        }
     }
 
     private static string ToIndexDateTime(DateTime dt)
@@ -379,15 +395,15 @@ public class SearchRepository : ISearchRepository
         var fields = new List<Field>
         {
             // Metadata fields
-            new StringField(SearchGateway.IdField, entry.EntryId.ToString(), Field.Store.YES),
-            new StringField(SearchGateway.LanguageIdField, entry.LanguageId.ToString(), Field.Store.YES),
-            new StringField(SearchGateway.SequenceIdField, entry.SequenceId.ToString(), Field.Store.YES),
-            new StringField(SearchGateway.OfficeIdField, entry.OfficeId.ToString(), Field.Store.NO),
-            new StringField(SearchGateway.CollectionIdField, entry.CollectionId.ToString(), Field.Store.NO),
+            new StringField(SearchGateway.IdField, entry.EntryId.ToString(CultureInfo.InvariantCulture), Field.Store.YES),
+            new StringField(SearchGateway.LanguageIdField, entry.LanguageId.ToString(CultureInfo.InvariantCulture), Field.Store.YES),
+            new StringField(SearchGateway.SequenceIdField, entry.SequenceId.ToString(CultureInfo.InvariantCulture), Field.Store.YES),
+            new StringField(SearchGateway.OfficeIdField, entry.OfficeId.ToString(CultureInfo.InvariantCulture), Field.Store.NO),
+            new StringField(SearchGateway.CollectionIdField, entry.CollectionId.ToString(CultureInfo.InvariantCulture), Field.Store.NO),
             new StringField(SearchGateway.CollectionIsActive, entry.CollectionIsActive.ToString(), Field.Store.NO),
-            new StringField(SearchGateway.StatusField, ((int)entry.Status).ToString(), Field.Store.NO),
-            new StringField(SearchGateway.CommentStatusField, ((int)commentStatus).ToString(), Field.Store.NO),
-            new StringField(SearchGateway.ReliabilityField, ((int)entry.Reliability).ToString(), Field.Store.NO),
+            new StringField(SearchGateway.StatusField, ((int)entry.Status).ToString(CultureInfo.InvariantCulture), Field.Store.NO),
+            new StringField(SearchGateway.CommentStatusField, ((int)commentStatus).ToString(CultureInfo.InvariantCulture), Field.Store.NO),
+            new StringField(SearchGateway.ReliabilityField, ((int)entry.Reliability).ToString(CultureInfo.InvariantCulture), Field.Store.NO),
             new StringField(SearchGateway.DeletedField, entry.Deleted.ToString(), Field.Store.NO),
             new Int64Field(SearchGateway.ModifiedField, ToInt64DateTime(ToIndexDateTime(entry.Modified)), Field.Store.NO),
 
@@ -522,42 +538,42 @@ public class SearchRepository : ISearchRepository
             fields.Add(new TextField(SearchGateway.MetadataSourceEquivalentsField, CharEquivalentsAnalyzer.PreprocessEquivalentsText(entry.MetadataSource, entry.LanguageId), Field.Store.NO));
         }
 
-        if (entry.Subjects?.Any() ?? false)
+        if (entry.Subjects?.Length > 0)
         {
-            fields.AddRange(entry.Subjects.Select(d => new StringField(SearchGateway.SubjectsField, d.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.Subjects.Select(d => new StringField(SearchGateway.SubjectsField, d.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.Domains?.Any() ?? false)
+        if (entry.Domains?.Length > 0)
         {
-            fields.AddRange(entry.Domains.Select(d => new StringField(SearchGateway.DomainsField, d.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.Domains.Select(d => new StringField(SearchGateway.DomainsField, d.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.LenochClassifications?.Any() ?? false)
+        if (entry.LenochClassifications?.Length > 0)
         {
-            fields.AddRange(entry.LenochClassifications.Select(d => new StringField(SearchGateway.LenochClassificationsField, d.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.LenochClassifications.Select(d => new StringField(SearchGateway.LenochClassificationsField, d.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.Glossaries?.Any() ?? false)
+        if (entry.Glossaries?.Length > 0)
         {
-            fields.AddRange(entry.Glossaries.Select(g => new StringField(SearchGateway.GlossariesField, g.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.Glossaries.Select(g => new StringField(SearchGateway.GlossariesField, g.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.References?.Any() ?? false)
+        if (entry.References?.Length > 0)
         {
-            fields.AddRange(entry.References.Select(r => new StringField(SearchGateway.ReferencesField, r.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.References.Select(r => new StringField(SearchGateway.ReferencesField, r.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.RelatedCollections?.Any() ?? false)
+        if (entry.RelatedCollections?.Length > 0)
         {
-            fields.AddRange(entry.RelatedCollections.Select(c => new StringField(SearchGateway.RelatedCollectionsField, c.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.RelatedCollections.Select(c => new StringField(SearchGateway.RelatedCollectionsField, c.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
-        if (entry.AdminInfos?.Any() ?? false)
+        if (entry.AdminInfos?.Length > 0)
         {
-            fields.AddRange(entry.AdminInfos.Select(a => new StringField(SearchGateway.AdminInfosField, a.ToString(), Field.Store.YES)));
+            fields.AddRange(entry.AdminInfos.Select(a => new StringField(SearchGateway.AdminInfosField, a.ToString(CultureInfo.InvariantCulture), Field.Store.YES)));
         }
 
         var document = new Document();
 
         foreach (var field in fields)
         {
-            if (FieldSpecificBoosts.ContainsKey(field.Name))
+            if (FieldSpecificBoosts.TryGetValue(field.Name, out var boost))
             {
-                field.Boost = FieldSpecificBoosts[field.Name];
+                field.Boost = boost;
             }
 
             document.Add(field);
@@ -758,7 +774,7 @@ public class SearchRepository : ISearchRepository
     }
 
 
-    private Query GetSearchQuery(string searchPhrase, SearchFields searchFields, int[] sourceLanguageIds = null)
+    private BooleanQuery GetSearchQuery(string searchPhrase, SearchFields searchFields, int[] sourceLanguageIds = null)
     {
         var fields = GetSearchFields(searchFields);
         var keywordFields = GetSearchKeywordFields(searchFields);
@@ -818,11 +834,14 @@ public class SearchRepository : ISearchRepository
 
             return (parser.Parse(searchPhrase), GetCharEquivalentsQuery(searchPhrase, searchFields, languageIds), GetCharEquivalentsQuery(searchPhraseSanitzed, searchFields, languageIds));
         }
-        catch (ParseException)
+        catch (ParseException parseEx)
         {
             try
             {
-                logger.LogWarning("Could not create search query: '{Phrase}'", searchPhrase);
+                if (logger.IsEnabled(LogLevel.Warning))
+                {
+                    logger.LogWarning(parseEx, "Could not create search query: '{Phrase}'", searchPhrase);
+                }
 
                 // Escape query and try again since it could be a valid query based on data in the system,
                 // even tho lucene considers it to be invalid query parser syntax
@@ -856,7 +875,7 @@ public class SearchRepository : ISearchRepository
         var groupedSearchPhrases = languageIdList.Select(id => (id, CharEquivalentsAnalyzer.PreprocessEquivalentsText(searchPhrase, id))).GroupBy(g => g.Item2).ToList();
 
         // If no language specific preprocessing happened, groupedSearchPhrases will only contain one entry and no language specific condition needs to be added
-        if (!languageIdList.Any() || groupedSearchPhrases.Count == 1)
+        if (languageIdList.Count == 0 || groupedSearchPhrases.Count == 1)
         {
             generalPreprocessedQuery.Boost = boost;
 
@@ -881,7 +900,7 @@ public class SearchRepository : ISearchRepository
             var languageQuery = new BooleanQuery
             {
                 { charEquivalentsParser.Parse(phrase), Occur.MUST },
-                { new TermQuery(new Term(SearchGateway.LanguageIdField, languageId.ToString())), Occur.MUST }
+                { new TermQuery(new Term(SearchGateway.LanguageIdField, languageId.ToString(CultureInfo.InvariantCulture))), Occur.MUST }
             };
             wrapperQuery.Add(languageQuery, Occur.SHOULD);
         }
@@ -948,11 +967,11 @@ public class SearchRepository : ISearchRepository
                 Occur.MUST
             },
             {
-                new TermQuery(new Term(SearchGateway.StatusField, ((int)Status.Validated).ToString())) { Boost = options.QueryBoostHighestPriority },
+                new TermQuery(new Term(SearchGateway.StatusField, ((int)Status.Validated).ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostHighestPriority },
                 Occur.SHOULD
             },
             {
-                new TermQuery(new Term(SearchGateway.OfficeIdField, options.AchOfficeId.ToString())) { Boost = options.QueryBoostHighestPriority },
+                new TermQuery(new Term(SearchGateway.OfficeIdField, options.AchOfficeId.ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostHighestPriority },
                 Occur.SHOULD
             },
             {
@@ -960,39 +979,39 @@ public class SearchRepository : ISearchRepository
                 Occur.SHOULD
             },
             {
-                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Approved).ToString())) { Boost = options.QueryBoostMidPriority },
+                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Approved).ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostMidPriority },
                 Occur.SHOULD
             },
             {
-                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Verified).ToString())) { Boost = options.QueryBoostLowPriority },
+                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Verified).ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostLowPriority },
                 Occur.SHOULD
             },
             {
-                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Translated).ToString())) { Boost = options.QueryBoostVeryLowPriority },
+                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Translated).ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostVeryLowPriority },
                 Occur.SHOULD
             },
             {
-                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Tentative).ToString())) { Boost = options.QueryBoostLowestPriority },
+                new TermQuery(new Term(SearchGateway.ReliabilityField, ((int)Reliability.Tentative).ToString(CultureInfo.InvariantCulture))) { Boost = options.QueryBoostLowestPriority },
                 Occur.SHOULD
             },
         };
     }
 
-    private Filter GetFilter(IEnumerable<int> languageIds, bool includeDeleted, bool includeDeactivatedCollectionEntries)
+    private static BooleanFilter? GetFilter(IEnumerable<int> languageIds, bool includeDeleted, bool includeDeactivatedCollectionEntries)
     {
         var languageIdArray = languageIds?.ToArray() ?? Array.Empty<int>();
-        if (!languageIdArray.Any() && includeDeleted)
+        if (languageIdArray.Length == 0 && includeDeleted)
         {
             return null;
         }
 
         var filter = new BooleanFilter();
 
-        if (languageIdArray.Any())
+        if (languageIdArray.Length > 0)
         {
             foreach (var language in languageIdArray)
             {
-                filter.Add(new TermFilter(new Term(SearchGateway.LanguageIdField, language.ToString())), Occur.SHOULD);
+                filter.Add(new TermFilter(new Term(SearchGateway.LanguageIdField, language.ToString(CultureInfo.InvariantCulture))), Occur.SHOULD);
             }
         }
 
@@ -1024,46 +1043,46 @@ public class SearchRepository : ISearchRepository
         return priorityQueries;
     }
 
-    private IEnumerable<Query> GetHighestPriorityQueries(SearchFilterParameter searchFilterParameter)
+    private List<Query> GetHighestPriorityQueries(SearchFilterParameter searchFilterParameter)
     {
         var priorityQueries = new List<Query>();
 
-        if (searchFilterParameter.StatusPriority && (searchFilterParameter.Status?.Any() ?? false))
+        if (searchFilterParameter.StatusPriority && searchFilterParameter.Status?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.Status.Select(s => CreateBoostedQueryTerm(SearchGateway.StatusField, ((int)s).ToString(), options.QueryBoostHighestPriority * 1.5f * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.Status.Select(s => CreateBoostedQueryTerm(SearchGateway.StatusField, ((int)s).ToString(CultureInfo.InvariantCulture), options.QueryBoostHighestPriority * 1.5f * options.QueryBoostPriorityMultiplier)));
         }
 
-        if (searchFilterParameter.OfficesPriority && (searchFilterParameter.Offices?.Any() ?? false))
+        if (searchFilterParameter.OfficesPriority && searchFilterParameter.Offices?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.Offices.Select(o => CreateBoostedQueryTerm(SearchGateway.OfficeIdField, o.ToString(), options.QueryBoostHighestPriority * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.Offices.Select(o => CreateBoostedQueryTerm(SearchGateway.OfficeIdField, o.ToString(CultureInfo.InvariantCulture), options.QueryBoostHighestPriority * options.QueryBoostPriorityMultiplier)));
         }
 
-        if (searchFilterParameter.ReliabilityPriority && (searchFilterParameter.Reliability?.Any() ?? false))
+        if (searchFilterParameter.ReliabilityPriority && searchFilterParameter.Reliability?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.Reliability.Select(r => CreateBoostedQueryTerm(SearchGateway.ReliabilityField, ((int)r).ToString(), 1.5f * options.QueryBoostHighestPriority * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.Reliability.Select(r => CreateBoostedQueryTerm(SearchGateway.ReliabilityField, ((int)r).ToString(CultureInfo.InvariantCulture), 1.5f * options.QueryBoostHighestPriority * options.QueryBoostPriorityMultiplier)));
         }
 
         return priorityQueries;
     }
 
-    private IEnumerable<Query> GetHighPriorityQueries(SearchFilterParameter searchFilterParameter)
+    private List<Query> GetHighPriorityQueries(SearchFilterParameter searchFilterParameter)
     {
         var priorityQueries = new List<Query>();
 
         // Boost indicates the priority factor, according to AC its: Languages, Status, Collections, Lenoch Classifications..
-        if (searchFilterParameter.CollectionsPriority && (searchFilterParameter.Collections?.Any() ?? false))
+        if (searchFilterParameter.CollectionsPriority && searchFilterParameter.Collections?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.Collections.Select(c => CreateBoostedQueryTerm(SearchGateway.CollectionIdField, c.ToString(), options.QueryBoostVeryHighPriority * 1.5f * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.Collections.Select(c => CreateBoostedQueryTerm(SearchGateway.CollectionIdField, c.ToString(CultureInfo.InvariantCulture), options.QueryBoostVeryHighPriority * 1.5f * options.QueryBoostPriorityMultiplier)));
         }
 
-        if (searchFilterParameter.SubjectDomainsPriority && (searchFilterParameter.SubjectDomains?.Any() ?? false))
+        if (searchFilterParameter.SubjectDomainsPriority && searchFilterParameter.SubjectDomains?.Length > 0)
         {
             priorityQueries.AddRange(GetSubjectDomainsBoostedQueries(searchFilterParameter.SubjectDomains, options.QueryBoostVeryHighPriority * options.QueryBoostPriorityMultiplier));
         }
 
-        if (searchFilterParameter.LenochClassificationPriority && (searchFilterParameter.LenochClassifications?.Any() ?? false))
+        if (searchFilterParameter.LenochClassificationPriority && searchFilterParameter.LenochClassifications?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.LenochClassifications.Select(lc => CreateBoostedQueryTerm(SearchGateway.LenochClassificationsField, lc.ToString(), 0.5f * options.QueryBoostVeryHighPriority * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.LenochClassifications.Select(lc => CreateBoostedQueryTerm(SearchGateway.LenochClassificationsField, lc.ToString(CultureInfo.InvariantCulture), 0.5f * options.QueryBoostVeryHighPriority * options.QueryBoostPriorityMultiplier)));
         }
 
         if (searchFilterParameter.DeletedPriority && searchFilterParameter.Deleted)
@@ -1074,19 +1093,19 @@ public class SearchRepository : ISearchRepository
         return priorityQueries;
     }
 
-    private IEnumerable<Query> GetMidPriorityQueries(SearchFilterParameter searchFilterParameter)
+    private List<Query> GetMidPriorityQueries(SearchFilterParameter searchFilterParameter)
     {
         var priorityQueries = new List<Query>();
 
-        if (searchFilterParameter.AdminInfosPriority && (searchFilterParameter.AdminInfos?.Any() ?? false))
+        if (searchFilterParameter.AdminInfosPriority && searchFilterParameter.AdminInfos?.Length > 0)
         {
-            priorityQueries.AddRange(searchFilterParameter.AdminInfos.Select(o => CreateBoostedQueryTerm(SearchGateway.AdminInfosField, o.ToString(), options.QueryBoostHighPriority * options.QueryBoostPriorityMultiplier)));
+            priorityQueries.AddRange(searchFilterParameter.AdminInfos.Select(o => CreateBoostedQueryTerm(SearchGateway.AdminInfosField, o.ToString(CultureInfo.InvariantCulture), options.QueryBoostHighPriority * options.QueryBoostPriorityMultiplier)));
         }
 
         return priorityQueries;
     }
 
-    private IEnumerable<Query> GetLowPriorityQueries(SearchFilterParameter searchFilterParameter)
+    private List<Query> GetLowPriorityQueries(SearchFilterParameter searchFilterParameter)
     {
         var priorityQueries = new List<Query>();
 
@@ -1103,7 +1122,7 @@ public class SearchRepository : ISearchRepository
         return priorityQueries;
     }
 
-    private BooleanQuery GetPriorityNumericRangeQuery(BooleanQuery allQueries, SearchFilterParameter searchFilterParameter)
+    private static BooleanQuery GetPriorityNumericRangeQuery(BooleanQuery allQueries, SearchFilterParameter searchFilterParameter)
     {
         // Boosting query sets all other queries to be lower rated, so this has to happen after adding all the other queries. NumericRangeQuery has no own Boost option.
         if (searchFilterParameter.ModifiedPeriodPriority && searchFilterParameter.ModifiedFrom != null && searchFilterParameter.ModifiedTo != null)
@@ -1117,7 +1136,7 @@ public class SearchRepository : ISearchRepository
         return allQueries;
     }
 
-    private Filter GetFilterExtended(SearchFilterParameter searchFilterParameter, bool includeDeleted, bool includeDeactivatedCollectionEntries)
+    private static BooleanFilter GetFilterExtended(SearchFilterParameter searchFilterParameter, bool includeDeleted, bool includeDeactivatedCollectionEntries)
     {
         var languageIdArray = searchFilterParameter.SourceLanguageIds?.ToArray() ?? Array.Empty<int>();
         var officeIdArray = searchFilterParameter.Offices?.ToArray() ?? Array.Empty<int>();
@@ -1131,27 +1150,27 @@ public class SearchRepository : ISearchRepository
 
         AddFilterIfSet(languageIdArray, () =>
         {
-            var sourceLanguageFilter = new TermsFilter(languageIdArray.Select(i => new Term(SearchGateway.LanguageIdField, i.ToString())).ToList());
+            var sourceLanguageFilter = new TermsFilter(languageIdArray.Select(i => new Term(SearchGateway.LanguageIdField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(sourceLanguageFilter, Occur.MUST);
         }, false);
         AddFilterIfSet(searchFilterParameter.Status, () =>
         {
-            var statusFilter = new TermsFilter(searchFilterParameter.Status.Select(i => new Term(SearchGateway.StatusField, ((int)i).ToString())).ToList());
+            var statusFilter = new TermsFilter(searchFilterParameter.Status.Select(i => new Term(SearchGateway.StatusField, ((int)i).ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(statusFilter, Occur.MUST);
         }, searchFilterParameter.StatusPriority);
         AddFilterIfSet(officeIdArray, () =>
         {
-            var officeFilter = new TermsFilter(officeIdArray.Select(i => new Term(SearchGateway.OfficeIdField, i.ToString())).ToList());
+            var officeFilter = new TermsFilter(officeIdArray.Select(i => new Term(SearchGateway.OfficeIdField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(officeFilter, Occur.MUST);
         }, searchFilterParameter.OfficesPriority);
         AddFilterIfSet(lenochClassificationIdArray, () =>
         {
-            var lenochClassificationFilter = new TermsFilter(lenochClassificationIdArray.Select(i => new Term(SearchGateway.LenochClassificationsField, i.ToString())).ToList());
+            var lenochClassificationFilter = new TermsFilter(lenochClassificationIdArray.Select(i => new Term(SearchGateway.LenochClassificationsField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(lenochClassificationFilter, Occur.MUST);
         }, searchFilterParameter.LenochClassificationPriority);
         AddFilterIfSet(collectionIdArray, () =>
         {
-            var collectionFilter = new TermsFilter(collectionIdArray.Select(i => new Term(SearchGateway.CollectionIdField, i.ToString())).ToList());
+            var collectionFilter = new TermsFilter(collectionIdArray.Select(i => new Term(SearchGateway.CollectionIdField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(collectionFilter, searchFilterParameter.CollectionsExclude ? Occur.MUST_NOT : Occur.MUST);
         }, searchFilterParameter.CollectionsPriority, searchFilterParameter.CollectionsExclude);
         AddFilterIfSet(subjectDomainsArray, () =>
@@ -1160,24 +1179,24 @@ public class SearchRepository : ISearchRepository
         }, searchFilterParameter.SubjectDomainsPriority);
         AddFilterIfSet(relatedCollectionIdArray, () =>
         {
-            var relatedCollectionFilter = new TermsFilter(relatedCollectionIdArray.Select(i => new Term(SearchGateway.RelatedCollectionsField, i.ToString())).ToList());
+            var relatedCollectionFilter = new TermsFilter(relatedCollectionIdArray.Select(i => new Term(SearchGateway.RelatedCollectionsField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(relatedCollectionFilter, Occur.MUST);
         }, false);
         AddFilterIfSet(glossaryIdArray, () =>
         {
-            var glossaryFilter = new TermsFilter(glossaryIdArray.Select(i => new Term(SearchGateway.GlossariesField, i.ToString())).ToList());
+            var glossaryFilter = new TermsFilter(glossaryIdArray.Select(i => new Term(SearchGateway.GlossariesField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(glossaryFilter, searchFilterParameter.GlossariesExclude ? Occur.MUST_NOT : Occur.MUST);
         }, false, searchFilterParameter.GlossariesExclude);
         AddFilterIfSet(searchFilterParameter.AdminInfos, () =>
         {
-            var adminInfoFilter = new TermsFilter(searchFilterParameter.AdminInfos.Select(i => new Term(SearchGateway.AdminInfosField, i.ToString())).ToList());
+            var adminInfoFilter = new TermsFilter(searchFilterParameter.AdminInfos.Select(i => new Term(SearchGateway.AdminInfosField, i.ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(adminInfoFilter, searchFilterParameter.AdminInfosExclude ? Occur.MUST_NOT : Occur.MUST);
         }, searchFilterParameter.AdminInfosPriority, searchFilterParameter.AdminInfosExclude);
         AddFilterIfSet(filter, searchFilterParameter.CreatedBy, SearchGateway.CreatedByField, searchFilterParameter.CreatedByPriority, searchFilterParameter.CreatedByExclude);
         AddFilterIfSet(filter, searchFilterParameter.ModifiedBy, SearchGateway.ModifiedByField, searchFilterParameter.ModifiedByPriority, searchFilterParameter.ModifiedByExclude);
         AddFilterIfSet(searchFilterParameter.Reliability, () =>
         {
-            var reliabilityFilter = new TermsFilter(searchFilterParameter.Reliability.Select(i => new Term(SearchGateway.ReliabilityField, ((int)i).ToString())).ToList());
+            var reliabilityFilter = new TermsFilter(searchFilterParameter.Reliability.Select(i => new Term(SearchGateway.ReliabilityField, ((int)i).ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(reliabilityFilter, Occur.MUST);
         }, searchFilterParameter.ReliabilityPriority);
         if (searchFilterParameter.ModifiedFrom != null && searchFilterParameter.ModifiedTo != null && (searchFilterParameter.ModifiedPeriodExclude || !searchFilterParameter.ModifiedPeriodPriority))
@@ -1204,11 +1223,11 @@ public class SearchRepository : ISearchRepository
 
         AddFilterIfSet(searchFilterParameter.CommentStatus, () =>
         {
-            var commentStatusFilter = new TermsFilter(searchFilterParameter.CommentStatus.Select(i => new Term(SearchGateway.CommentStatusField, ((int)i).ToString())).ToList());
+            var commentStatusFilter = new TermsFilter(searchFilterParameter.CommentStatus.Select(i => new Term(SearchGateway.CommentStatusField, ((int)i).ToString(CultureInfo.InvariantCulture))).ToList());
             filter.Add(commentStatusFilter, Occur.MUST);
         }, false);
 
-        return filter.Clauses.Count == 0 ? null : filter;
+        return filter.Clauses.Count == 0 ? new BooleanFilter() : filter;
     }
 
     private static BooleanFilter GetSubjectDomainsBooleanFilter(string[] subjectDomainsArray)
@@ -1219,7 +1238,7 @@ public class SearchRepository : ISearchRepository
         {
             var split = subjectDomain.Split('-');
 
-            if (!split.Any())
+            if (split.Length == 0)
             {
                 throw new InvalidOperationException($"Invalid syntax used for search query: {nameof(SearchFilterParameter.SubjectDomains)}");
             }
@@ -1254,7 +1273,7 @@ public class SearchRepository : ISearchRepository
         {
             var split = subjectDomain.Split('-');
 
-            if (!split.Any())
+            if (split.Length == 0)
             {
                 throw new InvalidOperationException($"Invalid syntax used for search query: {nameof(SearchFilterParameter.SubjectDomains)}");
             }
@@ -1288,7 +1307,7 @@ public class SearchRepository : ISearchRepository
 
     private static void AddFilterIfSet<T>(T[] parameter, Action filterAction, bool priority, bool exclude = false)
     {
-        if (parameter != null && parameter.Any() && (exclude || !priority))
+        if (parameter != null && parameter.Length > 0 && (exclude || !priority))
         {
             filterAction();
         }
@@ -1323,7 +1342,7 @@ public class SearchRepository : ISearchRepository
                searchFilterParameter.DeletedPriority;
     }
 
-    private BooleanQuery BuildMissingSourceQuery(SearchFields fields)
+    private static BooleanQuery BuildMissingSourceQuery(SearchFields fields)
     {
         var q = new BooleanQuery();
 
@@ -1365,7 +1384,7 @@ public class SearchRepository : ISearchRepository
         return q;
     }
 
-    private BooleanQuery BuildFieldMissingSource(string field, string sourceField)
+    private static BooleanQuery BuildFieldMissingSource(string field, string sourceField)
     {
         var q = new BooleanQuery
         {
@@ -1383,7 +1402,7 @@ public class SearchRepository : ISearchRepository
         return q;
     }
 
-    private class Recommendation
+    private sealed class Recommendation
     {
         public string Value { get; set; }
         public float Score { get; set; }

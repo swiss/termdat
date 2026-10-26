@@ -15,7 +15,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class ClassificationServiceTests
+internal class ClassificationServiceTests
 {
     private ClassificationService classificationService;
     private IMapper mapperMock;

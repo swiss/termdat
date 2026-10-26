@@ -24,34 +24,48 @@ public class EntryPart
     public string? NoteCitation { get; init; }
     public string? Context { get; init; }
     public string? Country { get; init; }
-    public bool Deprecated { get; init; } = false;
+    public bool Deprecated { get; init; }
 
-    public EntryType GetEntryType()
+    public EntryType EntryType
     {
-        if (Name is not null)
+        get
         {
-            return EntryType.Name;
-        }
+            if (Name is not null)
+            {
+                return EntryType.Name;
+            }
 
-        if (Term is not null)
-        {
-            return EntryType.Term;
-        }
+            if (Term is not null)
+            {
+                return EntryType.Term;
+            }
 
-        if (Phraseology is not null)
-        {
-            return EntryType.Phraseology;
-        }
+            if (Phraseology is not null)
+            {
+                return EntryType.Phraseology;
+            }
 
-        if (Abbreviation is not null)
-        {
-            return EntryType.Abbreviation;
-        }
+            if (Abbreviation is not null)
+            {
+                return EntryType.Abbreviation;
+            }
 
-        return EntryType.None;
+            return EntryType.None;
+        }
     }
 
-    public IEnumerable<Triple> GetTriplesByType(IGraph graph, IUriNode subject, EntryType type)
+    public IEnumerable<Triple> GetTriplesByType(
+        IGraph graph,
+        IUriNode subject,
+        EntryType type)
+    {
+        ArgumentNullException.ThrowIfNull(graph);
+        ArgumentNullException.ThrowIfNull(subject);
+
+        return GetTriplesByTypeIterator(graph, subject, type);
+    }
+
+    private IEnumerable<Triple> GetTriplesByTypeIterator(IGraph graph, IUriNode subject, EntryType type)
     {
         var name = GetTextByType(type);
         var citation = GetCitationByType(type);

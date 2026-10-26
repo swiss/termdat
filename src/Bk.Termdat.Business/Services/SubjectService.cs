@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -92,7 +93,10 @@ public class SubjectService : ISubjectService
             }
         });
 
-        logger.LogDebug("Created new Subject with Id {id}", newSubject.Id);
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Created new Subject with Id {Id}", newSubject.Id);
+        }
 
         var subject = await subjectRepository.GetById(newSubject.Id);
         return mapper.Map<SubjectDetail>(subject);
@@ -101,7 +105,7 @@ public class SubjectService : ISubjectService
     public async Task<SubjectModification> GetDetail(int id)
     {
         var subject = await subjectRepository.GetById(id)
-            ?? throw new EntityNotFoundException(string.Format(BackendTexts.SubjectNotFound, id));
+            ?? throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.SubjectNotFound, id));
 
         return mapper.Map<SubjectModification>(subject);
     }
@@ -111,7 +115,7 @@ public class SubjectService : ISubjectService
         var subjectId = subjectUpdate?.Id
             ?? throw new ArgumentException("Cannot update subject with no id.");
         var databaseSubject = (await subjectRepository.GetById(subjectId))
-            ?? throw new EntityNotFoundException(string.Format(BackendTexts.SubjectNotFound, subjectUpdate.Id));
+            ?? throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.SubjectNotFound, subjectUpdate.Id));
 
         var mappedSubject = mapper.Map<Subject>(subjectUpdate);
         mappedSubject.Created = databaseSubject.Created;
@@ -147,7 +151,7 @@ public class SubjectService : ISubjectService
         var subject = await subjectRepository.GetById(id);
         if (subject is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.SubjectNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.SubjectNotFound, id));
         }
 
         var entryCount = await subjectRepository.GetEntryCountById(id);

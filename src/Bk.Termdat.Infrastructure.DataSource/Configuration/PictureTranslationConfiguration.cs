@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class PictureTranslationConfiguration : EntityConfiguration<PictureTransl
 {
     protected override void ConfigureEntity(EntityTypeBuilder<PictureTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(pt => pt.Description)
             .HasMaxLength(2000)
             .IsRequired(false);

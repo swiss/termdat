@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class ConceptSystemPositionConfiguration : EntityConfiguration<ConceptSys
 {
     protected override void ConfigureEntity(EntityTypeBuilder<ConceptSystemPosition> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(cs => cs.Value)
             .HasMaxLength(1000);
 

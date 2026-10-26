@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Bk.Termdat.Business.Domain.Projections;
-using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.CrossCutting.Configuration;
 using Bk.Termdat.Infrastructure.Search.Repositories;
+using Bogus;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
@@ -20,11 +21,10 @@ using CommentStatus = Bk.Termdat.Business.Resource.Models.CommentStatus;
 namespace Bk.Termdat.Infrastructure.Search.Tests.Repositories;
 
 [TestFixture]
-public class SearchRepositoryTests
+internal class SearchRepositoryTests
 {
-    private ISearchRepository searchRepository;
-    private TestHelpers helpers;
-    private ISearchGateway gateway;
+    private SearchRepository searchRepository;
+    private SearchGateway gateway;
     private SearchFilterParameter searchFilterParameter;
     private SearchFields searchFields;
     private IOptions<SearchOptions> searchOptionsMock;
@@ -50,13 +50,14 @@ public class SearchRepositoryTests
     [SetUp]
     public void Setup()
     {
+        Randomizer.Seed = new Random(8675309);
+
         searchOptionsMock = Substitute.For<IOptions<SearchOptions>>();
         searchOptionsMock.Value.Returns(searchOptions);
 
         gateway = new TestSearchGateway(Substitute.For<ILogger<SearchGateway>>(), searchOptionsMock, null);
         searchRepository = new SearchRepository(Substitute.For<ILogger<SearchRepository>>(), gateway, searchOptionsMock);
-        helpers = new TestHelpers();
-        indexEntries = helpers.GenerateIndexEntries();
+        indexEntries = TestHelpers.GenerateIndexEntries();
     }
 
     [TearDown]
@@ -66,9 +67,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void ImportEntries_AddsEntryToIndex()
+    public async Task ImportEntries_AddsEntryToIndex()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var query = new MatchAllDocsQuery();
         var searcher = gateway.SearcherManager.Acquire();
@@ -96,7 +97,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void ImportEntries_AddsEntryToIndexForNullValues()
+    public async Task ImportEntries_AddsEntryToIndexForNullValues()
     {
         var indexEntry = indexEntries.First();
         indexEntry.CreatedBy = null;
@@ -112,7 +113,7 @@ public class SearchRepositoryTests
         indexEntry.Metadata = null;
         indexEntry.Country = null;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var query = new MatchAllDocsQuery();
         var searcher = gateway.SearcherManager.Acquire();
@@ -139,10 +140,10 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void ImportEntries_DoesNotThrowExceptionIfSingleEntryGeneratesException()
+    public async Task ImportEntries_DoesNotThrowExceptionIfSingleEntryGeneratesException()
     {
         var indexEntriesLocal = new[] { indexEntries[0], null, indexEntries[1], default, indexEntries[2], new IndexEntry(), indexEntries[3] }.ToAsyncEnumerable();
-        searchRepository.ImportEntries(indexEntriesLocal, CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntriesLocal, CancellationToken.None);
 
         var query = new MatchAllDocsQuery();
         var searcher = gateway.SearcherManager.Acquire();
@@ -154,9 +155,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void ImportEntries_AddsMultipleEntriesToIndex()
+    public async Task ImportEntries_AddsMultipleEntriesToIndex()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var query = new MatchAllDocsQuery();
         var searcher = gateway.SearcherManager.Acquire();
@@ -182,12 +183,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_ReturnsEntries()
+    public async Task Search_ReturnsEntries()
     {
         var searchPhrase = "XSS";
 
         GenerateFilterParameterAndFields(searchPhrase);
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -210,12 +211,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithLimit_ReturnsLimitedEntries()
+    public async Task Search_WithLimit_ReturnsLimitedEntries()
     {
         GenerateFilterParameterAndFields("XSS");
         searchFilterParameter.PageSize = 10;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -224,14 +225,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithLanguageFilter_ReturnsFilteredEntries()
+    public async Task Search_WithLanguageFilter_ReturnsFilteredEntries()
     {
         var searchPhrase = "JSON";
         GenerateFilterParameterAndFields(searchPhrase);
         searchFilterParameter.SourceLanguageIds = [7];
         searchFilterParameter.PageSize = 4000;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -254,7 +255,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithMultipleLanguageFilters_ReturnsFilteredEntriesInAnyOfTheLanguagesProvided()
+    public async Task Search_WithMultipleLanguageFilters_ReturnsFilteredEntriesInAnyOfTheLanguagesProvided()
     {
         var searchPhrase = "JSON";
         GenerateFilterParameterAndFields(searchPhrase);
@@ -262,7 +263,7 @@ public class SearchRepositoryTests
         var singleSourceLanguageId = new[] { 7 };
         searchFilterParameter.PageSize = 4000;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFilterParameter.SourceLanguageIds = multipleSourceLanguageIds;
         var resultMultiple = searchRepository.Search(searchFilterParameter, searchFields);
@@ -294,9 +295,9 @@ public class SearchRepositoryTests
 
     [TestCase(0, null)]
     [TestCase(0, new[] { 7 })]
-    public void Recommend_ReturnsEntriesForTerminus(int entryIndex, int[] languageIds)
+    public async Task Recommend_ReturnsEntriesForTerminus(int entryIndex, int[] languageIds)
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var phrase = indexEntries[entryIndex].Terminus;
         var result = searchRepository.Recommend(phrase, languageIds).ToList();
@@ -307,11 +308,11 @@ public class SearchRepositoryTests
 
     [TestCase(0, null)]
     [TestCase(0, new[] { 6 })]
-    public void Recommend_ReturnsEntriesForName(int entryIndex, int[] languageIds)
+    public async Task Recommend_ReturnsEntriesForName(int entryIndex, int[] languageIds)
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
-
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
         var phrase = indexEntries[entryIndex].Name;
+
         var result = searchRepository.Recommend(phrase, languageIds).ToList();
 
         Assert.That(result, Is.Not.Null);
@@ -320,9 +321,9 @@ public class SearchRepositoryTests
 
     [TestCase(0, null)]
     [TestCase(0, new[] { 7 })]
-    public void Recommend_ReturnsEntriesForPhraseology(int entryIndex, int[] languageIds)
+    public async Task Recommend_ReturnsEntriesForPhraseology(int entryIndex, int[] languageIds)
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var phrase = indexEntries[entryIndex].Phraseology;
         var result = searchRepository.Recommend(phrase, languageIds).ToList();
@@ -332,7 +333,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_PerformsWildcardSearchAndSortsHitsByLengthThenByScore()
+    public async Task Recommend_PerformsWildcardSearchAndSortsHitsByLengthThenByScore()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.Add(new IndexEntry
@@ -351,7 +352,7 @@ public class SearchRepositoryTests
             Terminus = "Unique Office3"
         });
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("UNIQUE").ToList();
         Assert.That(results, Is.Not.Empty);
@@ -370,7 +371,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_WithActiveCollectionEntriesOnly_ShouldReturnFilteredResult()
+    public async Task Recommend_WithActiveCollectionEntriesOnly_ShouldReturnFilteredResult()
     {
         var data = new List<IndexEntry>
         {
@@ -387,7 +388,7 @@ public class SearchRepositoryTests
                 Terminus = "Dummy Street"
             }
         };
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("Dummy", includeDeactivatedCollectionEntries: false).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -396,7 +397,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_IncludeDeactivatedCollectionEntries_ShouldReturnResult()
+    public async Task Recommend_IncludeDeactivatedCollectionEntries_ShouldReturnResult()
     {
         var data = new List<IndexEntry>
         {
@@ -413,7 +414,7 @@ public class SearchRepositoryTests
                 Terminus = "Dummy Street"
             }
         };
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("Dummy", includeDeactivatedCollectionEntries: true).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -423,11 +424,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_MultipleTermsAreUsedInConjunction()
+    public async Task Recommend_MultipleTermsAreUsedInConjunction()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         var results = searchRepository.Recommend("Unique offi").ToList();
         var results2 = searchRepository.Recommend("UNIQUE te").ToList();
 
@@ -441,11 +442,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_DoesNotReturnDuplicates()
+    public async Task Recommend_DoesNotReturnDuplicates()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("SUPERUNIQUE", [10]).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -455,9 +456,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_ReturnsEmptyResultForSearchesWithNullOrLessThenMinimumLength()
+    public async Task Recommend_ReturnsEmptyResultForSearchesWithNullOrLessThenMinimumLength()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var resultsNull = searchRepository.Recommend(null).ToList();
         var resultsBelowMin = searchRepository.Recommend("Com").ToList();
@@ -467,7 +468,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_WithDeletedFlagFilter_ReturnsEntriesCorrectly()
+    public async Task Recommend_WithDeletedFlagFilter_ReturnsEntriesCorrectly()
     {
         const string searchPhrase = "UNIQUE";
         var data = indexEntries.ToArray();
@@ -475,7 +476,7 @@ public class SearchRepositoryTests
         data[0].Name = searchPhrase;
         data[0].Deleted = true;
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var resultWithoutDeleted = searchRepository.Recommend(searchPhrase).ToList();
         var resultIncludingDeleted = searchRepository.Recommend(searchPhrase, null, true).ToList();
@@ -486,11 +487,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_PrioritizeValidatedEntries()
+    public async Task Recommend_PrioritizeValidatedEntries()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("UNIQUE", [8]).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -501,11 +502,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_PrioritizeAchOfficeEntries()
+    public async Task Recommend_PrioritizeAchOfficeEntries()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("UNIQUE", [7]).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -515,11 +516,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_PrioritizePreferredEntries()
+    public async Task Recommend_PrioritizePreferredEntries()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("PREFERRED").ToList();
         Assert.That(results, Is.Not.Empty);
@@ -530,7 +531,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Recommend_PrioritizeEntriesByReliability()
+    public async Task Recommend_PrioritizeEntriesByReliability()
     {
         var data = TestHelpers.GetStaticIndexEntries();
 
@@ -540,7 +541,7 @@ public class SearchRepositoryTests
         }
 
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         var results = searchRepository.Recommend("UNIQUE", [6]).ToList();
         Assert.That(results, Is.Not.Empty);
@@ -553,7 +554,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDeletedFlagFilter_ReturnsEntriesCorrectly()
+    public async Task Search_WithDeletedFlagFilter_ReturnsEntriesCorrectly()
     {
         const string searchPhrase = "UNIQUE";
         var data = indexEntries.ToArray();
@@ -565,7 +566,7 @@ public class SearchRepositoryTests
         data[3].Abbreviation = searchPhrase;
         data[3].Deleted = true;
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields(searchPhrase);
 
@@ -581,7 +582,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDeletedSearchButWithoutPriority_ReturnsEntriesCorrectly()
+    public async Task Search_WithDeletedSearchButWithoutPriority_ReturnsEntriesCorrectly()
     {
         var data = indexEntries.ToArray();
 
@@ -589,7 +590,7 @@ public class SearchRepositoryTests
         data[2].Deleted = true;
         data[3].Deleted = true;
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("");
 
@@ -604,7 +605,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDeletedAndPrioritySearch_ReturnsEntriesCorrectly()
+    public async Task Search_WithDeletedAndPrioritySearch_ReturnsEntriesCorrectly()
     {
         var data = indexEntries.ToArray();
 
@@ -612,7 +613,7 @@ public class SearchRepositoryTests
         data[2].Deleted = true;
         data[3].Deleted = true;
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("");
 
@@ -626,11 +627,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithCommentStatus_ReturnsEntriesCorrectly()
+    public async Task Search_WithCommentStatus_ReturnsEntriesCorrectly()
     {
-        var data = helpers.GenerateIndexEntries(1000).ToList();
+        var data = TestHelpers.GenerateIndexEntries(1000).ToList();
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFilterParameter = new SearchFilterParameter
         {
@@ -700,11 +701,11 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_ForFieldComment_ReturnsEntriesCorrectly()
+    public async Task Search_ForFieldComment_ReturnsEntriesCorrectly()
     {
         var data = TestHelpers.GetStaticIndexEntries().ToArray();
 
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFilterParameter = new SearchFilterParameter
         {
@@ -774,9 +775,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void DeletesEntriesCorrectly()
+    public async Task DeletesEntriesCorrectly()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var matchId1Query = new TermQuery(new Term(nameof(IndexEntry.EntryId), indexEntries[0].EntryId.ToString()));
         var matchId2Query = new TermQuery(new Term(nameof(IndexEntry.EntryId), indexEntries[1].EntryId.ToString()));
@@ -811,14 +812,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void UpdatesEntriesCorrectly()
+    public async Task UpdatesEntriesCorrectly()
     {
         indexEntries[0].LanguageId = 1;
         indexEntries[1].EntryId = indexEntries[0].EntryId;
         indexEntries[1].LanguageId = 2;
         indexEntries[2].EntryId = indexEntries[0].EntryId;
         indexEntries[2].LanguageId = 3;
-        searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3], indexEntries[4], indexEntries[5] }.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3], indexEntries[4], indexEntries[5] }.ToAsyncEnumerable(), CancellationToken.None);
 
         var matchQuery = new TermQuery(new Term(nameof(IndexEntry.EntryId), indexEntries[0].EntryId.ToString()));
         var searcher = gateway.SearcherManager.Acquire();
@@ -855,14 +856,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void UpdateCanUpdateMultipleIndexEntriesWithDifferentEntryIds()
+    public async Task UpdateCanUpdateMultipleIndexEntriesWithDifferentEntryIds()
     {
         indexEntries[0].LanguageId = 1;
         indexEntries[1].EntryId = indexEntries[0].EntryId;
         indexEntries[1].LanguageId = 2;
         indexEntries[2].EntryId = indexEntries[0].EntryId;
         indexEntries[2].LanguageId = 3;
-        searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3], indexEntries[4], indexEntries[5] }.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3], indexEntries[4], indexEntries[5] }.ToAsyncEnumerable(), CancellationToken.None);
 
         var matchQuery = new BooleanQuery
         {
@@ -914,14 +915,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void UpdatesEntriesShouldRemoveLanguagesCorrectly()
+    public async Task UpdatesEntriesShouldRemoveLanguagesCorrectly()
     {
         indexEntries[0].LanguageId = 1;
         indexEntries[1].EntryId = indexEntries[0].EntryId;
         indexEntries[1].LanguageId = 2;
         indexEntries[2].EntryId = indexEntries[0].EntryId;
         indexEntries[2].LanguageId = 3;
-        searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3] }.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(new[] { indexEntries[0], indexEntries[1], indexEntries[2], indexEntries[3] }.ToAsyncEnumerable(), CancellationToken.None);
 
         var matchQuery = new TermQuery(new Term(nameof(IndexEntry.EntryId), indexEntries[0].EntryId.ToString()));
         var searcher = gateway.SearcherManager.Acquire();
@@ -950,7 +951,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithFilterAbbreviationReturnsResult()
+    public async Task Search_WithFilterAbbreviationReturnsResult()
     {
         const string phrase = "Abbreviation";
         var data = TestHelpers.GetStaticIndexEntries();
@@ -967,7 +968,7 @@ public class SearchRepositoryTests
             Terminus = phrase
         });
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFilterParameter = new SearchFilterParameter
         {
@@ -992,7 +993,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithActiveCollectionEntriesOnly_ShouldReturnFilteredResult()
+    public async Task Search_WithActiveCollectionEntriesOnly_ShouldReturnFilteredResult()
     {
         var data = new List<IndexEntry>
         {
@@ -1009,7 +1010,7 @@ public class SearchRepositoryTests
                 Terminus = "A"
             }
         };
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         searchFilterParameter = new SearchFilterParameter
         {
             Phrase = "A",
@@ -1025,7 +1026,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDeactivatedCollectionEntries_ShouldReturnResult()
+    public async Task Search_WithDeactivatedCollectionEntries_ShouldReturnResult()
     {
         var data = new List<IndexEntry>
         {
@@ -1042,7 +1043,7 @@ public class SearchRepositoryTests
                 Terminus = "A"
             }
         };
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         searchFilterParameter = new SearchFilterParameter
         {
             Phrase = "A",
@@ -1059,14 +1060,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithMutationDateRangeFindsHits()
+    public async Task Search_WithMutationDateRangeFindsHits()
     {
         var searchPhrase = "CSS";
         GenerateFilterParameterAndFields(searchPhrase);
         searchFilterParameter.ModifiedFrom = DateTime.UtcNow.AddDays(-15);
         searchFilterParameter.ModifiedTo = DateTime.UtcNow;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1090,14 +1091,14 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithMutationDateRangeAndPriorityFindsMoreHits()
+    public async Task Search_WithMutationDateRangeAndPriorityFindsMoreHits()
     {
         var searchPhrase = "CSS";
         GenerateFilterParameterAndFields(searchPhrase);
         searchFilterParameter.ModifiedFrom = DateTime.UtcNow.AddDays(-390);
         searchFilterParameter.ModifiedTo = DateTime.UtcNow.AddDays(-370);
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1139,13 +1140,13 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithPastMutationDateDoesNotFindHits()
+    public async Task Search_WithPastMutationDateDoesNotFindHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedFrom = DateTime.UtcNow.AddDays(-600);
         searchFilterParameter.ModifiedTo = DateTime.UtcNow.AddDays(-700);
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1154,13 +1155,13 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithMutationDateRangeAndExcludeFindsNoHits()
+    public async Task Search_WithMutationDateRangeAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedFrom = DateTime.UtcNow.AddDays(-1000);
         searchFilterParameter.ModifiedTo = DateTime.UtcNow;
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1175,12 +1176,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDomainDoesFindHits()
+    public async Task Search_WithDomainDoesFindHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.LenochClassifications = [200];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1189,12 +1190,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDomainDoesNotFindHits()
+    public async Task Search_WithDomainDoesNotFindHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.LenochClassifications = [400, 500, 600];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1203,12 +1204,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCollectionFindsHits()
+    public async Task Search_WithExistingCollectionFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Collections = [68, 10301, 10299, 10297, 10292];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1217,12 +1218,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCollectionAndPriorityFindsMoreHits()
+    public async Task Search_WithExistingCollectionAndPriorityFindsMoreHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Collections = [68];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1241,12 +1242,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingCollectionFindsNoHits()
+    public async Task Search_WithNonExistingCollectionFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Collections = [645, 343, 18890];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1255,12 +1256,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCollectionAndExcludeFindsNoHits()
+    public async Task Search_WithExistingCollectionAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Collections = [68, 10301, 10299, 10297, 10292];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1275,12 +1276,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingRelatedCollectionsFindsHits()
+    public async Task Search_WithExistingRelatedCollectionsFindsHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         searchFilterParameter.RelatedCollections = [200, 300];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1289,12 +1290,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingRelatedCollectionsFindsNoHits()
+    public async Task Search_WithNonExistingRelatedCollectionsFindsNoHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         searchFilterParameter.RelatedCollections = [201, 301];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1303,12 +1304,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingGlossaryFindsHits()
+    public async Task Search_WithExistingGlossaryFindsHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         searchFilterParameter.Glossaries = [500, 600];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1317,12 +1318,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingGlossaryFindsNoHits()
+    public async Task Search_WithNonExistingGlossaryFindsNoHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         searchFilterParameter.Glossaries = [645, 343, 18890];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1331,12 +1332,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingGlossaryAndExcludeFindsNoHits()
+    public async Task Search_WithExistingGlossaryAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Glossaries = [500];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1351,12 +1352,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCreatorFindsHits()
+    public async Task Search_WithExistingCreatorFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.CreatedBy = "test@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1365,12 +1366,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCreatorAndPriorityFindsMoreHits()
+    public async Task Serach_WithExistingCreatorAndPriorityFindsMoreHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.CreatedBy = "test@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1389,12 +1390,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingCreatorFindsNoHits()
+    public async Task Search_WithNonExistingCreatorFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.CreatedBy = "miro@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1403,7 +1404,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingCreatorAndExcludeFindsNoHits()
+    public async Task Search_WithExistingCreatorAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         foreach (var entry in indexEntries)
@@ -1412,7 +1413,7 @@ public class SearchRepositoryTests
         }
         searchFilterParameter.CreatedBy = "all@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1427,12 +1428,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingModifierFindsHits()
+    public async Task Search_WithExistingModifierFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedBy = "michael@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1441,12 +1442,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingModifierAndPriorityFindsMoreHits()
+    public async Task Search_WithExistingModifierAndPriorityFindsMoreHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedBy = "michael@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1465,12 +1466,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingModifierAndWrongPriorityFieldsFindsNotMoreHits()
+    public async Task Search_WithExistingModifierAndWrongPriorityFieldsFindsNotMoreHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedBy = "michael@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1488,12 +1489,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingModifierFindsNoHits()
+    public async Task Search_WithNonExistingModifierFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.ModifiedBy = "louis@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1502,7 +1503,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingModifierAndExcludeFindsNoHits()
+    public async Task Search_WithExistingModifierAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields(string.Empty);
         foreach (var entry in indexEntries)
@@ -1511,7 +1512,7 @@ public class SearchRepositoryTests
         }
         searchFilterParameter.ModifiedBy = "all@test.ch";
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1526,12 +1527,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingAdminInfoFindsHits()
+    public async Task Search_WithExistingAdminInfoFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.AdminInfos = [1];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1540,12 +1541,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingAdminInfoButPriorityFindsHits()
+    public async Task Search_WithNonExistingAdminInfoButPriorityFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.AdminInfos = [666];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1561,12 +1562,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithNonExistingAdminInfoFindsNoHits()
+    public async Task Search_WithNonExistingAdminInfoFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.AdminInfos = [666];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1575,12 +1576,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithExistingAdminInfoAndExcludeFindsNoHits()
+    public async Task Search_WithExistingAdminInfoAndExcludeFindsNoHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.AdminInfos = [1];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var includedResult = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1596,12 +1597,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithStatusValidatedFindsHits()
+    public async Task Search_WithStatusValidatedFindsHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Status = [Status.Validated];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1610,12 +1611,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithStatusValidatedAndPriorityFindsAllHits()
+    public async Task Search_WithStatusValidatedAndPriorityFindsAllHits()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Status = [Status.Validated];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1631,12 +1632,12 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithStatusValidatedAndInProgressMatchesTotalNumberOfEntries()
+    public async Task Search_WithStatusValidatedAndInProgressMatchesTotalNumberOfEntries()
     {
         GenerateFilterParameterAndFields("CSS");
         searchFilterParameter.Status = [Status.Validated, Status.InProgress];
 
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
 
@@ -1647,7 +1648,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_MultipleTerms_AreUsedInConjunction()
+    public async Task Search_MultipleTerms_AreUsedInConjunction()
     {
         var data = TestHelpers.GetStaticIndexEntries();
 
@@ -1657,7 +1658,7 @@ public class SearchRepositoryTests
         }
 
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("TeRm INUS");
         var result = searchRepository.Search(searchFilterParameter, searchFields);
@@ -1674,7 +1675,7 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_MultipleTerms_PhraseHitsArePrioritizesOverConjunctionHits()
+    public async Task Search_MultipleTerms_PhraseHitsArePrioritizesOverConjunctionHits()
     {
         var data = TestHelpers.GetStaticIndexEntries();
         data[0].Terminus = "UNIQUE And Very Partial Extending Terminus";
@@ -1682,7 +1683,7 @@ public class SearchRepositoryTests
         data[4].Terminus = "UNIQUE Terminus";
 
         data.AddRange(indexEntries);
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("UNIQUE Terminus");
         var result = searchRepository.Search(searchFilterParameter, searchFields);
@@ -1695,10 +1696,10 @@ public class SearchRepositoryTests
     }
 
     [TestCaseSource(nameof(subjectAndDomainFilterTestCases))]
-    public void Search_CanFilterSubjectsAndDomains(IEnumerable<string> subjectDomainIds, int expectedHits)
+    public async Task Search_CanFilterSubjectsAndDomains(IEnumerable<string> subjectDomainIds, int expectedHits)
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("");
         searchFilterParameter.SubjectDomains = subjectDomainIds.ToArray();
@@ -1711,10 +1712,10 @@ public class SearchRepositoryTests
     }
 
     [TestCaseSource(nameof(subjectAndDomainFilterTestCases))]
-    public void Search_CanUsePrioritySubjectsAndDomains(IEnumerable<string> subjectDomainIds, int expectedHits)
+    public async Task Serach_CanUsePrioritySubjectsAndDomains(IEnumerable<string> subjectDomainIds, int expectedHits)
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("");
         searchFilterParameter.SubjectDomains = subjectDomainIds.ToArray();
@@ -1728,10 +1729,10 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_PriorityForSubjectAndDomainsWorks()
+    public async Task Serach_PriorityForSubjectAndDomainsWorks()
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields("");
         searchFilterParameter.SubjectDomains =
@@ -1750,9 +1751,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_CanUsePriorityForAllFields()
+    public async Task Serach_CanUsePriorityForAllFields()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFields = new()
         {
@@ -1817,9 +1818,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_CanUseFilterForAllFields()
+    public async Task Serach_CanUseFilterForAllFields()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFields = new()
         {
@@ -1878,9 +1879,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_CanUseFilterAndPriorityCombinationForAllFields()
+    public async Task Serach_CanUseFilterAndPriorityCombinationForAllFields()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         searchFields = new()
         {
@@ -1947,9 +1948,9 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_ShouldFindReferences()
+    public async Task Serach_ShouldFindReferences()
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
         var entryWithReferenceId = indexEntries.First(i => i.References.Any() && !i.Deleted);
 
         var phrase = $"References: {entryWithReferenceId.References.First()}";
@@ -1989,9 +1990,9 @@ public class SearchRepositoryTests
     [TestCase("bund AND OR bund")]
     [TestCase("EntryId: 1 AND")]
     [TestCase("EntryId: 1 OR")]
-    public void Search_ShouldNotThrowQueryParserExceptionOnInvalidLuceneQuerySyntax(string searchPhrase)
+    public async Task Serach_ShouldNotThrowQueryParserExceptionOnInvalidLuceneQuerySyntax(string searchPhrase)
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         GenerateFilterParameterAndFields(searchPhrase);
 
@@ -2005,19 +2006,19 @@ public class SearchRepositoryTests
     [TestCase("bund AND OR bund")]
     [TestCase("EntryId: 1 AND")]
     [TestCase("EntryId: 1 OR")]
-    public void Recommend_ShouldNotThrowQueryParserExceptionOnInvalidLuceneQuerySyntax(string searchPhrase)
+    public async Task Recommend_ShouldNotThrowQueryParserExceptionOnInvalidLuceneQuerySyntax(string searchPhrase)
     {
-        searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(indexEntries.ToAsyncEnumerable(), CancellationToken.None);
 
         Assert.DoesNotThrow(() => searchRepository.Recommend(searchPhrase, [1, 2, 3]));
     }
 
     [TestCase("Gilliéron")]
     [TestCase("Gillieron")]
-    public void Search_ForEntryLanguageSources_ShouldFindEquivalents(string searchPhrase)
+    public async Task Serach_ForEntryLanguageSources_ShouldFindEquivalents(string searchPhrase)
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         GenerateFilterParameterAndFields(searchPhrase);
         searchFields.Source = true;
         var result = searchRepository.Search(searchFilterParameter, searchFields);
@@ -2031,10 +2032,10 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDashBeforeString_FindsHits()
+    public async Task Serach_WithDashBeforeString_FindsHits()
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         GenerateFilterParameterAndFields("Hundehalterinnen und -halter");
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
@@ -2044,10 +2045,10 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithDashBeforeString_FindsNoHitsWhenNotInIndex()
+    public async Task Serach_WithDashBeforeString_FindsNoHitsWhenNotInIndex()
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         GenerateFilterParameterAndFields("Hundehalter und -halterinnen");
 
         var result = searchRepository.Search(searchFilterParameter, searchFields);
@@ -2057,10 +2058,10 @@ public class SearchRepositoryTests
     }
 
     [Test]
-    public void Search_WithHasMissingSourceTerminus_ShouldFindEntries()
+    public async Task Serach_WithHasMissingSourceTerminus_ShouldFindEntries()
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         searchFilterParameter = new()
         {
             Phrase = "UNIQUE",
@@ -2099,10 +2100,10 @@ public class SearchRepositoryTests
     [TestCase(false, false, false, false, true, false, false)]
     [TestCase(false, false, false, false, false, true, false)]
     [TestCase(false, false, false, false, false, false, true)]
-    public void Search_WithHasMissingSource_ShouldFindEntries(bool terminus, bool name, bool abbreviation, bool phraseology, bool definition, bool note, bool context)
+    public async Task Serach_WithHasMissingSource_ShouldFindEntries(bool terminus, bool name, bool abbreviation, bool phraseology, bool definition, bool note, bool context)
     {
         var data = TestHelpers.GetStaticIndexEntries();
-        searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
+        await searchRepository.ImportEntries(data.ToAsyncEnumerable(), CancellationToken.None);
         searchFilterParameter = new()
         {
             Phrase = "verified",
@@ -2153,9 +2154,20 @@ public class SearchRepositoryTests
 
     private static IndexEntry GetIndexEntry(Document document)
     {
-        int.TryParse(document.Get(nameof(IndexEntry.EntryId)), out var entryId);
-        int.TryParse(document.Get(nameof(IndexEntry.LanguageId)), out var languageId);
-        int.TryParse(document.Get(nameof(IndexEntry.SequenceId)), out var sequenceId);
+        if (!int.TryParse(document.Get(nameof(IndexEntry.EntryId)), out var entryId))
+        {
+            throw new FormatException($"Invalid {nameof(IndexEntry.EntryId)}.");
+        }
+
+        if (!int.TryParse(document.Get(nameof(IndexEntry.LanguageId)), out var languageId))
+        {
+            throw new FormatException($"Invalid {nameof(IndexEntry.LanguageId)}.");
+        }
+
+        if (!int.TryParse(document.Get(nameof(IndexEntry.SequenceId)), out var sequenceId))
+        {
+            throw new FormatException($"Invalid {nameof(IndexEntry.SequenceId)}.");
+        }
 
         return new IndexEntry
         {

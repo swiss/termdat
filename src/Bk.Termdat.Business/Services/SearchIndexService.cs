@@ -29,13 +29,20 @@ public class SearchIndexService : ISearchIndexService
         var pageSize = searchOptions.Value.IndexPageSize;
         if (pageSize == 0)
         {
-            logger.LogInformation("PageSize for indexing not found, using default PageSize = {defaultPageSize}", DefaultPageSize);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("PageSize for indexing not found, using default PageSize = {DefaultPageSize}", DefaultPageSize);
+            }
             pageSize = DefaultPageSize;
         }
 
         var total = await entryRepository.Count();
         var pages = (total / pageSize) + 1;
-        logger.LogInformation("Adding {Total} entries to index", total);
+
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Adding {Total} entries to index", total);
+        }
 
         for (var i = 0; i < pages; i++)
         {
@@ -45,12 +52,20 @@ public class SearchIndexService : ISearchIndexService
             }
 
             var skip = i * pageSize;
-            logger.LogInformation("Loading {Skip}-{TotalSkipped} of {Total}", skip, skip + pageSize, total);
+
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Loading {Skip}-{TotalSkipped} of {Total}", skip, skip + pageSize, total);
+            }
+
             var entries = entryRepository.GetPageForIndex(skip, pageSize);
 
             await searchRepository.ImportEntries(entries, stoppingToken);
         }
 
-        logger.LogInformation("Finished adding {Total} entries to index", total);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Finished adding {Total} entries to index", total);
+        }
     }
 }

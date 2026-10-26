@@ -20,7 +20,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class AdminInfoServiceTests
+internal class AdminInfoServiceTests
 {
     private AdminInfoService adminInfoService;
     private IMapper mapperMock;

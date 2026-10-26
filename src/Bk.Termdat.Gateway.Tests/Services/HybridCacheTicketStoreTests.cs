@@ -12,13 +12,13 @@ using CookieOptions = Bk.Termdat.Gateway.Configuration.CookieOptions;
 namespace Bk.Termdat.Gateway.Tests.Services;
 
 [TestFixture]
-internal class HybridCacheTicketStoreTests
+internal sealed class HybridCacheTicketStoreTests
 {
     private const int ConfiguredExpireTimeSpanHours = 8;
 
-    private HybridCache cache = null!;
-    private FakeTimeProvider timeProvider = null!;
-    private HybridCacheTicketStore ticketStore = null!;
+    private HybridCache cache;
+    private FakeTimeProvider timeProvider;
+    private HybridCacheTicketStore ticketStore;
 
     [SetUp]
     public void SetUp()

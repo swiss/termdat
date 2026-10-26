@@ -45,7 +45,7 @@ internal class CreateIndexBackgroundServiceTests
     [Test]
     public async Task ExecuteAsync_ShouldRunCreateIndex()
     {
-        var source = new CancellationTokenSource();
+        using var source = new CancellationTokenSource();
         await backgroundService.StartAsync(source.Token);
 
         // INFO: wait x seconds to let the CreateIndexBackgroundService.CreateIndex complete
@@ -60,7 +60,7 @@ internal class CreateIndexBackgroundServiceTests
         searchOptionsMock.Value.Returns(new SearchOptions { ContinueOnError = false, RecreateIndexOnStartUp = false });
         backgroundService = new CreateIndexBackgroundService(loggerMock, serviceProvider, searchOptionsMock);
 
-        var source = new CancellationTokenSource();
+        using var source = new CancellationTokenSource();
         await backgroundService.StartAsync(source.Token);
 
         // INFO: wait x seconds to let the CreateIndexBackgroundService.CreateIndex complete

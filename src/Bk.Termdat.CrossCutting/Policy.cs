@@ -1,6 +1,6 @@
 namespace Bk.Termdat.CrossCutting;
 
-public static class Policy
+public static class AuthorizationPolicies
 {
     public const string RequireAdminPolicy = nameof(RequireAdminPolicy);
     public const string RequireWriterPolicy = nameof(RequireWriterPolicy);

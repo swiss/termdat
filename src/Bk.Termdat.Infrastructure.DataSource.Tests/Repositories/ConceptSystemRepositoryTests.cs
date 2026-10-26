@@ -99,7 +99,7 @@ internal class ConceptSystemRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new ConceptSystemRepository(createContext);
 
         var newConceptSystem = new ConceptSystem

@@ -29,6 +29,10 @@ public class TermdatGraphService : ITermdatGraphService
         ILindasOperationExecutor lindasOperationExecutor,
         IChunkDelay chunkDelay)
     {
+        ArgumentNullException.ThrowIfNull(lindasExportOptions);
+        ArgumentNullException.ThrowIfNull(termdatGraphOptions);
+        ArgumentNullException.ThrowIfNull(sparqlClientFactory);
+
         this.logger = logger;
         this.termdatGraphOptions = termdatGraphOptions.Value;
         this.lindasExportOptions = lindasExportOptions.Value;
@@ -37,11 +41,17 @@ public class TermdatGraphService : ITermdatGraphService
         this.chunkDelay = chunkDelay;
     }
 
-    public IReadOnlyCollection<string> Targets => storageProviders.Keys.OrderBy(k => k).ToArray();
+    public IReadOnlyCollection<string> GetTargets()
+    {
+        return storageProviders.Keys.OrderBy(k => k).ToArray();
+    }
 
     public Task DeleteGraph(string target, CancellationToken ct)
     {
-        logger.LogInformation("Deleting graph on target {TargetName}", target);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Deleting graph on target {TargetName}", target);
+        }
         var storageProvider = storageProviders[target];
         return lindasOperationExecutor.Execute(
             target,
@@ -54,7 +64,7 @@ public class TermdatGraphService : ITermdatGraphService
     {
         ArgumentNullException.ThrowIfNull(collection);
 
-        var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
+        using var graph = new Graph { BaseUri = UriFactory.Create(Uris.TermdatGraph) };
 
         var triples = collection.GetTriples(graph, lindasExportOptions.AddCubeLinkData);
 
@@ -64,9 +74,12 @@ public class TermdatGraphService : ITermdatGraphService
         {
             current++;
 
-            logger.LogInformation(
-                "Updating graph for collection Code={CollectionCode} on target {TargetName}. Chunk: {Current}",
-                collection.Code, target, current);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation(
+                    "Updating graph for collection Code={CollectionCode} on target {TargetName}. Chunk: {Current}",
+                    collection.Code, target, current);
+            }
 
             var storageProvider = storageProviders[target];
             await lindasOperationExecutor.Execute(
@@ -80,7 +93,7 @@ public class TermdatGraphService : ITermdatGraphService
 
     public async Task AddDataSet(string target, CancellationToken ct)
     {
-        var graph = new Graph();
+        using var graph = new Graph();
         var triples = DataSet.GetTriples(graph).ToList();
         graph.Assert(triples);
 
@@ -103,7 +116,11 @@ public class TermdatGraphService : ITermdatGraphService
                 graph.CreateUriNode(UriFactory.Create(Uris.ObservationSet))));
         }
 
-        logger.LogInformation("Updating graph data set on target {TargetName}", target);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Updating graph data set on target {TargetName}", target);
+        }
+
         var storageProvider = storageProviders[target];
         await lindasOperationExecutor.Execute(
             target,

@@ -87,28 +87,28 @@ internal class SearchStatisticServiceTests
         normalSearch = new SearchFilterParameter
         {
             Phrase = "NormalSearchIsLogged",
-            Offices = new int[] { 1 },
+            Offices = [1],
             OfficesPriority = true,
-            Status = new Status[] { Status.Validated },
+            Status = [Status.Validated],
             StatusPriority = true,
-            SourceLanguageIds = new int[] { 1, 2, 4 },
-            AdminInfos = new int[] { },
-            Collections = new int[] { },
-            Glossaries = new int[] { },
-            RelatedCollections = new int[] { },
-            CommentStatus = new CommentStatus[] { },
-            LenochClassifications = new int[] { },
-            SubjectDomains = new string[] { },
-            Reliability = new Business.Resource.Models.Reliability[] { },
+            SourceLanguageIds = [1, 2, 4],
+            AdminInfos = [],
+            Collections = [],
+            Glossaries = [],
+            RelatedCollections = [],
+            CommentStatus = [],
+            LenochClassifications = [],
+            SubjectDomains = [],
+            Reliability = [],
             ReliabilityPriority = false,
         };
 
         extendedSearch = new SearchFilterParameter
         {
             Phrase = "ExtendedSearchWillNotBeLogged",
-            Offices = new int[] { 1 },
-            Status = new Status[] { Status.Validated },
-            AdminInfos = new int[] { 1, 2, 3 },
+            Offices = [1],
+            Status = [Status.Validated],
+            AdminInfos = [1, 2, 3],
         };
 
         validFields = new SearchFields

@@ -19,6 +19,8 @@ public class StatisticDeleteBackgroundService : BackgroundService
 
     public StatisticDeleteBackgroundService(IBackgroundServiceScheduler backgroundServiceScheduler, ILogger<StatisticDeleteBackgroundService> logger, IServiceProvider services, IOptions<StatisticDeleteOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.backgroundServiceScheduler = backgroundServiceScheduler;
         this.logger = logger;
         this.services = services;

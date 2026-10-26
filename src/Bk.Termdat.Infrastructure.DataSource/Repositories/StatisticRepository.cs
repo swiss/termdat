@@ -37,6 +37,8 @@ public class StatisticRepository : IStatisticRepository
 
     public async Task<IEnumerable<Statistic>> GetBySearchQuery(StatisticSearchQuery searchQuery)
     {
+        ArgumentNullException.ThrowIfNull(searchQuery);
+
         searchQuery.FromDate ??= DateTime.UtcNow.AddDays(-numberOfDays);
         searchQuery.ToDate ??= DateTime.UtcNow.AddDays(+1);
 
@@ -110,7 +112,7 @@ public class StatisticRepository : IStatisticRepository
             .Where(s => s.DateLastSearch <= searchQuery.ToDate);
     }
 
-    private IQueryable<Statistic> OrderStatisticQueryable(IQueryable<Statistic> filteredStatistics, string sort)
+    private static IQueryable<Statistic> OrderStatisticQueryable(IQueryable<Statistic> filteredStatistics, string sort)
     {
         IQueryable<Statistic> orderedStatistics = sort switch
         {

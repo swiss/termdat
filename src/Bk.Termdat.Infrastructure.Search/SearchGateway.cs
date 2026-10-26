@@ -100,8 +100,10 @@ public class SearchGateway : ISearchGateway
     private const string KeywordFieldSuffix = "Keyword";
     private const string EquivalentsFieldSuffix = "Eq";
 
-    public SearchGateway(ILogger<SearchGateway> logger, IOptions<SearchOptions> searchOptions, string indexName = "termdat_index")
+    public SearchGateway(ILogger<SearchGateway> logger, IOptions<SearchOptions> searchOptions, string indexName = "termdat_index", Func<string, Directory>? directoryFactory = null)
     {
+        ArgumentNullException.ThrowIfNull(searchOptions);
+
         Logger = logger;
         var options = searchOptions.Value;
 
@@ -132,25 +134,41 @@ public class SearchGateway : ISearchGateway
 
         };
 
-        DefaultAnalyzer = new StandardAnalyzer(LuceneVersion, Lucene.Net.Analysis.Util.CharArraySet.EMPTY_SET);
+        DefaultAnalyzer = new StandardAnalyzer(LuceneVersion, Lucene.Net.Analysis.Util.CharArraySet.Empty);
+#pragma warning disable CA2000
         var perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper(DefaultAnalyzer, FieldSpecificAnalyzer);
         IndexWriterConfig = new IndexWriterConfig(LuceneVersion, perFieldAnalyzerWrapper)
+#pragma warning restore CA2000
         {
             OpenMode = options.RecreateIndexOnStartUp ? OpenMode.CREATE : OpenMode.CREATE_OR_APPEND
         };
 
-        InitializeIndex(indexName);
+        InitializeIndex(indexName, directoryFactory);
 
         BooleanQuery.MaxClauseCount = int.MaxValue;
     }
 
-    protected virtual void InitializeIndex(string indexName)
+    private void InitializeIndex(
+        string indexName,
+        Func<string, Directory>? directoryFactory)
     {
-        var indexPath = Path.Join(Path.GetTempPath(), indexName);
-        Logger.LogInformation("Creating index in '{IndexPath}'", indexPath);
-        var directoryInfo = System.IO.Directory.CreateDirectory(indexPath);
+        if (directoryFactory is null)
+        {
+            var indexPath = Path.Join(Path.GetTempPath(), indexName);
 
-        Directory = FSDirectory.Open(directoryInfo);
+            if (Logger.IsEnabled(LogLevel.Information))
+            {
+                Logger.LogInformation("Creating index in '{IndexPath}'", indexPath);
+            }
+
+            var directoryInfo = System.IO.Directory.CreateDirectory(indexPath);
+            Directory = FSDirectory.Open(directoryInfo);
+        }
+        else
+        {
+            Directory = directoryFactory(indexName);
+        }
+
         Writer = new IndexWriter(Directory, IndexWriterConfig);
         SearcherManager = new SearcherManager(Writer, true, null);
     }
@@ -160,12 +178,20 @@ public class SearchGateway : ISearchGateway
         Logger.LogInformation("Calling maybe refresh");
         SearcherManager.MaybeRefresh();
     }
-
     public void Dispose()
     {
-        SearcherManager?.Dispose();
-        Writer?.Dispose();
-        Directory?.Dispose();
-        DefaultAnalyzer?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SearcherManager?.Dispose();
+            Writer?.Dispose();
+            Directory?.Dispose();
+            DefaultAnalyzer?.Dispose();
+        }
     }
 }

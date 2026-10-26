@@ -426,6 +426,9 @@ public class EntryRepository : IEntryRepository
 
     public void Update(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         UpdateTranslations(existing, update);
@@ -441,29 +444,43 @@ public class EntryRepository : IEntryRepository
 
     public void UpdateGlossaries(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         UpdateManyToManyRelation(existing.Glossaries, update.Glossaries);
     }
 
     public void UpdateRelatedCollections(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         UpdateManyToManyRelation(existing.RelatedCollections, update.RelatedCollections);
     }
 
     public void UpdateAdminInfos(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         UpdateManyToManyRelation(existing.AdminInfos, update.AdminInfos);
     }
 
     public void UpdateWithoutRelations(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+
         context.Entry(existing).CurrentValues.SetValues(update);
     }
 
     public void UpdateMandatoryHeaderFields(Entry existing, Entry update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         existing.Subjects = update.Subjects;
         existing.Domains = update.Domains;

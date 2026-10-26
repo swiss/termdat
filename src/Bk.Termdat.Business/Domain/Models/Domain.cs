@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 
+#pragma warning disable CA1724 // Domain is a domain entity name.
+
 namespace Bk.Termdat.Business.Domain.Models;
 
 // Domain - Sachgebiet
 public class Domain : EntityChangeTracking, IMultiLingualEntity<DomainTranslation>
 {
+#pragma warning restore CA1724
     public int SubjectId { get; set; }
     public Subject Subject { get; set; }
     public ICollection<DomainTranslation> Translations { get; set; }

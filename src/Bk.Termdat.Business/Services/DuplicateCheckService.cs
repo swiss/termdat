@@ -22,6 +22,8 @@ public class DuplicateCheckService : IDuplicateCheckService
 
     public async Task<DuplicateCheckResponse> GetDuplicateEntryIds(DuplicateCheckRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var matches = await CheckDuplicatesInternal(request);
         return new DuplicateCheckResponse
         {
@@ -34,6 +36,8 @@ public class DuplicateCheckService : IDuplicateCheckService
 
     public async Task<(string fileName, Stream content)> ExportDuplicateCheckXlsx(DuplicateCheckRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var matches = await CheckDuplicatesInternal(request);
 
         if (matches.Count == 0)

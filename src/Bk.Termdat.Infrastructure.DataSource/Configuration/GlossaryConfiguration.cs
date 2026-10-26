@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class GlossaryConfiguration : EntityChangeTrackingConfiguration<Glossary>
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Glossary> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(g => g.Code)
             .HasMaxLength(10)
             .IsRequired();

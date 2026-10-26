@@ -1,6 +1,6 @@
+using System.Globalization;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.LindasExport.Api.Extensions;
-using Bk.Termdat.LindasExport.Api.Interfaces;
 using Bk.Termdat.LindasExport.Api.Mapping;
 
 namespace Bk.Termdat.LindasExport.Api.Tests.Mapping;
@@ -178,7 +178,7 @@ internal class LindasMapperTests
         Entries = new List<Entry> { entry, deletedEntry }
     };
 
-    private readonly ILindasMapper lindasMapper = new LindasMapper();
+    private readonly LindasMapper lindasMapper = new();
 
     [Test]
     public void Map_Collection_ShouldMap()
@@ -192,7 +192,7 @@ internal class LindasMapperTests
 
             // Collection names
             Assert.That(result.Names, Is.Not.Empty);
-            var collectionNames = result.Names!.ToList();
+            var collectionNames = result.Names.ToList();
             Assert.That(collectionNames, Has.Count.EqualTo(2));
             Assert.That(collectionNames.First().Language, Is.EqualTo(Api.Models.Language.De));
             Assert.That(collectionNames.First().Value, Is.EqualTo(collection.Translations.First().Name));
@@ -202,7 +202,7 @@ internal class LindasMapperTests
             // Entries
             Assert.That(result.Entries, Is.Not.Empty);
             Assert.That(result.Entries.Count, Is.EqualTo(1));
-            var sparqlEntry = result.Entries!.First();
+            var sparqlEntry = result.Entries.First();
             Assert.That(sparqlEntry.Id, Is.EqualTo(entry.Id));
             Assert.That(sparqlEntry.Modified, Is.EqualTo(entry.Modified));
             Assert.That(sparqlEntry.AdminInfoCodeItems, Has.Count.EqualTo(3));
@@ -220,7 +220,7 @@ internal class LindasMapperTests
 
             // Reliability
             Assert.That(sparqlEntry.Reliability, Is.Not.Null);
-            Assert.That(sparqlEntry.Reliability.Code, Is.EqualTo(((int)entry.Reliability).ToString()));
+            Assert.That(sparqlEntry.Reliability.Code, Is.EqualTo(((int)entry.Reliability).ToString(CultureInfo.InvariantCulture)));
             Assert.That(sparqlEntry.Reliability.Names, Has.Count.EqualTo(5));
 
             // Glossaries

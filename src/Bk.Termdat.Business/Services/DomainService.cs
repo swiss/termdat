@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -64,13 +65,16 @@ public class DomainService : IDomainService
     public async Task<DomainDetail> Update(DomainModification domainUpdate)
     {
         ArgumentNullException.ThrowIfNull(domainUpdate);
-        ArgumentNullException.ThrowIfNull(domainUpdate.Id);
+        if (domainUpdate.Id is null)
+        {
+            throw new ArgumentException("Domain Id is required for update", nameof(domainUpdate)) ;
+        }
 
         var databaseDomain = await domainRepository.GetById(domainUpdate.Id.Value);
 
         if (databaseDomain is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.DomainNotFound, domainUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.DomainNotFound, domainUpdate.Id));
         }
 
         var mappedDomain = mapper.Map<DomainModels.Domain>(domainUpdate);
@@ -95,7 +99,7 @@ public class DomainService : IDomainService
         var domain = await domainRepository.GetById(id);
         if (domain is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.DomainNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.DomainNotFound, id));
         }
 
         var entryCount = await domainRepository.GetEntryCountById(id);

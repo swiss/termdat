@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Configuration;
 using Microsoft.Extensions.Options;
@@ -11,13 +12,15 @@ public class TermdatUrlService : ITermdatUrlService
 
     public TermdatUrlService(IOptions<TermdatClientOptions> termdatClientOptions)
     {
+        ArgumentNullException.ThrowIfNull(termdatClientOptions);
+
         this.termdatClientOptions = termdatClientOptions.Value;
     }
 
     public string GetTermdatUrl(int entryId)
     {
-        var entryPath = string.Format(termdatClientOptions.EntryDetailPath, entryId);
-        var queryParams = string.Format(termdatClientOptions.EntryIdSearchQueryParameter, entryId);
+        var entryPath = string.Format(CultureInfo.InvariantCulture, termdatClientOptions.EntryDetailPath, entryId);
+        var queryParams = string.Format(CultureInfo.InvariantCulture, termdatClientOptions.EntryIdSearchQueryParameter, entryId);
 
         var uriBuilder = new UriBuilder(termdatClientOptions.BaseUrl)
         {

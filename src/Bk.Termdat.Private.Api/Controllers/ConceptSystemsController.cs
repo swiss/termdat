@@ -26,7 +26,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await conceptSystemService.GetAllDetails();
@@ -34,7 +34,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await conceptSystemService.GetDetail(id);
@@ -42,7 +42,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] ConceptSystemUpdate conceptSystemUpdate)
     {
         if (conceptSystemUpdate is null)
@@ -60,7 +60,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] ConceptSystemCreate conceptSystemCreate)
     {
         if (conceptSystemCreate is null)
@@ -74,7 +74,7 @@ public class ConceptSystemsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await conceptSystemService.Delete(id);

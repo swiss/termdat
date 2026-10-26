@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Public.Api.Resource.Models;
@@ -41,6 +42,8 @@ public class EntryController : ControllerBase
     [SwaggerResponseExample(500, typeof(InternalServerErrorExample))]
     public async Task<IActionResult> GetEntries([FromQuery] GetEntriesParameter parameter)
     {
+        ArgumentNullException.ThrowIfNull(parameter);
+
         await analyticsService.TrackEvent("Public Search", "Perform");
 
         var entryDetails = await entryService.GetByIds(parameter.EntryIds, parameter.InLanguageCode, parameter.OutLanguageCode);

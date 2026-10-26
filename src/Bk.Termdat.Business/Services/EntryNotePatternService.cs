@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using Bk.Termdat.Business.Services.Interfaces;
@@ -16,19 +18,21 @@ public class EntryNotePatternService : IEntryNotePatternService
 
     public EntryNotePatternService(IOptions<EntryNotePatternOptions> entryNotePatternOptions)
     {
+        ArgumentNullException.ThrowIfNull(entryNotePatternOptions);
+
         this.entryNotePatternOptions = entryNotePatternOptions.Value;
 
         var obsoleteRegexString = GetRegexString(this.entryNotePatternOptions.ObsoletePattern, this.entryNotePatternOptions.RarePattern, this.entryNotePatternOptions.ShouldAvoidPattern);
         isObsoleteRegex = new Regex(obsoleteRegexString,
-        RegexOptions.Compiled | RegexOptions.Singleline);
+        RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromSeconds(1));
 
         var rareRegexString = GetRegexString(this.entryNotePatternOptions.RarePattern, this.entryNotePatternOptions.ObsoletePattern, this.entryNotePatternOptions.ShouldAvoidPattern);
         isRareRegex = new Regex(rareRegexString,
-        RegexOptions.Compiled | RegexOptions.Singleline);
+        RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromSeconds(1));
 
         var shouldAvoidRegexString = GetRegexString(this.entryNotePatternOptions.ShouldAvoidPattern, this.entryNotePatternOptions.RarePattern, this.entryNotePatternOptions.ObsoletePattern);
         shouldAvoidRegex = new Regex(shouldAvoidRegexString,
-        RegexOptions.Compiled | RegexOptions.Singleline);
+        RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromSeconds(1));
     }
 
     private string GetRegexString(string pattern, string otherPattern1, string otherPattern2)
@@ -36,7 +40,7 @@ public class EntryNotePatternService : IEntryNotePatternService
         var regexBuilder = new StringBuilder();
         regexBuilder.Append(entryNotePatternOptions.StartingPattern);
         regexBuilder.Append(@"[\s]?");
-        regexBuilder.Append($"({otherPattern1}|{otherPattern2})?");
+        regexBuilder.Append(CultureInfo.InvariantCulture, $"({otherPattern1}|{otherPattern2})?");
         regexBuilder.Append(@"[,\s]*[,'""?!:\.\/]?(");
         regexBuilder.Append(pattern);
         regexBuilder.Append(@")[\W]?");
@@ -46,17 +50,17 @@ public class EntryNotePatternService : IEntryNotePatternService
 
     public bool IsObsolete(string text)
     {
-        return text != null && text.Contains(entryNotePatternOptions.StartingPattern) && isObsoleteRegex.IsMatch(text);
+        return text != null && text.Contains(entryNotePatternOptions.StartingPattern, StringComparison.OrdinalIgnoreCase) && isObsoleteRegex.IsMatch(text);
     }
 
     public bool IsRare(string text)
     {
-        return text != null && text.Contains(entryNotePatternOptions.StartingPattern) && isRareRegex.IsMatch(text);
+        return text != null && text.Contains(entryNotePatternOptions.StartingPattern, StringComparison.OrdinalIgnoreCase) && isRareRegex.IsMatch(text);
     }
 
     public bool ShouldAvoid(string text)
     {
-        return text != null && text.Contains(entryNotePatternOptions.StartingPattern) && shouldAvoidRegex.IsMatch(text);
+        return text != null && text.Contains(entryNotePatternOptions.StartingPattern, StringComparison.OrdinalIgnoreCase) && shouldAvoidRegex.IsMatch(text);
     }
 
     public (bool isObsolete, bool isRare, bool shouldAvoid) DetermineEntryNotePatterns(string note)

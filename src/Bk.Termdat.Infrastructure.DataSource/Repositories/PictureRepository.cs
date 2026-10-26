@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Domain.Models;
@@ -50,6 +51,9 @@ public class PictureRepository : IPictureRepository
 
     public void Update(Picture existing, Picture update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
         context.Entry(existing.File).CurrentValues.SetValues(update.File);
 

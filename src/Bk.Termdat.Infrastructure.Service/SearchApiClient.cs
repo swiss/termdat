@@ -29,6 +29,8 @@ public class SearchApiClient : ISearchApiClient
 
     public SearchApiClient(ILogger<SearchApiClient> logger, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IOptions<SearchApiOptions> searchApiOptions)
     {
+        ArgumentNullException.ThrowIfNull(searchApiOptions);
+
         this.logger = logger;
         this.httpClientFactory = httpClientFactory;
         this.httpContextAccessor = httpContextAccessor;
@@ -37,7 +39,7 @@ public class SearchApiClient : ISearchApiClient
 
     public async Task<bool> IsAlive()
     {
-        var client = httpClientFactory.CreateClient();
+        using var client = httpClientFactory.CreateClient();
 
         try
         {
@@ -47,13 +49,16 @@ public class SearchApiClient : ISearchApiClient
         }
         catch (Exception ex)
         {
-            logger.LogError("Failed to get SearchService IsAlive status. Error={Message}", ex.Message);
+            logger.LogError(ex, "Failed to get SearchService IsAlive status. Error={Message}", ex.Message);
             return false;
         }
     }
 
     public async Task<SearchResult> Search(SearchFilterParameter searchFilterParameter, SearchFields searchFields)
     {
+        ArgumentNullException.ThrowIfNull(searchFilterParameter);
+        ArgumentNullException.ThrowIfNull(searchFields);
+
         var query = CreateSearchQuery(searchFilterParameter, searchFields);
 
         var queryString = QueryHelpers.AddQueryString(searchApiOptions.UrnSearch, query.Where(c => c.Value != StringValues.Empty));
@@ -172,7 +177,7 @@ public class SearchApiClient : ISearchApiClient
     private static StringValues CreateStringValue(IEnumerable<int> ids)
     {
         var arrayOfIds = ids != null ? ids as int[] ?? ids.ToArray() : Array.Empty<int>();
-        if (!arrayOfIds.Any())
+        if (arrayOfIds.Length == 0)
         {
             return StringValues.Empty;
         }
@@ -183,7 +188,7 @@ public class SearchApiClient : ISearchApiClient
 
     private static StringValues CreateStringValue(Status[] status)
     {
-        if (status == null || !status.Any())
+        if (status == null || status.Length == 0)
         {
             return StringValues.Empty;
         }
@@ -193,7 +198,7 @@ public class SearchApiClient : ISearchApiClient
 
     private static StringValues CreateStringValue(Reliability[] reliability)
     {
-        if (reliability == null || !reliability.Any())
+        if (reliability == null || reliability.Length == 0)
         {
             return StringValues.Empty;
         }
@@ -203,7 +208,7 @@ public class SearchApiClient : ISearchApiClient
 
     private static StringValues CreateStringValue(CommentStatus[] commentStatus)
     {
-        if (commentStatus == null || !commentStatus.Any())
+        if (commentStatus == null || commentStatus.Length == 0)
         {
             return StringValues.Empty;
         }
@@ -250,7 +255,7 @@ public class SearchApiClient : ISearchApiClient
     {
         var client = httpClientFactory.CreateClient(SearchApiOptions.HttpClientName);
 
-        var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
         if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Request.Headers.TryGetValue(RequestHeaderAuthorization, out var authorizationValue))
         {
             request.Headers.Add(RequestHeaderAuthorization, authorizationValue.ToArray());

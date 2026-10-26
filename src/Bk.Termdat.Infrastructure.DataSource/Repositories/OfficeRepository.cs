@@ -59,6 +59,9 @@ public class OfficeRepository : IOfficeRepository
 
     public void Update(Office existing, Office update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         UpdateTranslationHelper.UpdateTranslations(existing.Translations, update.Translations, existing.Id, "Office");

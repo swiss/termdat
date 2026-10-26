@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -55,7 +56,7 @@ public class ConceptSystemService : IConceptSystemService
         var conceptSystem = await conceptSystemRepository.GetByIdForEdit(id);
         if (conceptSystem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.ConceptSystemNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemNotFound, id));
         }
 
         conceptSystem.ConceptSystemPositions = conceptSystem.ConceptSystemPositions
@@ -69,6 +70,8 @@ public class ConceptSystemService : IConceptSystemService
 
     public async Task<ConceptSystemDetail> Create(ConceptSystemCreate conceptSystemCreate)
     {
+        ArgumentNullException.ThrowIfNull(conceptSystemCreate);
+
         var mappedConceptSystem = mapper.Map<ConceptSystem>(conceptSystemCreate);
         mappedConceptSystem.Modified = DateTime.UtcNow;
         mappedConceptSystem.ModifiedBy = identityService.GetCurrentEmail();
@@ -78,13 +81,13 @@ public class ConceptSystemService : IConceptSystemService
         var collection = await collectionRepository.GetById(conceptSystemCreate.CollectionId);
         if (collection == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.CollectionNotFound, conceptSystemCreate.CollectionId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, conceptSystemCreate.CollectionId));
         }
 
         if (collection.ConceptSystem != null)
         {
             throw new BusinessValidationException(nameof(conceptSystemCreate.CollectionId),
-                string.Format(BackendTexts.ConceptSystemCollectionAlreadyUsed, collection.Id));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemCollectionAlreadyUsed, collection.Id));
         }
 
         UpdateSortIndex(mappedConceptSystem);
@@ -101,24 +104,26 @@ public class ConceptSystemService : IConceptSystemService
 
     public async Task<ConceptSystemDetail> Update(ConceptSystemUpdate conceptSystemUpdate)
     {
+        ArgumentNullException.ThrowIfNull(conceptSystemUpdate);
+
         var databaseConceptSystem = await conceptSystemRepository.GetByIdForEdit(conceptSystemUpdate.Id);
 
         if (databaseConceptSystem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.ConceptSystemNotFound, conceptSystemUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemNotFound, conceptSystemUpdate.Id));
         }
 
         var collection = await collectionRepository.GetById(conceptSystemUpdate.CollectionId);
         if (collection == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.CollectionNotFound, conceptSystemUpdate.CollectionId));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, conceptSystemUpdate.CollectionId));
         }
 
         var changeCollection = collection.Id != databaseConceptSystem.CollectionId;
         if (collection.ConceptSystem != null && changeCollection)
         {
             throw new BusinessValidationException(nameof(conceptSystemUpdate.CollectionId),
-                string.Format(BackendTexts.ConceptSystemCollectionAlreadyUsed, collection.Id));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemCollectionAlreadyUsed, collection.Id));
         }
 
         if (changeCollection)
@@ -147,12 +152,10 @@ public class ConceptSystemService : IConceptSystemService
     {
         var positionIds = conceptSystem.ConceptSystemPositions.Select(csp => csp.Id);
         var entryIdsWithPositions = (await entryRepository.GetIdsByConceptPositionIds(positionIds)).ToList();
-        if (entryIdsWithPositions.Any())
+        if (entryIdsWithPositions.Count > 0)
         {
             throw new BusinessValidationException(nameof(ConceptSystemUpdate.CollectionId),
-                string.Format(
-                    message,
-                    string.Join(',', entryIdsWithPositions)));
+                string.Format(CultureInfo.InvariantCulture, message, string.Join(',', entryIdsWithPositions)));
         }
     }
 
@@ -171,7 +174,7 @@ public class ConceptSystemService : IConceptSystemService
 
         if (conceptSystem == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.ConceptSystemNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.ConceptSystemNotFound, id));
         }
 
         await ThrowIfPositionsInUse(conceptSystem, BackendTexts.ConceptSystemDeleteNotAllowed);

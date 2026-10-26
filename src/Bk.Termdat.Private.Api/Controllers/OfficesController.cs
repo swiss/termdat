@@ -26,7 +26,7 @@ public class OfficesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetails([FromRoute] int id)
     {
         var result = await officeService.GetDetails(id);
@@ -34,7 +34,7 @@ public class OfficesController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await officeService.GetAllDetails();
@@ -42,7 +42,7 @@ public class OfficesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] OfficeUpdate officeUpdate)
     {
         if (officeUpdate is null || officeUpdate.Id != id)
@@ -56,7 +56,7 @@ public class OfficesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] OfficeCreate officeCreate)
     {
         if (officeCreate is null)
@@ -69,7 +69,7 @@ public class OfficesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await officeService.Delete(id);

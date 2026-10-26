@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -38,9 +40,9 @@ public class OfficeService : IOfficeService
     public async Task<OfficeDetail> Create(OfficeCreate officeCreate)
     {
         var mappedOffice = mapper.Map<Office>(officeCreate);
-        mappedOffice.Created = System.DateTime.UtcNow;
+        mappedOffice.Created = DateTime.UtcNow;
         mappedOffice.CreatedBy = identityService.GetCurrentEmail();
-        mappedOffice.Modified = System.DateTime.UtcNow;
+        mappedOffice.Modified = DateTime.UtcNow;
         mappedOffice.ModifiedBy = identityService.GetCurrentEmail();
 
         mappedOffice.Translations = (await languageDescriptionMapper.Map<OfficeTranslation>(officeCreate)).ToList();
@@ -71,7 +73,7 @@ public class OfficeService : IOfficeService
 
         if (office == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.OfficeNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.OfficeNotFound, id));
         }
 
         var entryCount = await officeRepository.GetEntryCountById(id);
@@ -90,7 +92,7 @@ public class OfficeService : IOfficeService
         var office = await officeRepository.GetById(id);
         if (office is null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.OfficeNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.OfficeNotFound, id));
         }
 
         return mapper.Map<OfficeUpdate>(office);
@@ -98,15 +100,17 @@ public class OfficeService : IOfficeService
 
     public async Task<OfficeDetail> Update(OfficeUpdate officeUpdate)
     {
+        ArgumentNullException.ThrowIfNull(officeUpdate);
+
         var databaseOffice = await officeRepository.GetById(officeUpdate.Id);
 
         if (databaseOffice == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.OfficeNotFound, officeUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.OfficeNotFound, officeUpdate.Id));
         }
 
         var mappedOffice = mapper.Map<Office>(officeUpdate);
-        mappedOffice.Modified = System.DateTime.UtcNow;
+        mappedOffice.Modified = DateTime.UtcNow;
         mappedOffice.ModifiedBy = identityService.GetCurrentEmail();
         mappedOffice.Created = databaseOffice.Created;
         mappedOffice.CreatedBy = databaseOffice.CreatedBy;

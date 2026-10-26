@@ -23,6 +23,9 @@ public class SearchQueueClient : ISearchQueueClient, IDisposable
 
     public SearchQueueClient(IRabbitMqChannelFactory channelFactory, IOptions<SearchQueueOptions> searchQueueOptions, ILogger<SearchQueueClient> logger)
     {
+        ArgumentNullException.ThrowIfNull(channelFactory);
+        ArgumentNullException.ThrowIfNull(searchQueueOptions);
+
         channel = channelFactory.CreateChannel().Result;
 
         this.searchQueueOptions = searchQueueOptions.Value;
@@ -60,20 +63,34 @@ public class SearchQueueClient : ISearchQueueClient, IDisposable
         }
         catch (OperationCanceledException e)
         {
-            logger.LogCritical(
-                "Could not send {Name} because operation was canceled after {PublishTimeoutInSeconds} seconds. Message: {Message}",
-                typeof(T).Name, searchQueueOptions.PublishTimeoutInSeconds, e.Message);
+            if (logger.IsEnabled(LogLevel.Critical))
+            {
+                logger.LogCritical(e,
+                    "Could not send {Name} because operation was canceled after {PublishTimeoutInSeconds} seconds. Message: {Message}",
+                    typeof(T).Name, searchQueueOptions.PublishTimeoutInSeconds, e.Message);
+            }
         }
         catch (Exception e)
         {
-            logger.LogCritical(
+            if (logger.IsEnabled(LogLevel.Critical))
+            {
+                logger.LogCritical(e,
                 "Could not send {Name} because no connection could be established. Message: {Message}", typeof(T).Name, e.Message);
+            }
         }
     }
 
     public void Dispose()
     {
-        channel?.Dispose();
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            channel?.Dispose();
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Services;
 using Bk.Termdat.Business.Services.Interfaces;
 
@@ -8,6 +9,8 @@ public static class AuthorizationServiceExtensions
     public static StaticAuthorizationService ConvertToStaticAuthorizationService(
         this IAuthorizationService authorizationService)
     {
+        ArgumentNullException.ThrowIfNull(authorizationService);
+
         return new StaticAuthorizationService
         {
             IsAdminField = authorizationService.IsAdmin(),

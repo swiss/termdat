@@ -19,7 +19,7 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpGet("")]
-    [Authorize(Policy = Policy.RequireAdminOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrSuperUserPolicy)]
     public async Task<ActionResult> GetAll()
     {
         var result = await userAccountService.GetAll();
@@ -36,7 +36,7 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpPut("")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromBody] UserAccountModification dto)
     {
         await userAccountService.Update(dto);
@@ -45,7 +45,7 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await userAccountService.GetDetail(id);
@@ -53,7 +53,7 @@ public class UserAccountsController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await userAccountService.GetAllDetails();

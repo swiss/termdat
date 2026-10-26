@@ -11,13 +11,13 @@ using NUnit.Framework;
 namespace Bk.Termdat.Public.Api.Tests.Controllers;
 
 [TestFixture]
-public class SearchControllerTests
+internal class SearchControllerTests
 {
     private readonly ISearchService searchService = Substitute.For<ISearchService>();
     private readonly IAnalyticsService analyticsService = Substitute.For<IAnalyticsService>();
     private readonly Fixture fixture = new();
 
-    private SearchController searchController = null!;
+    private SearchController searchController;
 
     [SetUp]
     public void SetUp()

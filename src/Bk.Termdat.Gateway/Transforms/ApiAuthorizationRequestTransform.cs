@@ -14,6 +14,8 @@ public class ApiAuthorizationRequestTransform : RequestTransform
 {
     public override async ValueTask ApplyAsync(RequestTransformContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         context.ProxyRequest.Headers.Remove(HeaderNames.Cookie);
         context.ProxyRequest.Headers.Remove(HeaderNames.Authorization);
 

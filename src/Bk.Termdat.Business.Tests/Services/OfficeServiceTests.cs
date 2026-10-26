@@ -19,7 +19,7 @@ using DomainModels = Bk.Termdat.Business.Domain.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class OfficeServiceTests
+internal class OfficeServiceTests
 {
     private OfficeService officeService;
     private IOfficeRepository officeRepositoryMock;

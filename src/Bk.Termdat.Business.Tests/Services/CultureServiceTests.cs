@@ -1,5 +1,4 @@
 using Bk.Termdat.Business.Services;
-using Bk.Termdat.Business.Services.Interfaces;
 using NUnit.Framework;
 
 namespace Bk.Termdat.Business.Tests.Services;
@@ -7,7 +6,7 @@ namespace Bk.Termdat.Business.Tests.Services;
 [TestFixture]
 internal class CultureServiceTests
 {
-    private ICultureService service;
+    private CultureService service;
 
     [SetUp]
     public void SetUp()

@@ -20,7 +20,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await languageService.GetAllDetails();
@@ -28,7 +28,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await languageService.GetDetail(id);
@@ -56,7 +56,7 @@ public class LanguagesController : ControllerBase
 
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] LanguageUpdate languageUpdate)
     {
         if (languageUpdate?.Id != id)
@@ -70,7 +70,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminOrWriterOrSuperUserPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy)]
     public async Task<ActionResult> Create([FromBody] LanguageCreate languageCreate)
     {
         if (languageCreate is null)

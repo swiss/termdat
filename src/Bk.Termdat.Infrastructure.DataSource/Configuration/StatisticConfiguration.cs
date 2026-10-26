@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class StatisticConfiguration : EntityChangeTrackingConfiguration<Statisti
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Statistic> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(s => s.SearchText)
             .HasMaxLength(1000)
             .IsRequired();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using AutoMapper;
 using Bk.Termdat.Business.Domain;
@@ -36,6 +37,8 @@ public class UserAccountService : IUserAccountService
         IUserAccountValidationService userAccountValidationService,
         IOptions<AuthorizationOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.mapper = mapper;
         this.userAccountRepository = userAccountRepository;
         this.identityService = identityService;
@@ -58,14 +61,20 @@ public class UserAccountService : IUserAccountService
         var currentLastName = identityService.GetCurrentLastName();
         var role = identityService.GetCurrentRole();
 
-        logger.LogDebug(
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug(
             "User information from claims, email='{CurrentEmail}' fistName='{CurrentFirstName}' lastName='{CurrentLastName}'",
             currentEmail, currentFirstName, currentLastName);
+        }
 
         var account = await userAccountRepository.GetDetailByEmailForUpdate(currentEmail);
         if (account is null)
         {
-            logger.LogDebug("User with email='{CurrentEmail}' not found, adding...", currentEmail);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("User with email='{CurrentEmail}' not found, adding...", currentEmail);
+            }
 
             var newUser = new UserAccount
             {
@@ -83,7 +92,10 @@ public class UserAccountService : IUserAccountService
         }
         else
         {
-            logger.LogDebug("User with email='{CurrentEmail}' found, updating...", currentEmail);
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                logger.LogDebug("User with email='{CurrentEmail}' found, updating...", currentEmail);
+            }
 
             var update = new UserAccount
             {
@@ -114,7 +126,7 @@ public class UserAccountService : IUserAccountService
         var userAccount = await userAccountRepository.GetDetail(id);
         if (userAccount == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.UserAccountNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.UserAccountNotFound, id));
         }
         var mappedUserAccount = mapper.Map<UserAccountDetail>(userAccount);
 
@@ -141,6 +153,8 @@ public class UserAccountService : IUserAccountService
 
     public async Task Update(UserAccountModification userAccountModification)
     {
+        ArgumentNullException.ThrowIfNull(userAccountModification);
+
         var databaseEntry = await userAccountRepository.GetDetailByIdForUpdate(userAccountModification.Id);
         if (databaseEntry is null)
         {

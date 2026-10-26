@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class NewsItemConfiguration : EntityConfiguration<NewsItem>
 {
     protected override void ConfigureEntity(EntityTypeBuilder<NewsItem> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(ni => ni.ValidFrom)
            .IsRequired();
 

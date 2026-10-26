@@ -21,10 +21,10 @@ internal class AnalyticsServiceTests
     private readonly IHttpClientFactory httpClientFactory = Substitute.For<IHttpClientFactory>();
     private readonly AnalyticsOptions analyticsOptions = new() { Enabled = true, SiteId = "1", Url = "https://example.com/track" };
 
-    private HttpClient httpClient = null!;
-    private MockHttpMessageHandler mockHttpMessageHandler = null!;
+    private HttpClient httpClient;
+    private MockHttpMessageHandler mockHttpMessageHandler;
 
-    private AnalyticsService analyticsService = null!;
+    private AnalyticsService analyticsService;
 
     [SetUp]
     public void SetUp()
@@ -35,7 +35,9 @@ internal class AnalyticsServiceTests
         httpClient = mockHttpMessageHandler.ToHttpClient();
         httpClient.BaseAddress = new Uri(options.Value.Url);
 
+#pragma warning disable CA2000
         httpClientFactory.CreateClient().Returns(httpClient);
+#pragma warning restore CA2000
 
         analyticsService = new AnalyticsService(logger, options, httpClientFactory);
     }

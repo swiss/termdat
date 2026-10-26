@@ -2,10 +2,15 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <Nullable>annotations</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="16.1.1" />
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swiss.FCh.DocumentService.Client" Version="1.9.0" />
         <PackageReference Include="Swiss.FCh.Monitoring" Version="2.5.4" />
         <PackageReference Include="Swiss.FCh.Sparql" Version="6.2.4" />

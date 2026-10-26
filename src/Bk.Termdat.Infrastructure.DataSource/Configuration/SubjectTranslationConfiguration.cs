@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class SubjectTranslationConfiguration : EntityConfiguration<SubjectTransl
 {
     protected override void ConfigureEntity(EntityTypeBuilder<SubjectTranslation> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.IsTranslation();
 
         builder.Property(st => st.Name)

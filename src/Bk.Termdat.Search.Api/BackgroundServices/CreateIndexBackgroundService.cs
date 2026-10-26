@@ -21,6 +21,8 @@ public class CreateIndexBackgroundService : BackgroundService
 
     public CreateIndexBackgroundService(ILogger<CreateIndexBackgroundService> logger, IServiceProvider serviceProvider, IOptions<SearchOptions> searchOptions)
     {
+        ArgumentNullException.ThrowIfNull(searchOptions);
+
         this.logger = logger;
         this.serviceProvider = serviceProvider;
         this.searchOptions = searchOptions.Value;
@@ -33,7 +35,12 @@ public class CreateIndexBackgroundService : BackgroundService
         {
             if (!searchOptions.RecreateIndexOnStartUp)
             {
-                logger.LogInformation("Skipping index creating in background service ({Name}=false)", nameof(searchOptions.RecreateIndexOnStartUp));
+                if (logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation(
+                        "Skipping index creating in background service ({Name}=false)",
+                        nameof(searchOptions.RecreateIndexOnStartUp));
+                }
                 return;
             }
 
@@ -46,20 +53,27 @@ public class CreateIndexBackgroundService : BackgroundService
             await searchService.CreateIndex(stoppingToken);
 
             timer.Stop();
-            logger.LogInformation("Adding data to index took {Elapsed:g}", timer.Elapsed);
+
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Adding data to index took {Elapsed:g}", timer.Elapsed);
+            }
 
             var process = Process.GetCurrentProcess();
             var memory = process.PeakWorkingSet64;
 
-            logger.LogInformation("Process peak memory usage for create index: {Size}", memory.ToSize(SizeExtension.SizeUnits.MB));
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Process peak memory usage for create index: {Size}", memory.ToSize(SizeExtension.SizeUnits.MB));
+            }
         }
-        catch (TaskCanceledException)
+        catch (TaskCanceledException ex)
         {
-            logger.LogInformation("SearchIndexWorker stopped by request");
+            logger.LogInformation(ex, "SearchIndexWorker stopped by request");
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
-            logger.LogInformation("SearchIndexWorker stopped by request");
+            logger.LogInformation(ex, "SearchIndexWorker stopped by request");
         }
         catch (Exception ex)
         {

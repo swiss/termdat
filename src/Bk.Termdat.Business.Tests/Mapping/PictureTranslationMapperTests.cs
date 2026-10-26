@@ -8,11 +8,11 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 namespace Bk.Termdat.Business.Tests.Mapping;
 
 [TestFixture]
-public class PictureTranslationMapperTests
+internal class PictureTranslationMapperTests
 {
     private ResourceModels.PictureDetail dto;
     private List<DomainModels.Language> languages;
-    private readonly IPictureTranslationMapper mapper = new PictureTranslationMapper();
+    private readonly PictureTranslationMapper mapper = new();
 
     [SetUp]
     public void SetUp()

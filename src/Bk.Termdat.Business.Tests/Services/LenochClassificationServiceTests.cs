@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +14,7 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class LenochClassificationServiceTests
+internal class LenochClassificationServiceTests
 {
     private LenochClassificationService lenochClassificationService;
     private ILenochClassificationRepository lenochClassificationRepositoryMock;
@@ -69,12 +70,12 @@ public class LenochClassificationServiceTests
         mapperMock.Map<ResourceModels.LenochClassificationDetail>(Arg.Any<DomainModels.LenochClassificationSubjectDomainMapping>()).Returns(x => new ResourceModels.LenochClassificationDetail
         {
             Id = x.Arg<DomainModels.LenochClassificationSubjectDomainMapping>().LenochClassificationId,
-            Code = x.Arg<DomainModels.LenochClassificationSubjectDomainMapping>().LenochClassificationId.ToString()
+            Code = x.Arg<DomainModels.LenochClassificationSubjectDomainMapping>().LenochClassificationId.ToString(CultureInfo.InvariantCulture)
         });
         mapperMock.Map<ResourceModels.LenochClassificationDetail>(Arg.Any<EntityWithEntryCount<DomainModels.LenochClassification>>()).Returns(x => new ResourceModels.LenochClassificationDetail
         {
             Id = x.Arg<EntityWithEntryCount<DomainModels.LenochClassification>>().Entity.Id,
-            Code = x.Arg<EntityWithEntryCount<DomainModels.LenochClassification>>().Entity.Id.ToString()
+            Code = x.Arg<EntityWithEntryCount<DomainModels.LenochClassification>>().Entity.Id.ToString(CultureInfo.InvariantCulture)
         });
 
         var result = (await lenochClassificationService.GetAllDetails()).ToList();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ public class NewsRepository : INewsRepository
         return await context.NewsItems
             .Include(ni => ni.Translations)
             .ThenInclude(t => t.Language)
-            .Where(y => y.IsEnabled && y.ValidFrom <= System.DateTime.UtcNow && y.ValidTo >= System.DateTime.UtcNow)
+            .Where(y => y.IsEnabled && y.ValidFrom <= DateTime.UtcNow && y.ValidTo >= DateTime.UtcNow)
             .OrderBy(ni => ni.SortIndex)
             .AsNoTracking()
             .ToListAsync();
@@ -63,6 +64,9 @@ public class NewsRepository : INewsRepository
 
     public async Task Update(NewsItem existing, NewsItem update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         foreach (var updateTranslation in update.Translations)

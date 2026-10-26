@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Resource.Validators;
 
 [TestFixture]
-public class EntryCreateValidatorTests
+internal class EntryCreateValidatorTests
 {
     private EntryCreateValidator validator;
 

@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class BackendTextHelperTests
+internal class BackendTextHelperTests
 {
     private BackendTextHelperService backendTextHelperService;
     private Fixture fixture;

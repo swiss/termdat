@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using Bk.Termdat.Business.Services.Interfaces;
@@ -17,6 +18,8 @@ public class EntryWatchlistValueResolver : IValueResolver<DomainModels.Entry, Re
 
     public string Resolve(DomainModels.Entry source, ResourceModels.WatchlistEntry destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         var currentLang = cultureService.GetCurrentIsoCode();
         var entryLanguage = source.Translations
             .OrderBy(t => t.Sequence)

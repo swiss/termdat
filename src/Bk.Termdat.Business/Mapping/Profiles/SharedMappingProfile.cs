@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Bk.Termdat.Business.Mapping.Resolvers;
@@ -170,7 +171,7 @@ public class SharedMappingProfile : Profile
         CreateMap<ResourceModels.ILanguageModification, DomainModels.Language>()
             .ForMember(dest => dest.IsUiLanguage, opt => opt.MapFrom(src => src.IsUiLanguage))
             .ForMember(dest => dest.IsSystemLanguage, opt => opt.Ignore())
-            .ForMember(dest => dest.IsoCode, opt => opt.MapFrom(src => src.IsoCode.ToUpper()))
+            .ForMember(dest => dest.IsoCode, opt => opt.MapFrom(src => src.IsoCode.ToUpper(CultureInfo.InvariantCulture)))
             .ForMember(dest => dest.Translations, opt => opt.Ignore())
             .ForMember(dest => dest.SortIndex, opt => opt.MapFrom(src => src.SortIndex))
             .ForMember(dest => dest.Created, opt => opt.Ignore())

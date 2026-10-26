@@ -15,6 +15,8 @@ public class LindasOperationExecutor : ILindasOperationExecutor
         IOptions<LindasExportOptions> options,
         TimeProvider timeProvider)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.logger = logger;
         this.options = options.Value;
         this.timeProvider = timeProvider;
@@ -22,8 +24,12 @@ public class LindasOperationExecutor : ILindasOperationExecutor
 
     public async Task Execute(string target, string operation, Func<Task> action, CancellationToken ct)
     {
-        for (var attempt = 1; ; attempt++)
+        ArgumentNullException.ThrowIfNull(action);
+
+        var attempt = 0;
+        while (true)
         {
+            attempt++;
             ct.ThrowIfCancellationRequested();
 
             try

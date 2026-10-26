@@ -115,11 +115,11 @@ internal class LindasOperationExecutorTests
         var calls = 0;
 
         Assert.ThrowsAsync<TaskCanceledException>(() =>
-            executor.Execute("target", "operation", () =>
+            executor.Execute("target", "operation", async () =>
             {
                 calls++;
-                cancellation.Cancel();
-                return Task.FromCanceled(cancellation.Token);
+                await cancellation.CancelAsync();
+                await Task.FromCanceled(cancellation.Token);
             }, cancellation.Token));
 
         Assert.That(calls, Is.EqualTo(1));

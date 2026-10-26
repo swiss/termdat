@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.DataSource.Tests.Repositories;
 
 [TestFixture]
-public class PictureRepositoryTests
+internal class PictureRepositoryTests
 {
     private PictureRepository pictureRepository;
     private DataContext context;
@@ -126,7 +126,7 @@ public class PictureRepositoryTests
         await pictureRepository.Delete(200);
         await context.SaveChangesAsync();
 
-        var deleted = context.Pictures.FirstOrDefault(p => p.EntryId == 200);
+        var deleted = await context.Pictures.FirstOrDefaultAsync(p => p.EntryId == 200);
         Assert.That(deleted, Is.Null);
     }
 

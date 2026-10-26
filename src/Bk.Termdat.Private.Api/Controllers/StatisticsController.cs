@@ -19,7 +19,7 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpGet("")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetBySearchQuery([FromQuery] StatisticSearchQuery searchQuery)
     {
         var statistics = await statisticService.GetBySearchQuery(searchQuery);
@@ -27,7 +27,7 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         await statisticService.Delete(id);
@@ -36,7 +36,7 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpDelete]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromQuery] StatisticSearchQuery searchQuery)
     {
         await statisticService.DeleteBySearchQuery(searchQuery);

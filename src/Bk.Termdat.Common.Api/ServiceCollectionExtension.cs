@@ -96,28 +96,28 @@ public static class ServiceCollectionExtension
         services.AddAuthorization(options =>
         {
             options.AddPolicy(
-                Policy.RequireAdminPolicy,
+                AuthorizationPolicies.RequireAdminPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Admin)
             );
             options.AddPolicy(
-                Policy.RequireWriterPolicy,
+                AuthorizationPolicies.RequireWriterPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Writer)
             );
             options.AddPolicy(
-                Policy.RequireSuperUserPolicy,
+                AuthorizationPolicies.RequireSuperUserPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.SuperUser)
             );
             options.AddPolicy(
-                Policy.RequireAdminOrWriterPolicy,
+                AuthorizationPolicies.RequireAdminOrWriterPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Admin, authorizationOptions.Writer));
             options.AddPolicy(
-                Policy.RequireAdminOrWriterOrSuperUserPolicy,
+                AuthorizationPolicies.RequireAdminOrWriterOrSuperUserPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Admin, authorizationOptions.Writer, authorizationOptions.SuperUser));
             options.AddPolicy(
-                Policy.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy,
+                AuthorizationPolicies.RequireAdminOrWriterOrSuperUserOrSuperReaderPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Admin, authorizationOptions.Writer, authorizationOptions.SuperUser, authorizationOptions.SuperReader));
             options.AddPolicy(
-                Policy.RequireAdminOrSuperUserPolicy,
+                AuthorizationPolicies.RequireAdminOrSuperUserPolicy,
                 p => p.RequireRole(authorizationOptions.Allow).RequireRole(authorizationOptions.Admin, authorizationOptions.SuperUser));
         });
     }

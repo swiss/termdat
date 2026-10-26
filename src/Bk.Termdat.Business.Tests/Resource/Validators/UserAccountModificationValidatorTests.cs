@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Resource.Validators;
 
 [TestFixture]
-public class UserAccountModificationValidatorTests
+internal class UserAccountModificationValidatorTests
 {
     private UserAccountModificationValidator validator;
 

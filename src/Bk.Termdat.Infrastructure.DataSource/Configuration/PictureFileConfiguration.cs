@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,6 +10,8 @@ public class PictureFileConfiguration : IEntityTypeConfiguration<PictureFile>
 
     public void Configure(EntityTypeBuilder<PictureFile> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.HasKey(p => p.EntryId);
 
         builder.Property(p => p.Value)

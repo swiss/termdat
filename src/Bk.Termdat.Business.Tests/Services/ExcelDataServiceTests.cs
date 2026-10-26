@@ -30,7 +30,7 @@ using Status = Bk.Termdat.Business.Resource.Models.Status;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class ExcelDataServiceTests
+internal class ExcelDataServiceTests
 {
     [SetUp]
     public void SetUp()
@@ -46,7 +46,7 @@ public class ExcelDataServiceTests
     public async Task IsFileValid_WithOnlyHeaderRow_ShouldReturnValidationError()
     {
         var sut = CreateService();
-        var workbook = CreateWorkbookWithHeaderOnly();
+        using var workbook = CreateWorkbookWithHeaderOnly();
         var formFileMock = CreateFormFile(workbook);
 
         var (isValid, validationErrors, _) = await sut.IsFileValid(formFileMock);
@@ -63,7 +63,7 @@ public class ExcelDataServiceTests
     public async Task IsFileValid_WithInsufficientColumns_ShouldReturnValidationError()
     {
         var sut = CreateService();
-        var workbook = CreateWorkbookWithInsufficientColumns();
+        using var workbook = CreateWorkbookWithInsufficientColumns();
         var formFileMock = CreateFormFile(workbook);
         var (isValid, validationErrors, _) = await sut.IsFileValid(formFileMock);
 
@@ -79,7 +79,7 @@ public class ExcelDataServiceTests
     public async Task IsFileValid_WithValidWorkbook_ShouldReturnSuccess()
     {
         var sut = CreateService();
-        var workbook = CreateValidWorkbookWithTestData();
+        using var workbook = CreateValidWorkbookWithTestData();
         var formFileMock = CreateFormFile(workbook);
 
         var (isValid, validationErrors, resultWorkbook) = await sut.IsFileValid(formFileMock);
@@ -96,7 +96,7 @@ public class ExcelDataServiceTests
     public async Task ComposeEntryCreateItems_WithValidData_ShouldMapToEntryCreate()
     {
         var sut = CreateTestableService();
-        var workbook = CreateValidWorkbookWithTestData();
+        using var workbook = CreateValidWorkbookWithTestData();
 
         var actual = await sut.ComposeEntryCreateItemsAccessor(
             workbook, 1, 2,
@@ -142,7 +142,7 @@ public class ExcelDataServiceTests
     public async Task ComposeEntryCreateItems_WithMultipleDefinitions_ShouldSetDefinitionOnlyOnFirstSynonym()
     {
         var sut = CreateTestableService();
-        var workbook = CreateWorkbookWithMultipleDefinitions();
+        using var workbook = CreateWorkbookWithMultipleDefinitions();
 
         var actual = await sut.ComposeEntryCreateItemsAccessor(
             workbook, 1, 2,
@@ -167,7 +167,7 @@ public class ExcelDataServiceTests
     public void ComposeEntryCreateItems_WithInvalidLanguage_ShouldThrowBusinessValidationException()
     {
         var sut = CreateTestableService();
-        var workbook = CreateWorkbookWithInvalidLanguage();
+        using var workbook = CreateWorkbookWithInvalidLanguage();
 
         var ex = Assert.ThrowsAsync<BusinessValidationException>(async () =>
             await sut.ComposeEntryCreateItemsAccessor(
@@ -187,7 +187,7 @@ public class ExcelDataServiceTests
     public void ComposeEntryCreateItems_WithMissingSequence_ShouldThrowBusinessValidationException()
     {
         var sut = CreateTestableService();
-        var workbook = CreateWorkbookWithMissingSequence();
+        using var workbook = CreateWorkbookWithMissingSequence();
 
         var ex = Assert.ThrowsAsync<BusinessValidationException>(async () =>
             await sut.ComposeEntryCreateItemsAccessor(
@@ -207,7 +207,7 @@ public class ExcelDataServiceTests
     public async Task ComposeEntryCreateItems_WithAllFields_ShouldMapAllProperties()
     {
         var sut = CreateTestableService();
-        var workbook = CreateWorkbookWithAllFields();
+        using var workbook = CreateWorkbookWithAllFields();
 
         var actual = await sut.ComposeEntryCreateItemsAccessor(
             workbook, 1, 2,
@@ -246,7 +246,7 @@ public class ExcelDataServiceTests
     public async Task ComposeEntryCreateItems_WithEmptyGroupKey_ShouldSkipRow()
     {
         var sut = CreateTestableService();
-        var workbook = CreateWorkbookWithEmptyGroupKey();
+        using var workbook = CreateWorkbookWithEmptyGroupKey();
 
         var actual = await sut.ComposeEntryCreateItemsAccessor(
             workbook, 1, 2,
@@ -264,10 +264,10 @@ public class ExcelDataServiceTests
         const string importJobLabel = "Excel-Import-Test";
         var entryServiceMock = Substitute.For<IEntryService>();
         var emailServiceMock = Substitute.For<IEmailService>();
-        Email emailToSend = null!;
+        Email emailToSend = null;
         emailServiceMock.Send(Arg.Do<Email>(v => emailToSend = v)).Returns(Task.CompletedTask);
         var sut = CreateService(entryServiceMock, emailServiceMock);
-        var workbook = CreateValidWorkbookWithTestData();
+        using var workbook = CreateValidWorkbookWithTestData();
 
         await sut.ImportDocument(workbook, importJobLabel, currentUserEmail, 1, 2,
             Status.InProgress, Reliability.Tentative,
@@ -301,7 +301,7 @@ public class ExcelDataServiceTests
             var documentServiceMock = Substitute.For<IDocumentService>();
             var cultureServiceMock = Substitute.For<ICultureService>();
             var termdatUrlServiceMock = Substitute.For<ITermdatUrlService>();
-            Spreadsheet capturedSpreadsheet = null!;
+            Spreadsheet capturedSpreadsheet = null;
 
             documentServiceMock.CreateExcel(Arg.Do<Spreadsheet>(s => capturedSpreadsheet = s))
                 .Returns(Task.FromResult<Stream>(new MemoryStream()));
@@ -421,7 +421,7 @@ public class ExcelDataServiceTests
             .CreateExcel(Arg.Any<Spreadsheet>())
             .Returns(stream);
 
-        var (fileName, content) = await sut.CreateDuplicateCheckExport(matches);
+        var (_, content) = await sut.CreateDuplicateCheckExport(matches);
 
         Assert.That(content, Is.SameAs(stream));
 

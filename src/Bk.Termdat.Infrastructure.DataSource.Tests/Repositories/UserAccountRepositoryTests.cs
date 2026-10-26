@@ -135,7 +135,7 @@ internal class UserAccountRepositoryTests
         var builder = new DbContextOptionsBuilder<DataContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
 
-        var createContext = new DataContext(builder.Options);
+        using var createContext = new DataContext(builder.Options);
         var repository = new UserAccountRepository(createContext);
 
         var newUserAccount = new UserAccount()

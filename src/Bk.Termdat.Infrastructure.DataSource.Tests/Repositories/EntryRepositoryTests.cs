@@ -159,7 +159,7 @@ internal class EntryRepositoryTests
         Assert.That(afterUpdate.ExternalLinks.Last().Url, Is.EqualTo("https://added.example.com"));
         Assert.That(afterUpdate.ExternalLinks.Last().Type, Is.EqualTo(ExternalLinkType.Fedlex));
 
-        context.EntryExternalLinks.Remove(context.EntryExternalLinks.Last());
+        context.EntryExternalLinks.Remove(await context.EntryExternalLinks.LastAsync());
         await context.SaveChangesAsync();
     }
 
@@ -523,7 +523,7 @@ internal class EntryRepositoryTests
     [Test]
     public async Task GetIdsByCollectionIdReturnsIds()
     {
-        var cleanContext = DatabaseHelper.PrepareContext(Guid.NewGuid().ToString("N"));
+        using var cleanContext = DatabaseHelper.PrepareContext(Guid.NewGuid().ToString("N"));
         entryRepository = new EntryRepository(cleanContext);
 
         var indexEntries = (await entryRepository.GetIdsByCollectionId(1)).ToList();
@@ -536,7 +536,7 @@ internal class EntryRepositoryTests
     [Test]
     public async Task GetIdsByGlossaryIdReturnsIds()
     {
-        var cleanContext = DatabaseHelper.PrepareContext(Guid.NewGuid().ToString("N"));
+        using var cleanContext = DatabaseHelper.PrepareContext(Guid.NewGuid().ToString("N"));
         entryRepository = new EntryRepository(cleanContext);
 
         var indexEntries = (await entryRepository.GetIdsByGlossaryId(1)).ToList();
@@ -667,16 +667,16 @@ internal class EntryRepositoryTests
         updatedEntry.CollectionId = 2;
         updatedEntry.Reliability = Reliability.Approved;
         updatedEntry.Comment = "Updated comment";
-        var firstLenochClassification = context.LenochClassifications.First();
-        var lastLenochClassification = context.LenochClassifications.Last();
+        var firstLenochClassification = await context.LenochClassifications.FirstAsync();
+        var lastLenochClassification = await context.LenochClassifications.LastAsync();
         updatedEntry.LenochClassifications = new List<LenochClassification> { firstLenochClassification, lastLenochClassification };
         updatedEntry.Identification = 1337;
         updatedEntry.Status = Status.Validated;
-        var firstCollection = context.Collections.First();
-        var lastCollection = context.Collections.Last();
+        var firstCollection = await context.Collections.FirstAsync();
+        var lastCollection = await context.Collections.LastAsync();
         updatedEntry.RelatedCollections = new List<Collection> { firstCollection, lastCollection };
-        var firstGlossary = context.Glossaries.First();
-        var lastGlossary = context.Glossaries.Last();
+        var firstGlossary = await context.Glossaries.FirstAsync();
+        var lastGlossary = await context.Glossaries.LastAsync();
 
         entryRepository.Update(dbEntry, updatedEntry);
 
@@ -882,7 +882,7 @@ internal class EntryRepositoryTests
         Assert.That(updatedTranslations[5].Sequence, Is.EqualTo(2));
 
         // Check delete
-        Assert.That(context.EntryLanguages.SingleOrDefault(l => l.Terminus == "will be deleted in unit test"), Is.EqualTo(null));
+        Assert.That(await context.EntryLanguages.SingleOrDefaultAsync(l => l.Terminus == "will be deleted in unit test"), Is.EqualTo(null));
     }
 
     [Test]
@@ -937,8 +937,8 @@ internal class EntryRepositoryTests
         updatedEntry.Subjects.Clear();
         updatedEntry.Domains.Clear();
 
-        var subject1 = context.Subjects.First();
-        var subject2 = context.Subjects.Last();
+        var subject1 = await context.Subjects.FirstAsync();
+        var subject2 = await context.Subjects.LastAsync();
 
         updatedEntry.Subjects = new List<Subject> { subject1, subject2 };
 
@@ -962,8 +962,8 @@ internal class EntryRepositoryTests
         updatedEntry.Subjects.Clear();
         updatedEntry.Domains.Clear();
 
-        var subject1 = context.Subjects.Include(s => s.Domains).First(s => s.Id == 1);
-        var subject2 = context.Subjects.Include(s => s.Domains).First(s => s.Id == 2);
+        var subject1 = await context.Subjects.Include(s => s.Domains).FirstAsync(s => s.Id == 1);
+        var subject2 = await context.Subjects.Include(s => s.Domains).FirstAsync(s => s.Id == 2);
         var domain1 = subject1.Domains.Last();
         var domain2 = subject2.Domains.Last();
 

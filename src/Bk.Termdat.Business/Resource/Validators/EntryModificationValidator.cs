@@ -48,7 +48,7 @@ public abstract class EntryModificationValidator<T> : AbstractValidator<T>
             .WithMessage(BackendTexts.ReferencesMustBeUnique);
     }
 
-    protected bool HasDuplicates(IEnumerable<EntryModificationReference> refs)
+    protected static bool HasDuplicates(IEnumerable<EntryModificationReference> refs)
     {
         if (refs != null)
         {

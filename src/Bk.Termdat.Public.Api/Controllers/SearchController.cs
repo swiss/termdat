@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bk.Termdat.Business.Public.Api.Resource.Models;
@@ -40,6 +41,8 @@ public class SearchController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Search([FromQuery] SearchParameter parameter)
     {
+        ArgumentNullException.ThrowIfNull(parameter);
+
         await analyticsService.TrackEvent("Public Search", "Perform", parameter.SearchTerm);
         var searchResults = await searchService.Search(parameter);
         return Ok(searchResults);

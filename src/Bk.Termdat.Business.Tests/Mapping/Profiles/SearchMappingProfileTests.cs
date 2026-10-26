@@ -12,6 +12,7 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 
 namespace Bk.Termdat.Business.Tests.Mapping.Profiles;
 
+[TestFixture]
 internal class SearchMappingProfileTests
 {
     private IMapper mapper;
@@ -28,11 +29,12 @@ internal class SearchMappingProfileTests
         services.AddTransient<PopulateModifiedAndCreatedAction>();
         var provider = services.BuildServiceProvider();
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var config = new MapperConfiguration(c =>
         {
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new SearchMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
         mapper = config.CreateMapper();
 
         searchQuery = new ResourceModels.SearchQuery()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +34,7 @@ public class TbxDataService : ITbxDataService
     private readonly ILogger<TbxDataService> logger;
     private readonly FileImportOptions fileImportOptions;
     private readonly EmailOptions emailOptions;
-    private readonly IList<KeyValuePair<string, string>> validationErrors = new List<KeyValuePair<string, string>>();
+    private readonly List<KeyValuePair<string, string>> validationErrors = new();
 
     public TbxDataService(
         IOptions<FileImportOptions> importOptions,
@@ -44,6 +45,9 @@ public class TbxDataService : ITbxDataService
         IEmailService emailService,
         IOptions<EmailOptions> emailOptions)
     {
+        ArgumentNullException.ThrowIfNull(importOptions);
+        ArgumentNullException.ThrowIfNull(emailOptions);
+
         fileImportOptions = importOptions.Value;
         this.logger = logger;
         this.languageRepository = languageRepository;
@@ -56,6 +60,8 @@ public class TbxDataService : ITbxDataService
     public async Task<(bool isValid, IList<KeyValuePair<string, string>> validationErrors, XDocument document)>
         IsFileValid(IFormFile file)
     {
+        ArgumentNullException.ThrowIfNull(file);
+
         //Note: The current validation uses a TBX core schema for TBX 3.0 files to validate the given XML. And it also validates the base XML structure.
         //      Based on recent information (February 2024), Star (the company where the export is implemented) is exporting in an older TBX 2.0 format.
         //      By the end of 2024, the export should be able to provide TBX 3.0.
@@ -64,17 +70,29 @@ public class TbxDataService : ITbxDataService
         {
             validationErrors.Clear();
             var executingAssembly = Assembly.GetExecutingAssembly();
-            using var tbxCoreSchemaReader =
-                new StreamReader(
-                    executingAssembly.GetManifestResourceStream($"{XmlSchemasBaseNamespace}TBX_core.xsd")!);
+            var schemaSettings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null
+            };
+
+            using var tbxCoreSchemaStream = executingAssembly.GetManifestResourceStream($"{XmlSchemasBaseNamespace}TBX_core.xsd")
+                ?? throw new InvalidOperationException("TBX_core.xsd resource not found.");
+
+            using var tbxCoreSchemaReader = XmlReader.Create(tbxCoreSchemaStream, schemaSettings);
+
             var tbxCoreSchema = XmlSchema.Read(tbxCoreSchemaReader, ValidationEventHandler);
-            using var baseXmlSchemaReader =
-                new StreamReader(executingAssembly.GetManifestResourceStream($"{XmlSchemasBaseNamespace}Xml.xsd")!);
+
+            using var baseXmlSchemaStream = executingAssembly.GetManifestResourceStream($"{XmlSchemasBaseNamespace}Xml.xsd")
+                ?? throw new InvalidOperationException("Xml.xsd resource not found.");
+
+            using var baseXmlSchemaReader = XmlReader.Create(baseXmlSchemaStream, schemaSettings);
+
             var baseXmlSchema = XmlSchema.Read(baseXmlSchemaReader, ValidationEventHandler);
 
             var xmlSchemaImport =
                 new XmlSchemaImport { Schema = baseXmlSchema, Namespace = "http://www.w3.org/XML/1998/namespace" };
-            tbxCoreSchema!.Includes.Add(xmlSchemaImport);
+            tbxCoreSchema.Includes.Add(xmlSchemaImport);
 
             var xmlReaderSettings = new XmlReaderSettings
             {
@@ -85,13 +103,13 @@ public class TbxDataService : ITbxDataService
             xmlReaderSettings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
             xmlReaderSettings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
             xmlReaderSettings.ValidationEventHandler += ValidationEventHandler;
-            xmlReaderSettings.Schemas.Add(tbxCoreSchema!);
+            xmlReaderSettings.Schemas.Add(tbxCoreSchema);
 
             using var memoryStream = await ReadAsSanitizedXmlMemoryStreamAsync(file);
             using var fileXmlReader = XmlReader.Create(memoryStream, xmlReaderSettings);
             var document = XDocument.Load(fileXmlReader, LoadOptions.SetLineInfo);
 
-            return (!validationErrors.Any(), validationErrors, document);
+            return (validationErrors.Count == 0, validationErrors, document);
         }
         catch (XmlException xmlException)
         {
@@ -113,6 +131,8 @@ public class TbxDataService : ITbxDataService
         Reliability reliability, IList<int> subjectIds, IList<int> domainIds, IList<int> glossaryIds, IList<AdminInfoSummary> adminInfos,
         string comment)
     {
+        ArgumentNullException.ThrowIfNull(adminInfos);
+
         try
         {
             adminInfos.Add(new AdminInfoDetail { Code = importJobLabel });
@@ -140,18 +160,18 @@ public class TbxDataService : ITbxDataService
                     }
                     default:
                     {
-                        throw new ArgumentOutOfRangeException(nameof(modificationItem));
+                        throw new InvalidOperationException($"Unexpected modification item type: {modificationItem?.GetType().FullName ?? "null"}");
                     }
                 }
             }
 
-            var mailBody = string.Format(BackendTexts.FileImportMailSuccess, importJobLabel, createdItemsCount,
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailSuccess, importJobLabel, createdItemsCount,
                 updatedItemsCount);
             await SendEmailAsync(mailBody);
         }
         catch (ForbiddenException)
         {
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel,
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel,
                 "Missing permissions for some or all included glossaries or collections.");
             await SendEmailAsync(mailBody);
         }
@@ -159,13 +179,13 @@ public class TbxDataService : ITbxDataService
         {
             var validationExceptionMessage =
                 $"Validation exception: {businessValidationException.ModelKey ?? "unknown"}: {businessValidationException.Message}";
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel, validationExceptionMessage);
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel, validationExceptionMessage);
             await SendEmailAsync(mailBody);
         }
         catch (Exception exception)
         {
             logger.LogError(exception, "Unexpected error during import");
-            var mailBody = string.Format(BackendTexts.FileImportMailError, importJobLabel,
+            var mailBody = string.Format(CultureInfo.InvariantCulture, BackendTexts.FileImportMailError, importJobLabel,
                 "Unexpected error during import.");
             await SendEmailAsync(mailBody);
         }
@@ -206,6 +226,8 @@ public class TbxDataService : ITbxDataService
         Reliability reliability, IList<int> subjectIds, IList<int> domainIds, IList<int> glossaryIds, IList<AdminInfoSummary> adminInfos,
         string comment)
     {
+        ArgumentNullException.ThrowIfNull(document);
+
         var result = new List<IEntryModification>();
         var languages = await GetLanguages();
 
@@ -249,7 +271,7 @@ public class TbxDataService : ITbxDataService
                             transac.Attribute("type")?.Value == "transactionType")?.Value == "modification")
                     ?.Element("date")?.Value;
 
-                if (!DateTime.TryParse(modificationDate, out var termEntryModificationDate))
+                if (!DateTime.TryParse(modificationDate, CultureInfo.InvariantCulture, out var termEntryModificationDate))
                 {
                     var (lineNumber, linePosition) = GetLineInfos(termEntry);
                     throw new BusinessValidationException("termEntry",
@@ -303,7 +325,7 @@ public class TbxDataService : ITbxDataService
                     var languageDetail = new EntryModificationLanguageDetail
                     {
                         ExternalSystemId = ntigGuid.ToString(),
-                        LanguageId = (int)languageId!,
+                        LanguageId = (int)languageId,
                         Sequence = sequence
                     };
                     entryModification.LanguageDetails.Add(languageDetail);
@@ -393,32 +415,28 @@ public class TbxDataService : ITbxDataService
                 break;
             default:
                 break;
-                // case XmlSeverityType.Warning:
-                //     validationErrors.Add(new KeyValuePair<string, string>(e.Severity.ToString(),
-                //         $"{ComposeLineInfo(e.Exception.LineNumber, e.Exception.LinePosition)} {e.Message}"));
-                //     break;
         }
     }
 
-    private string GetTermNoteValue(XElement ntigElement, string termNoteType)
+    private static string GetTermNoteValue(XElement ntigElement, string termNoteType)
     {
         return ntigElement.Descendants("termNote")
             .SingleOrDefault(termNote => termNote.Attribute("type")?.Value == termNoteType)?.Value;
     }
 
-    private string GetDescriptionValue(XElement ntigElement, string descriptionType)
+    private static string GetDescriptionValue(XElement ntigElement, string descriptionType)
     {
         return ntigElement.Elements("descripGrp").Elements("descrip")
             .SingleOrDefault(description => description.Attribute("type")?.Value == descriptionType)?.Value;
     }
 
-    private string GetDescriptionNoteValue(XElement ntigElement, string descriptionNoteType)
+    private static string GetDescriptionNoteValue(XElement ntigElement, string descriptionNoteType)
     {
         return ntigElement.Elements("descripGrp").Elements("descripNote")
             .SingleOrDefault(descriptionNote => descriptionNote.Attribute("type")?.Value == descriptionNoteType)?.Value;
     }
 
-    private bool TryGetLanguageId(IList<LanguageItem> availableLanguages, XElement languageSet, out int? result)
+    private static bool TryGetLanguageId(IList<LanguageItem> availableLanguages, XElement languageSet, out int? result)
     {
         result = default;
 
@@ -442,7 +460,7 @@ public class TbxDataService : ITbxDataService
         return true;
     }
 
-    protected string AdjustLinkStructure(string source)
+    protected static string AdjustLinkStructure(string source)
     {
         if (string.IsNullOrWhiteSpace(source))
         {
@@ -486,7 +504,7 @@ public class TbxDataService : ITbxDataService
                     {
                         var rawLinkSegments = segment.Split(@"\s");
                         var linkSegments = rawLinkSegments[0].Split('!');
-                        entrySourceStringBuilder.Append($"[{linkSegments[1]}]({linkSegments[0]})");
+                        entrySourceStringBuilder.Append(CultureInfo.InvariantCulture, $"[{linkSegments[1]}]({linkSegments[0]})");
                         entrySourceStringBuilder.Append(rawLinkSegments[1]);
                     }
                     else
@@ -508,7 +526,7 @@ public class TbxDataService : ITbxDataService
                     if (segment.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
                     {
                         var rawLinkSegments = segment.Split(@"\s");
-                        entrySourceStringBuilder.Append($" [{rawLinkSegments[0]}]({rawLinkSegments[0]})");
+                        entrySourceStringBuilder.Append(CultureInfo.InvariantCulture, $" [{rawLinkSegments[0]}]({rawLinkSegments[0]})");
                         entrySourceStringBuilder.Append(rawLinkSegments[1]);
                     }
                     else
@@ -550,13 +568,10 @@ public class TbxDataService : ITbxDataService
         var lineNumber = -1;
         var linePosition = -1;
 
-        if (xElement is IXmlLineInfo xmlLineInfo)
+        if (xElement is IXmlLineInfo xmlLineInfo && xmlLineInfo.HasLineInfo())
         {
-            if (xmlLineInfo.HasLineInfo())
-            {
-                lineNumber = xmlLineInfo.LineNumber;
-                linePosition = xmlLineInfo.LinePosition;
-            }
+            lineNumber = xmlLineInfo.LineNumber;
+            linePosition = xmlLineInfo.LinePosition;
         }
 
         return (lineNumber, linePosition);
@@ -567,7 +582,7 @@ public class TbxDataService : ITbxDataService
         return $"Line number {lineNumber}, position {linePosition}:";
     }
 
-    private record LanguageItem
+    private sealed record LanguageItem
     {
         public int LanguageId { get; init; }
         public string TwoLetterIsoCode { get; init; }

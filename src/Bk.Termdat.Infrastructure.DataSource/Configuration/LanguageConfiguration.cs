@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class LanguageConfiguration : EntityChangeTrackingConfiguration<Language>
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Language> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(l => l.IsoCode)
             .HasMaxLength(2)
             .IsRequired();

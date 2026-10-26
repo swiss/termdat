@@ -1,3 +1,5 @@
+namespace Bk.Termdat.Business.Resource.Models;
+
 public class DuplicateCheckRequest
 {
     public required int LanguageId { get; set; }

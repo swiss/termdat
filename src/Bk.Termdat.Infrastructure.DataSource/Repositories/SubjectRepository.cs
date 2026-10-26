@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,6 +77,9 @@ public class SubjectRepository : ISubjectRepository
 
     public void Update(Subject existing, Subject update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         UpdateTranslationHelper.UpdateTranslations(existing.Translations, update.Translations, existing.Id, nameof(Subject));

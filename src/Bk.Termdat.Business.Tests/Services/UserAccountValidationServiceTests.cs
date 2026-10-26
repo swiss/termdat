@@ -5,7 +5,6 @@ using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services;
-using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Exceptions;
 using NSubstitute;
 using NSubstitute.ClearExtensions;
@@ -17,13 +16,13 @@ namespace Bk.Termdat.Business.Tests.Services;
 [TestFixture]
 internal class UserAccountValidationServiceTests
 {
-    private IUserAccountValidationService service;
+    private UserAccountValidationService service;
 
     private readonly ICollectionRepository collectionRepositoryMock = Substitute.For<ICollectionRepository>();
     private readonly IGlossaryRepository glossaryRepositoryMock = Substitute.For<IGlossaryRepository>();
 
     private UserAccount userAccount;
-    private IUserAccountModification userAccountModification;
+    private UserAccountModification userAccountModification;
 
     [SetUp]
     public void SetUp()

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bk.Termdat.Private.Api.Controllers;
 
+#pragma warning disable S6960 // SMELL: Controller has multiple responsibilities
 [ApiController]
 [Route("api/search")]
 public class SearchController : ControllerBase
@@ -41,7 +42,7 @@ public class SearchController : ControllerBase
         }
         catch (AutoMapperMappingException ex)
         {
-            logger.LogError(ex, "Error while mapping search query, maybe invalid EntryIds were searched: '{searchQuery}'", searchQuery);
+            logger.LogError(ex, "Error while mapping search query, maybe invalid EntryIds were searched: '{SearchQuery}'", searchQuery);
             return BadRequest();
         }
     }
@@ -66,7 +67,7 @@ public class SearchController : ControllerBase
         }
     }
 
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     [HttpPost("duplicate-check")]
     public async Task<ActionResult> GetDuplicateEntryIds([FromBody] DuplicateCheckRequest request)
     {
@@ -79,7 +80,7 @@ public class SearchController : ControllerBase
         return Ok(duplicateCheckResponse);
     }
 
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     [HttpPost("duplicate-check/xlsx")]
     public async Task<ActionResult> ExportDuplicateCheckXlsx([FromBody] DuplicateCheckRequest request)
     {
@@ -98,3 +99,4 @@ public class SearchController : ControllerBase
         return File(content, ExcelMimeType, fileName);
     }
 }
+#pragma warning restore S6960

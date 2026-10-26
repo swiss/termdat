@@ -16,7 +16,7 @@ namespace Bk.Termdat.Infrastructure.Service.Tests;
 [TestFixture]
 internal class SearchIndexEntryEventConsumerTests
 {
-    private SearchIndexEntryEventConsumer searchIndexEntryEventConsumer = null!;
+    private SearchIndexEntryEventConsumer searchIndexEntryEventConsumer;
 
     private readonly ISearchRepository searchRepository = Substitute.For<ISearchRepository>();
     private readonly IEntryRepository entryRepository = Substitute.For<IEntryRepository>();

@@ -6,7 +6,7 @@ public interface IEntryModification
 {
     Status Status { get; set; }
     Reliability Reliability { get; set; }
-    string Comment { get; set; }
+    string? Comment { get; set; }
     int? Identification { get; set; }
 
     int OfficeId { get; set; }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 
@@ -9,6 +10,8 @@ public class RabbitMqProducerChannelFactory : IRabbitMqChannelFactory
 
     public RabbitMqProducerChannelFactory(IConnectionFactory connectionFactory)
     {
+        ArgumentNullException.ThrowIfNull(connectionFactory);
+
         connection = connectionFactory.CreateConnectionAsync().Result;
 
         using var tempChannel = connection.CreateChannelAsync().Result;

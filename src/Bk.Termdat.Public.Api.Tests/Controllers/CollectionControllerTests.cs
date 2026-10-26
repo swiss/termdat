@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Public.Api.Tests.Controllers;
 
 [TestFixture]
-public class CollectionControllerTests
+internal class CollectionControllerTests
 {
     private CollectionController collectionController;
     private ICollectionService collectionServiceMock;

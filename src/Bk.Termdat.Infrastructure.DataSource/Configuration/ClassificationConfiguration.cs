@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -7,6 +8,8 @@ public class ClassificationConfiguration : EntityChangeTrackingConfiguration<Cla
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Classification> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.Property(c => c.Code)
             .HasMaxLength(100)
             .IsRequired();

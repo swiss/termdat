@@ -3,7 +3,6 @@ using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Repositories;
 using Bk.Termdat.Business.Resource.Models;
 using Bk.Termdat.Business.Services;
-using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Exceptions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
@@ -11,9 +10,10 @@ using NUnit.Framework;
 
 namespace Bk.Termdat.Business.Tests.Services;
 
-public class CollectionValidationServiceTests
+[TestFixture]
+internal class CollectionValidationServiceTests
 {
-    private ICollectionValidationService service;
+    private CollectionValidationService service;
     private readonly IClassificationRepository classificationRepositoryMock = Substitute.For<IClassificationRepository>();
     private CollectionCreate collectionCreate;
 

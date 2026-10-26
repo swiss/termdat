@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoMapper;
 using Bk.Termdat.Business.Domain.Models;
@@ -16,6 +17,8 @@ public class RelatedCollectionsResolver : IValueResolver<Entry, object, string>
 
     public string Resolve(Entry source, object destination, string destMember, ResolutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(source);
+
         return string.Join(", ", source.RelatedCollections.Select(item => cultureService.GetTranslation(item.Translations)));
     }
 }

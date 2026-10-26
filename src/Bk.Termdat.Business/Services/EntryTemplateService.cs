@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -81,6 +82,8 @@ public class EntryTemplateService : IEntryTemplateService
 
     public async Task Create(EntryTemplateCreate entryTemplateCreate)
     {
+        ArgumentNullException.ThrowIfNull(entryTemplateCreate);
+
         var email = identityService.GetCurrentEmail();
         var user = await userAccountRepository.GetByEmail(email);
 
@@ -93,7 +96,7 @@ public class EntryTemplateService : IEntryTemplateService
         {
             throw new BusinessValidationException(
                 nameof(EntryTemplateCreate.TemplateName),
-                string.Format(BackendTexts.TemplateExistsForUser, entryTemplateCreate.TemplateName));
+                string.Format(CultureInfo.InvariantCulture, BackendTexts.TemplateExistsForUser, entryTemplateCreate.TemplateName));
         }
 
         var entry = mapper.Map<Entry>(entryTemplateCreate);
@@ -124,12 +127,13 @@ public class EntryTemplateService : IEntryTemplateService
 
     public async Task Update(EntryTemplateUpdate entryTemplateUpdate)
     {
+        ArgumentNullException.ThrowIfNull(entryTemplateUpdate);
+
         var existingTemplate = await repository.GetById(entryTemplateUpdate.Id);
 
         if (existingTemplate == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryTemplateNotFound,
-                entryTemplateUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryTemplateNotFound, entryTemplateUpdate.Id));
         }
 
         var entry = mapper.Map<Entry>(entryTemplateUpdate);
@@ -156,7 +160,7 @@ public class EntryTemplateService : IEntryTemplateService
 
         if (entryTemplate == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.EntryTemplateNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.EntryTemplateNotFound, id));
         }
 
         repository.Delete(entryTemplate);

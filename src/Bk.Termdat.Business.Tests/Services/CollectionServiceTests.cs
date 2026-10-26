@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,9 +24,9 @@ using DomainModels = Bk.Termdat.Business.Domain.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class CollectionServiceTests
+internal class CollectionServiceTests
 {
-    private ICollectionService collectionService;
+    private CollectionService collectionService;
     private ICollectionRepository collectionRepositoryMock;
     private IMapper mapperMock;
     private readonly IEntryRepository entryRepositoryMock = Substitute.For<IEntryRepository>();
@@ -332,10 +333,10 @@ public class CollectionServiceTests
     {
         var exceptionSoftDelete = Assert.ThrowsAsync<EntityNotFoundException>(() => collectionService.Delete(2));
         Assert.That(exceptionSoftDelete, Is.Not.Null);
-        Assert.That(exceptionSoftDelete.Message, Is.EqualTo(string.Format(BackendTexts.CollectionNotFound, 2)));
+        Assert.That(exceptionSoftDelete.Message, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, 2)));
         var exceptionDelete = Assert.ThrowsAsync<EntityNotFoundException>(() => collectionService.Delete(2));
         Assert.That(exceptionDelete, Is.Not.Null);
-        Assert.That(exceptionDelete.Message, Is.EqualTo(string.Format(BackendTexts.CollectionNotFound, 2)));
+        Assert.That(exceptionDelete.Message, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, 2)));
     }
 
     [Test]
@@ -343,7 +344,7 @@ public class CollectionServiceTests
     {
         var exception = Assert.ThrowsAsync<EntityNotFoundException>(() => collectionService.Restore(2));
         Assert.That(exception, Is.Not.Null);
-        Assert.That(exception.Message, Is.EqualTo(string.Format(BackendTexts.CollectionNotFound, 2)));
+        Assert.That(exception.Message, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, BackendTexts.CollectionNotFound, 2)));
     }
 
     [Test]
@@ -412,7 +413,7 @@ public class CollectionServiceTests
     [Test]
     public void SoftDeleteThrowsNoExceptionWhenQueueIndexUpdateByCollectionFails()
     {
-        searchQueueClientMock.QueueIndexUpdateByIds(Arg.Any<IEnumerable<int>>()).ThrowsForAnyArgs(new Exception("SHOULD NOT THROW"));
+        searchQueueClientMock.QueueIndexUpdateByIds(Arg.Any<IEnumerable<int>>()).ThrowsForAnyArgs(new ArgumentException("SHOULD NOT THROW"));
 
         Assert.DoesNotThrowAsync(() => collectionService.Delete(1));
     }
@@ -434,7 +435,7 @@ public class CollectionServiceTests
     [Test]
     public void RestoreThrowsNoExceptionWhenQueueIndexUpdateByCollectionFails()
     {
-        searchQueueClientMock.QueueIndexUpdateByIds(Arg.Any<IEnumerable<int>>()).ThrowsForAnyArgs(new Exception("SHOULD NOT THROW"));
+        searchQueueClientMock.QueueIndexUpdateByIds(Arg.Any<IEnumerable<int>>()).ThrowsForAnyArgs(new ArgumentException("SHOULD NOT THROW"));
 
         Assert.DoesNotThrowAsync(() => collectionService.Restore(1));
     }

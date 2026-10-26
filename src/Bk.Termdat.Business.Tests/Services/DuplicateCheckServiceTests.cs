@@ -17,7 +17,7 @@ internal class DuplicateCheckServiceTests
     private readonly IDuplicateCheckRepository duplicateCheckRepositoryMock = Substitute.For<IDuplicateCheckRepository>();
     private readonly IExcelDataService excelDataServiceMock = Substitute.For<IExcelDataService>();
 
-    private IDuplicateCheckService service;
+    private DuplicateCheckService service;
 
     [SetUp]
     public void SetUp()

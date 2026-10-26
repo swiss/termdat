@@ -17,7 +17,7 @@ using DomainModels = Bk.Termdat.Business.Domain.Models;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class DomainServiceTests
+internal class DomainServiceTests
 {
     private DomainService domainService;
     private IDomainRepository domainRepositoryMock;
@@ -123,7 +123,7 @@ public class DomainServiceTests
 
         domainModification.Id = null;
         Assert.ThrowsAsync<ArgumentNullException>(async () => await domainService.Update(null));
-        Assert.ThrowsAsync<ArgumentNullException>(async () => await domainService.Update(domainModification));
+        Assert.ThrowsAsync<ArgumentException>(async () => await domainService.Update(domainModification));
     }
 
     [Test]

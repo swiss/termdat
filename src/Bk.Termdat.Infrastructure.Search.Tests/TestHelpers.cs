@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using Bk.Termdat.Business.Domain.Models;
 using Bk.Termdat.Business.Domain.Projections;
 using Bogus;
+using NUnit.Framework;
 
 namespace Bk.Termdat.Infrastructure.Search.Tests;
 
-public class TestHelpers
+[SetUpFixture]
+public static class TestHelpers
 {
-    public TestHelpers()
-    {
-        Randomizer.Seed = new Random(8675309);
-    }
-
-    public IList<IndexEntry> GenerateIndexEntries(int count = 4000)
+    public static IList<IndexEntry> GenerateIndexEntries(int count = 4000)
     {
         var i = 0;
 

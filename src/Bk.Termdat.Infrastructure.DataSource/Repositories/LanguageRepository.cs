@@ -64,6 +64,9 @@ public class LanguageRepository : ILanguageRepository
 
     public void Update(Language existing, Language update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         foreach (var updateTranslation in update.Translations)

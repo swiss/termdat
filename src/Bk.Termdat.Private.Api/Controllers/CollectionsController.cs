@@ -60,7 +60,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet("details")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetAllDetails()
     {
         var result = await collectionService.GetAllDetails();
@@ -68,7 +68,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> GetDetail([FromRoute] int id)
     {
         var result = await collectionService.GetDetail(id);
@@ -76,7 +76,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Update([FromRoute] int id, [FromBody] CollectionUpdate collectionUpdate)
     {
         if (collectionUpdate is null)
@@ -94,7 +94,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Create([FromBody] CollectionCreate collectionCreate)
     {
         if (collectionCreate is null)
@@ -108,7 +108,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Delete([FromRoute] int id, [FromQuery] bool soft = true)
     {
         await collectionService.Delete(id, soft);
@@ -117,7 +117,7 @@ public class CollectionsController : ControllerBase
     }
 
     [HttpPost("restore")]
-    [Authorize(Policy = Policy.RequireAdminPolicy)]
+    [Authorize(Policy = AuthorizationPolicies.RequireAdminPolicy)]
     public async Task<ActionResult> Restore([FromBody] int id)
     {
         await collectionService.Restore(id);

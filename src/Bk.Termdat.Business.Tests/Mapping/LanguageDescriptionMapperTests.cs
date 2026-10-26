@@ -27,11 +27,11 @@ internal class TestTranslation : DomainModels.IEntityNameTranslation
 }
 
 [TestFixture]
-public class LanguageDescriptionMapperTests
+internal class LanguageDescriptionMapperTests
 {
-    private ILanguageDescriptionMapper mapper;
+    private LanguageDescriptionMapper mapper;
     private ILanguageRepository languageRepositoryMock;
-    private ResourceModels.ILanguageDescription testModification;
+    private TestModification testModification;
     private List<DomainModels.Language> languages;
 
     [SetUp]
@@ -95,7 +95,7 @@ public class LanguageDescriptionMapperTests
         Assert.That(translations.TrueForAll(t => t.LanguageId != 1));
     }
 
-    private static void AssertTranslationIsCorrect(DomainModels.IEntityNameTranslation translation, int languageId, string description)
+    private static void AssertTranslationIsCorrect(TestTranslation translation, int languageId, string description)
     {
         Assert.That(translation, Is.Not.Null);
         Assert.That(translation.LanguageId, Is.EqualTo(languageId));

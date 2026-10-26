@@ -1,5 +1,4 @@
 using Bk.Termdat.Business.Services;
-using Bk.Termdat.Business.Services.Interfaces;
 using Bk.Termdat.CrossCutting.Configuration;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -8,9 +7,9 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Tests.Services;
 
 [TestFixture]
-public class TermdatUrlServiceTests
+internal class TermdatUrlServiceTests
 {
-    private ITermdatUrlService termdatUrlService;
+    private TermdatUrlService termdatUrlService;
     private readonly IOptions<TermdatClientOptions> termdatClientOptionsMock = Substitute.For<IOptions<TermdatClientOptions>>();
 
     [SetUp]

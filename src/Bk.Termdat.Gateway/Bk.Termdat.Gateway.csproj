@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swiss.FCh.Utils" Version="3.0.1" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />

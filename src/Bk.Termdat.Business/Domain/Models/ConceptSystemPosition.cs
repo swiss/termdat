@@ -4,7 +4,7 @@ namespace Bk.Termdat.Business.Domain.Models;
 
 public class ConceptSystemPosition : Entity
 {
-    public string Value { get; set; }
+    public string? Value { get; set; }
     public int SortIndex { get; set; }
     public int ConceptSystemId { get; set; }
 

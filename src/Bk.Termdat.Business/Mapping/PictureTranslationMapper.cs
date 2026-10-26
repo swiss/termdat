@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bk.Termdat.Business.Domain.Models;
@@ -20,6 +21,9 @@ public class PictureTranslationMapper : IPictureTranslationMapper
 
     public PictureTranslation Map(ResourceModels.PictureDetail pictureDto, Language language)
     {
+        ArgumentNullException.ThrowIfNull(pictureDto);
+        ArgumentNullException.ThrowIfNull(language);
+
         var translation = new PictureTranslation
         {
             LanguageId = language.Id,

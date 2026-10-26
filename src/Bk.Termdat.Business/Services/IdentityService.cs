@@ -16,6 +16,8 @@ public class IdentityService : IIdentityService
 
     public IdentityService(IHttpContextAccessor httpContextAccessor, IOptions<AuthorizationOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.httpContextAccessor = httpContextAccessor;
         this.options = options.Value;
     }

@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,6 +9,8 @@ public class DomainConfiguration : EntityChangeTrackingConfiguration<Domain>
 {
     protected override void ConfigureEntityChangeTracking(EntityTypeBuilder<Domain> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.HasOne(d => d.Subject)
             .WithMany(s => s.Domains)
             .HasForeignKey(d => d.SubjectId)

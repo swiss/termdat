@@ -11,6 +11,6 @@ public interface IEntryHeaderUpdateService
     Task<EntryMultipleUpdateResult> UpdateAdminInfos(EntryChipFieldInputUpdate update);
     Task<EntryMultipleUpdateResult> UpdateComment(EntryCommentUpdate update);
     Task<EntryMultipleUpdateResult> UpdateConceptSystemPosition(EntryConceptSystemPositionUpdate update);
-    Task<EntrySourceUpdateResult> UpdateSource(EntrySourceUpdate updateDto);
+    Task<EntrySourceUpdateResult> UpdateSource(EntrySourceUpdate update);
     Task<EntryContentMoveResult> MoveContent(EntryContentMove update);
 }

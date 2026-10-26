@@ -5,6 +5,8 @@
         <UserSecretsId>3f868d47-331e-43c6-a851-e409769441be</UserSecretsId>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <ServerGarbageCollection>true</ServerGarbageCollection>
+        <Nullable>annotations</Nullable>
+        <NoWarn>$(NoWarn);CA1716</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +14,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="10.0.1" />
     </ItemGroup>

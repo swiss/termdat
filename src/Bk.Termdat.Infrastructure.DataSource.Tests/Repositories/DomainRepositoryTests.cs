@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Bk.Termdat.Infrastructure.DataSource.Tests.Repositories;
 
 [TestFixture]
-public class DomainRepositoryTests
+internal class DomainRepositoryTests
 {
     private DomainRepository domainRepository;
     private DataContext context;

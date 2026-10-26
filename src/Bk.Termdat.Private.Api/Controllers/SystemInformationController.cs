@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Version = Bk.Termdat.Business.Resource.Models.Version;
 
@@ -13,6 +14,7 @@ public class SystemInformationController : ControllerBase
 
     [HttpGet("version")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(Version), StatusCodes.Status200OK)]
     public ActionResult GetApplicationVersion()
     {
         var version = Environment.GetEnvironmentVariable(ApplicationVersionEnvVariableName);

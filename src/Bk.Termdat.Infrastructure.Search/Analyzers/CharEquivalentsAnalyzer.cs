@@ -65,6 +65,7 @@ public class CharEquivalentsAnalyzer : StopwordAnalyzerBase
     {
     }
 
+    #pragma warning disable CA2000
     protected override TokenStreamComponents CreateComponents(string fieldName, TextReader reader)
     {
         var tokenizer = new StandardTokenizer(m_matchVersion, reader)
@@ -79,6 +80,7 @@ public class CharEquivalentsAnalyzer : StopwordAnalyzerBase
         tokenStream = new StopFilter(m_matchVersion, tokenStream, m_stopwords);
         return new TokenStreamComponents(tokenizer, tokenStream);
     }
+    #pragma warning restore CA2000
 
     public static string PreprocessEquivalentsText(string text, int languageId = 0)
     {

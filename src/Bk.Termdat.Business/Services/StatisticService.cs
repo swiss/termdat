@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -38,6 +39,8 @@ public class StatisticService : IStatisticService
 
     public async Task<StatisticSearchResult> GetBySearchQuery(StatisticSearchQuery searchQuery)
     {
+        ArgumentNullException.ThrowIfNull(searchQuery);
+
         var statistics = await statisticRepository.GetBySearchQuery(searchQuery);
 
         var totalCount = statistics.Count();
@@ -57,7 +60,12 @@ public class StatisticService : IStatisticService
 
     public async Task<StatisticDetail> CreateOrUpdateStatistic(StatisticSummary summary)
     {
-        logger.LogInformation("Add not found search text to statistic: {searchText}", summary.SearchText);
+        ArgumentNullException.ThrowIfNull(summary);
+
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation("Add not found search text to statistic: {SearchText}", summary.SearchText);
+        }
 
         var existing = await GetBySummary(summary);
 
@@ -91,11 +99,13 @@ public class StatisticService : IStatisticService
 
     public async Task<StatisticDetail> Update(StatisticUpdate updatedStatistic)
     {
+        ArgumentNullException.ThrowIfNull(updatedStatistic);
+
         var databaseStatistic = await statisticRepository.GetById(updatedStatistic.Id);
 
         if (databaseStatistic == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.StatisticNotFound, updatedStatistic.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.StatisticNotFound, updatedStatistic.Id));
         }
 
         var mappedStatistic = mapper.Map<Statistic>(updatedStatistic);
@@ -122,7 +132,7 @@ public class StatisticService : IStatisticService
 
         if (statistic == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.StatisticNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.StatisticNotFound, id));
         }
 
         statisticRepository.Delete(statistic);

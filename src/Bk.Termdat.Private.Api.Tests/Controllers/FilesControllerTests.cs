@@ -68,13 +68,13 @@ internal class FilesControllerTests
         Assert.That(response, Is.Not.Null);
         var importResponse = response.Value as FileImportResponse;
         Assert.That(importResponse, Is.Not.Null);
-        Assert.That(importResponse.AdminInfoCode.StartsWith("TBX-Import-"), Is.True);
+        Assert.That(importResponse.AdminInfoCode.StartsWith("TBX-Import-", StringComparison.Ordinal), Is.True);
     }
 
     [Test]
     public async Task Import_WithValidExcelImportRequestData_ShouldReturnOkResult()
     {
-        var xlWorkbook = new XLWorkbook();
+        using var xlWorkbook = new XLWorkbook();
         var importRequest = new FileImportRequest
         {
             File = fileMock,
@@ -100,7 +100,7 @@ internal class FilesControllerTests
         Assert.That(response, Is.Not.Null);
         var importResponse = response.Value as FileImportResponse;
         Assert.That(importResponse, Is.Not.Null);
-        Assert.That(importResponse.AdminInfoCode.StartsWith("XLSX-Import-"), Is.True);
+        Assert.That(importResponse.AdminInfoCode.StartsWith("XLSX-Import-", StringComparison.Ordinal), Is.True);
     }
 
     [Test]
@@ -155,7 +155,7 @@ internal class FilesControllerTests
     {
         identityServiceMock.GetCurrentEmail().Returns("A");
         fileMock.FileName.Returns("file.tbx");
-        fileImportServiceMock.IsFileValid(fileMock).Throws(new Exception());
+        fileImportServiceMock.IsFileValid(fileMock).Throws(new ArgumentException("test"));
         var request = new FileImportRequest { File = fileMock };
         var sut = CreateSystemUnderTest();
 

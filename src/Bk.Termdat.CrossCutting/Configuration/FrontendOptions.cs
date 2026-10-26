@@ -1,3 +1,4 @@
+#nullable enable
 using System.ComponentModel.DataAnnotations;
 
 namespace Bk.Termdat.CrossCutting.Configuration;

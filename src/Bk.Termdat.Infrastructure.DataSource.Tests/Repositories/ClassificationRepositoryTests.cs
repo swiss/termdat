@@ -66,6 +66,5 @@ internal class ClassificationRepositoryTests
         Assert.That(translation.LanguageId, Is.EqualTo(3));
         Assert.That(translation.ClassificationId, Is.EqualTo(101));
         Assert.That(translation.Name, Is.EqualTo("TUV"));
-
     }
 }

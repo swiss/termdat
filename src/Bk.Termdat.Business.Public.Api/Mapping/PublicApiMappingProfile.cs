@@ -192,7 +192,7 @@ public class PublicApiMappingProfile : Profile
         return translation?.Name ?? string.Empty;
     }
 
-    private static IList<SubjectSummary> CreateSubjects(DomainModels.Entry entry, ResolutionContext context)
+    private static List<SubjectSummary> CreateSubjects(DomainModels.Entry entry, ResolutionContext context)
     {
         if (entry.Subjects == null && entry.Domains == null)
         {

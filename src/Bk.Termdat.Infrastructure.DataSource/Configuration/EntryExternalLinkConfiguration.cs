@@ -1,3 +1,4 @@
+using System;
 using Bk.Termdat.Business.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,6 +9,8 @@ public class EntryExternalLinkConfiguration : IEntityTypeConfiguration<EntryExte
 {
     public void Configure(EntityTypeBuilder<EntryExternalLink> builder)
     {
+        ArgumentNullException.ThrowIfNull(builder);
+
         builder.HasKey(er => er.Id);
 
         builder.Property(er => er.Type)

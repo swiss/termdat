@@ -15,13 +15,13 @@ internal class LindasExportServiceTests
     private readonly ICollectionRepository collectionRepository = Substitute.For<ICollectionRepository>();
     private readonly ITermdatGraphService graphService = Substitute.For<ITermdatGraphService>();
     private readonly ILindasMapper lindasMapper = Substitute.For<ILindasMapper>();
-    private ILindasExportService exportService = null!;
+    private LindasExportService exportService = null!;
     private static readonly CancellationToken ct = CancellationToken.None;
 
     [SetUp]
     public void SetUp()
     {
-        graphService.Targets.Returns(new[] { Target });
+        graphService.GetTargets().Returns(new[] { Target });
         exportService = new LindasExportService(logger, collectionRepository, graphService, lindasMapper);
     }
 
@@ -68,7 +68,7 @@ internal class LindasExportServiceTests
     [Test]
     public async Task ExportCollections_WhenTargetFails_ShouldContinueWithNextTarget()
     {
-        graphService.Targets.Returns(new[] { "Failed", "Healthy" });
+        graphService.GetTargets().Returns(new[] { "Failed", "Healthy" });
         collectionRepository.GetIdsForLindasExport().Returns([]);
         graphService.DeleteGraph("Failed", ct).Returns(Task.FromException(new HttpRequestException()));
 

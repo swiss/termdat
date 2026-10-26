@@ -21,13 +21,14 @@ using ResourceModels = Bk.Termdat.Business.Resource.Models;
 
 namespace Bk.Termdat.Business.Tests.Mapping.Profiles;
 
+[TestFixture]
 internal class AdministrationMappingProfileTests
 {
     private IMapper mapper;
     private readonly ICultureService cultureServiceMock = Substitute.For<ICultureService>();
     private readonly IOptions<PrivateOptions> privateOptionsMock = Substitute.For<IOptions<PrivateOptions>>();
     private readonly IOptions<AuthorizationOptions> authOptionsMock = Substitute.For<IOptions<AuthorizationOptions>>();
-    private AuthorizationOptions options = null!;
+    private AuthorizationOptions options;
 
     [SetUp]
     public void SetUp()
@@ -49,6 +50,7 @@ internal class AdministrationMappingProfileTests
             return translations.FirstOrDefault(t => t.Language.IsoCode == "current")?.Name;
         });
 
+        using var loggerFactory = LoggerFactory.Create(_ => { });
         var services = new ServiceCollection();
         services.AddSingleton(cultureServiceMock);
         services.AddSingleton(authOptionsMock);
@@ -65,7 +67,7 @@ internal class AdministrationMappingProfileTests
             c.ConstructServicesUsing(provider.GetRequiredService);
             c.AddProfile(new AdministrationMappingProfile());
             c.AddProfile(new SharedMappingProfile());
-        }, LoggerFactory.Create(_ => { }));
+        }, loggerFactory);
 
         mapper = config.CreateMapper();
     }

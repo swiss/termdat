@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,6 +68,9 @@ public class DomainRepository : IDomainRepository
 
     public void Update(Domain existing, Domain update)
     {
+        ArgumentNullException.ThrowIfNull(existing);
+        ArgumentNullException.ThrowIfNull(update);
+
         context.Entry(existing).CurrentValues.SetValues(update);
 
         UpdateTranslationHelper.UpdateTranslations(existing.Translations, update.Translations, existing.Id, nameof(Domain));

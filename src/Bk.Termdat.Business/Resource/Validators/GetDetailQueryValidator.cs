@@ -1,4 +1,3 @@
-using System.Linq;
 using Bk.Termdat.Business.Resource.Models;
 using FluentValidation;
 
@@ -10,10 +9,10 @@ public class GetDetailQueryValidator : AbstractValidator<GetDetailQuery>
     {
         RuleForEach(q => q.SourceLanguageIds)
             .NotEmpty()
-            .When(q => q.SourceLanguageIds != null && q.SourceLanguageIds.Any());
+            .When(q => q.SourceLanguageIds != null && q.SourceLanguageIds.Length > 0);
 
         RuleForEach(q => q.TargetLanguageIds)
             .NotEmpty()
-            .When(q => q.TargetLanguageIds != null && q.TargetLanguageIds.Any());
+            .When(q => q.TargetLanguageIds != null && q.TargetLanguageIds.Length > 0);
     }
 }

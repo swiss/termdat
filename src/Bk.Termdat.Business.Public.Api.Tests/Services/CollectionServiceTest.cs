@@ -15,9 +15,9 @@ using NUnit.Framework;
 namespace Bk.Termdat.Business.Public.Api.Tests.Services;
 
 [TestFixture]
-public class CollectionServiceTest
+internal class CollectionServiceTest
 {
-    private ICollectionService collectionService;
+    private CollectionService collectionService;
     private ICollectionRepository collectionRepositoryMock;
     private ILanguageValidationService languageValidationServiceMock;
     private IMapper mapperMock;

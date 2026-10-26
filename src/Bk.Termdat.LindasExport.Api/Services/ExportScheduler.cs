@@ -13,6 +13,8 @@ public class ExportScheduler : IExportScheduler
 
     public ExportScheduler(IOptions<LindasExportOptions> options, TimeProvider timeProvider)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         this.options = options.Value;
         this.timeProvider = timeProvider;
         timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneId);

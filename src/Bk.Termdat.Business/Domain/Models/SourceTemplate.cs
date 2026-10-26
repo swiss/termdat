@@ -1,3 +1,4 @@
+#nullable enable
 namespace Bk.Termdat.Business.Domain.Models;
 
 public class SourceTemplate : EntityChangeTracking
@@ -8,5 +9,5 @@ public class SourceTemplate : EntityChangeTracking
     public string? TextEn { get; set; }
     public string? TextRm { get; set; }
     public int UserId { get; set; }
-    public UserAccount User { get; set; }
+    public UserAccount? User { get; set; }
 }

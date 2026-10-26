@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bk.Termdat.Business.Domain.Models;
@@ -16,6 +17,8 @@ public class AuthorizationService : IAuthorizationService
 
     public AuthorizationService(IHttpContextAccessor httpContextAccessor, IOptions<AuthorizationOptions> authorizationOptions)
     {
+        ArgumentNullException.ThrowIfNull(authorizationOptions);
+
         this.httpContextAccessor = httpContextAccessor;
         this.authorizationOptions = authorizationOptions.Value;
     }
@@ -52,6 +55,8 @@ public class AuthorizationService : IAuthorizationService
 
     public bool CanEdit(Entry entry)
     {
+        ArgumentNullException.ThrowIfNull(entry);
+
         if (IsAdmin() || IsSuperUser())
         {
             return true;
@@ -70,6 +75,8 @@ public class AuthorizationService : IAuthorizationService
 
     public bool CanAddToWatchList(Entry entry)
     {
+        ArgumentNullException.ThrowIfNull(entry);
+
         if (CanEdit(entry))
         {
             return true;

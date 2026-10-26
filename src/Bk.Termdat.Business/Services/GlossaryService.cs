@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -80,7 +81,7 @@ public class GlossaryService : IGlossaryService
         var glossary = await glossaryRepository.GetById(id);
         if (glossary == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.GlossaryNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.GlossaryNotFound, id));
         }
         var mappedGlossary = mapper.Map<GlossaryUpdate>(glossary);
 
@@ -107,11 +108,13 @@ public class GlossaryService : IGlossaryService
 
     public async Task<GlossaryDetail> Update(GlossaryUpdate glossaryUpdate)
     {
+        ArgumentNullException.ThrowIfNull(glossaryUpdate);
+
         var databaseGlossary = await glossaryRepository.GetById(glossaryUpdate.Id);
 
         if (databaseGlossary == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.GlossaryNotFound, glossaryUpdate.Id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.GlossaryNotFound, glossaryUpdate.Id));
         }
 
         var mappedGlossary = mapper.Map<Glossary>(glossaryUpdate);
@@ -136,7 +139,7 @@ public class GlossaryService : IGlossaryService
 
         if (glossary == null)
         {
-            throw new EntityNotFoundException(string.Format(BackendTexts.GlossaryNotFound, id));
+            throw new EntityNotFoundException(string.Format(CultureInfo.InvariantCulture, BackendTexts.GlossaryNotFound, id));
         }
 
         var entriesIdsWithGlossary = await entryRepository.GetIdsByGlossaryId(glossary.Id);

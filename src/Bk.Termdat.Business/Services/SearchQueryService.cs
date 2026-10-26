@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,6 +35,8 @@ public class SearchQueryService : ISearchQueryService
 
     public async Task<SearchPage> Search(SearchQuery query)
     {
+        ArgumentNullException.ThrowIfNull(query);
+
         if (!authorizationService.IsAdmin())
         {
             query.CollectionsExclude = false;
@@ -59,7 +62,7 @@ public class SearchQueryService : ISearchQueryService
                 || (searchParams.EntryIds.Length > maxIdsForWriter && !authorizationService.IsSuperUser() && !authorizationService.IsAdmin())
                 || (searchParams.EntryIds.Length > maxIdsForPublic && !authorizationService.IsSuperUser() && !authorizationService.IsAdmin() && !authorizationService.IsWriter()))
             {
-                throw new SearchException(string.Format(BackendTexts.MaximumEntryIdsExceededError, searchParams.EntryIds.Length));
+                throw new SearchException(string.Format(CultureInfo.InvariantCulture, BackendTexts.MaximumEntryIdsExceededError, searchParams.EntryIds.Length));
             }
 
             searchResult.EntryIds = searchParams.EntryIds;
@@ -84,8 +87,8 @@ public class SearchQueryService : ISearchQueryService
         foreach (var entry in entries)
         {
             entry.Translations = entry.Translations.Where(t =>
-                targetLanguageIdArray == null || !targetLanguageIdArray.Any() || targetLanguageIdArray.Contains(t.LanguageId) ||
-                sourceLanguageIdArray == null || !sourceLanguageIdArray.Any() || sourceLanguageIdArray.Contains(t.LanguageId))
+                targetLanguageIdArray == null || targetLanguageIdArray.Length == 0 || targetLanguageIdArray.Contains(t.LanguageId) ||
+                sourceLanguageIdArray == null || sourceLanguageIdArray.Length == 0 || sourceLanguageIdArray.Contains(t.LanguageId))
                     .OrderBy(t => t.Language.SortIndex)
                     .ThenBy(t => t.Sequence)
                     .ToList();
