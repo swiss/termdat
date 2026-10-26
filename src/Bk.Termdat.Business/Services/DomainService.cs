@@ -67,7 +67,7 @@ public class DomainService : IDomainService
         ArgumentNullException.ThrowIfNull(domainUpdate);
         if (domainUpdate.Id is null)
         {
-            throw new ArgumentException("Domain Id is required for update", nameof(domainUpdate)) ;
+            throw new ArgumentException("Domain Id is required for update", nameof(domainUpdate));
         }
 
         var databaseDomain = await domainRepository.GetById(domainUpdate.Id.Value);
