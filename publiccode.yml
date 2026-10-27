@@ -1,0 +1,96 @@
+publiccodeYmlVersion: 0.5.0
+name: termdat
+url: https://github.com/swiss/termdat
+softwareVersion: "3.5"
+releaseDate: 2025-12-19
+platforms:
+  - mac
+  - linux
+  - windows
+categories:
+  - other
+developmentStatus: stable
+softwareType: standalone/web
+organisation:
+  uri: https://ld.admin.ch/FCh
+  name: Bundeskanzlei
+description:
+  en:
+    localisedName: TERMDAT
+    shortDescription: Multilingual terminology database of the Federal Administration.
+    longDescription: TERMDAT is a multilingual terminology database that is freely
+      accessible on the internet. The terminology entries have a fixed
+      structure; however, only certain fields are mandatory. TERMDAT is
+      organised into terminology collections and thematic glossaries. It offers
+      various tools for searching, editing and managing entries, depending on
+      the user’s role, as well as various options for importing and exporting
+      data.
+    documentation: https://www.bk.admin.ch/en/termdat-help
+    features:
+      - terminology database
+  fr:
+    localisedName: TERMDAT
+    shortDescription: Banque de données terminologiques multilingue de l’administration fédérale.
+    longDescription: TERMDAT est une banque de données terminologiques multilingue
+      librement accessible sur Internet. Les fiches terminologiques ont une
+      structure fixe, mais seuls certains champs sont obligatoires. TERMDAT est
+      organisée en collections terminologiques et en glossaires thématiques.
+      Elle propose différents outils de recherche, de modification et de gestion
+      des fiches en fonction du rôle des utilisateurs, ainsi que diverses
+      options d'importation et d'exportation des données.
+    documentation: https://www.bk.admin.ch/fr/termdat-aide
+    features:
+      - banque de données terminologique
+  de:
+    localisedName: TERMDAT
+    shortDescription: Mehrsprachige Terminologiedatenbank der Bundesverwaltung.
+    longDescription: TERMDAT ist eine mehrsprachige Terminologiedatenbank, die im
+      Internet frei zugänglich ist. Die Einträge folgen einer festen Struktur,
+      wobei nur einige Felder Pflichtfelder sind. Die Datenbank ist in
+      Terminologiesammlungen und thematische Glossare gegliedert. Je nach
+      Benutzerrolle stehen verschiedene Werkzeuge zur Suche, Bearbeitung und
+      Verwaltung der Einträge sowie Optionen zum Importieren und Exportieren von
+      Daten zur Verfügung.
+    documentation: https://www.bk.admin.ch/de/termdat-hilfe
+    features:
+      - Terminologiedatenbank
+  it:
+    localisedName: TERMDAT
+    shortDescription: Banca dati terminologica plurilingue dell’Amministrazione federale.
+    longDescription: TERMDAT è una banca dati terminologica plurilingue liberamente
+      accessibile in Internet. Le schede terminologiche hanno una struttura
+      fissa; tuttavia, solo alcuni campi sono obbligatori. TERMDAT è organizzato
+      in raccolte terminologiche e glossari termatici. Offre diversi strumenti
+      di ricerca, modifica e gestione delle schede a seconda del ruolo degli
+      utenti, nonché diverse opzioni per importare ed esportare i dati.
+    documentation: https://www.bk.admin.ch/it/usare-termdat
+    features:
+      - banca dati terminologica
+  rm:
+    localisedName: TERMDAT
+    shortDescription: Banca da datas terminologica plurilingua da l’administraziun federala.
+    longDescription: TERMDAT è ina banca da datas terminologica plurilingua
+      libramain accessibla en l’internet. Las fischas terminologicas han ina
+      structura fixa, mo intgins champs èn però obligatorics. TERMDAT è
+      structurà en collecziuns terminologicas e glossaris tematics. La banca da
+      datas porscha differents instruments per tschertgar, midar ed administrar
+      las fischas tut tenor la rolla da las utilisadras e dals utilisaders e
+      diversas pussaivladads per importar ed exportar las datas.
+    documentation: https://www.bk.admin.ch/rm/termdat-agid
+    features:
+      - banca da datas terminologica
+legal:
+  license: AGPL-3.0-only
+maintenance:
+  type: internal
+  contacts:
+    - name: IT Services Federal Chancellery
+      email: ikt@admin.ch
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - de
+    - fr
+    - it
+    - rm
+    - en
