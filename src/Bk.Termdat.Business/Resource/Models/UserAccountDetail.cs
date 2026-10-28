@@ -15,7 +15,7 @@ public class UserAccountDetail
     public bool IsWriter { get; set; }
     public bool IsSuperReader { get; set; }
     public DateTime? LastAction { get; set; }
-    public string Information { get; set; }
+    public string? Information { get; set; }
     public IList<GlossarySummary> Glossaries { get; set; }
     public IList<CollectionSummary> Collections { get; set; }
 }

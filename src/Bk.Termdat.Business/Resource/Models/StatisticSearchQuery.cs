@@ -11,10 +11,10 @@ public class StatisticSearchQuery
         Sort = "DateLastSearch";
     }
 
-    public string Phrase { get; set; }
+    public string? Phrase { get; set; }
     public int PageIndex { get; set; }
     public int PageSize { get; set; }
-    public string Sort { get; set; }
+    public string? Sort { get; set; }
 
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }

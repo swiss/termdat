@@ -9,7 +9,7 @@ public class EntryHeaderUpdate
     public Reliability? Reliability { get; set; }
     public int? OfficeId { get; set; }
     public int? CollectionId { get; set; }
-    public IList<int> SubjectIds { get; set; }
-    public IList<int> DomainIds { get; set; }
+    public IList<int>? SubjectIds { get; set; }
+    public IList<int>? DomainIds { get; set; }
     public bool ReplaceSubjects { get; set; }
 }

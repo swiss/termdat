@@ -34,5 +34,5 @@ public class EntryLanguage : Entity, IEntityNameTranslation
     public Entry Entry { get; set; }
 
     //Note: Contains the ID provided by the TBX import and originally generated in the Star software.
-    public string ExternalSystemId { get; set; }
+    public string? ExternalSystemId { get; set; }
 }
