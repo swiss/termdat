@@ -14,13 +14,13 @@ public class EntryTemplateUpdate : IEntryModification
     public int CollectionId { get; set; }
     public int? ConceptSystemPositionId { get; set; }
 
-    public IList<int> LenochClassificationIds { get; set; }
-    public IList<int> RelatedCollectionIds { get; set; }
-    public IList<int> GlossaryIds { get; set; }
-    public IList<AdminInfoSummary> AdminInfos { get; set; }
-    public IList<EntryModificationLanguageDetail> LanguageDetails { get; set; }
-    public IList<EntryModificationReference> References { get; set; }
-    public IList<EntryModificationExternalLink> ExternalLinks { get; set; }
-    public IList<int> SubjectIds { get; set; }
-    public IList<int> DomainIds { get; set; }
+    public IList<int>? LenochClassificationIds { get; set; }
+    public IList<int>? RelatedCollectionIds { get; set; }
+    public IList<int>? GlossaryIds { get; set; }
+    public IList<AdminInfoSummary>? AdminInfos { get; set; }
+    public IList<EntryModificationLanguageDetail>? LanguageDetails { get; set; }
+    public IList<EntryModificationReference>? References { get; set; }
+    public IList<EntryModificationExternalLink>? ExternalLinks { get; set; }
+    public IList<int>? SubjectIds { get; set; }
+    public IList<int>? DomainIds { get; set; }
 }

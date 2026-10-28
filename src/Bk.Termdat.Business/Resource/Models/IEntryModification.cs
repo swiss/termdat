@@ -13,13 +13,13 @@ public interface IEntryModification
     int CollectionId { get; set; }
     int? ConceptSystemPositionId { get; set; }
 
-    IList<int> LenochClassificationIds { get; set; }
-    IList<int> SubjectIds { get; set; }
-    IList<int> DomainIds { get; set; }
-    IList<int> RelatedCollectionIds { get; set; }
-    IList<int> GlossaryIds { get; set; }
-    IList<AdminInfoSummary> AdminInfos { get; set; }
-    IList<EntryModificationLanguageDetail> LanguageDetails { get; set; }
-    IList<EntryModificationReference> References { get; set; }
-    IList<EntryModificationExternalLink> ExternalLinks { get; set; }
+    IList<int>? LenochClassificationIds { get; set; }
+    IList<int>? SubjectIds { get; set; }
+    IList<int>? DomainIds { get; set; }
+    IList<int>? RelatedCollectionIds { get; set; }
+    IList<int>? GlossaryIds { get; set; }
+    IList<AdminInfoSummary>? AdminInfos { get; set; }
+    IList<EntryModificationLanguageDetail>? LanguageDetails { get; set; }
+    IList<EntryModificationReference>? References { get; set; }
+    IList<EntryModificationExternalLink>? ExternalLinks { get; set; }
 }

@@ -5,8 +5,8 @@ public class CollectionCreate : ICollectionModification
     public string Code { get; set; }
     public int? ClassificationId { get; set; }
     public bool IsObsolete { get; set; }
-    public string Description { get; set; }
-    public string Documentation { get; set; }
+    public string? Description { get; set; }
+    public string? Documentation { get; set; }
     public bool Active { get; set; }
     public bool ActiveApi { get; set; }
     public bool ExportLindas { get; set; }
