@@ -11,10 +11,6 @@
         <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00017" />
         <PackageReference Include="Lucene.Net.ICU" Version="4.8.0-beta00017" />
         <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00017" />
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
