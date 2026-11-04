@@ -148,7 +148,7 @@
                                 mat-icon-button
                                 [matTooltip]="'common.delete' | translate"
                                 [matTooltipPosition]="'below'"
-                                [disabled]="row.entryCount"
+                                [disabled]="row.entryCount > 0"
                                 (click)="delete(row)"
                             >
                                 <mat-icon svgIcon="delete" class="ob-icon header-icon" />
