@@ -25,7 +25,6 @@ description:
       various tools for searching, editing and managing entries, depending on
       the user’s role, as well as various options for importing and exporting
       data.
-    documentation: https://www.bk.admin.ch/en/termdat-help
     features:
       - terminology database
   fr:
@@ -38,7 +37,6 @@ description:
       Elle propose différents outils de recherche, de modification et de gestion
       des fiches en fonction du rôle des utilisateurs, ainsi que diverses
       options d'importation et d'exportation des données.
-    documentation: https://www.bk.admin.ch/fr/termdat-aide
     features:
       - banque de données terminologique
   de:
@@ -51,7 +49,6 @@ description:
       Benutzerrolle stehen verschiedene Werkzeuge zur Suche, Bearbeitung und
       Verwaltung der Einträge sowie Optionen zum Importieren und Exportieren von
       Daten zur Verfügung.
-    documentation: https://www.bk.admin.ch/de/termdat-hilfe
     features:
       - Terminologiedatenbank
   it:
@@ -63,7 +60,6 @@ description:
       in raccolte terminologiche e glossari termatici. Offre diversi strumenti
       di ricerca, modifica e gestione delle schede a seconda del ruolo degli
       utenti, nonché diverse opzioni per importare ed esportare i dati.
-    documentation: https://www.bk.admin.ch/it/usare-termdat
     features:
       - banca dati terminologica
   rm:
@@ -76,7 +72,6 @@ description:
       datas porscha differents instruments per tschertgar, midar ed administrar
       las fischas tut tenor la rolla da las utilisadras e dals utilisaders e
       diversas pussaivladads per importar ed exportar las datas.
-    documentation: https://www.bk.admin.ch/rm/termdat-agid
     features:
       - banca da datas terminologica
 legal:
